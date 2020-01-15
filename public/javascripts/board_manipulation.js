@@ -271,16 +271,6 @@ const object = [
     }
   ];
 
-function changeScore(currentScore, questionValue, gotRight) {
-    // takes userCurrentScore, whether question was right, and changes the value
-    // checks if they got the question right, adds question value to currentscore
-    // if (gotRight) {
-    //     return currentScore + questionValue;
-    // } else {
-    //     return currentScore - questionValue;
-    // }
-}
-
 function updateScoreDOM(score) {
     let userScore = document.querySelector('.score');
     let currentScore = parseInt((userScore.textContent).slice(8));
@@ -313,6 +303,7 @@ function resetQuestionsDOM(factor) {
             element.textContent = `$${i * factor * 200}`;
             element.addEventListener('click', populateQuestionDOM);
             element.addEventListener('click', removeQuestionDOM);
+            element.addEventListener('click', answerTimer);
         });
     }
 }
@@ -347,7 +338,9 @@ function populateQuestionDOM(event) {
         "Value": event.target.dataAttribute.Value
     };
     question.textContent = event.target.dataAttribute.Question;
+    // changes display from none to flex to show question
     questionContainer.style.display = "flex";
+    // puts cursor in answerField
     answer.focus();
     answer.select();
 }
@@ -364,6 +357,7 @@ function resetQuestionContainer() {
 
 function addAnswerCheck() {
     let answer = document.querySelector('#answerField');
+    // change triggers when value for input field changed and focus lost or submitted
     answer.addEventListener('change', checkIfRight);
 }
 
@@ -376,22 +370,40 @@ function buzzTimer() {
 
 function answerTimer() {
     // once buzzed in, times how long they have to type the answer of the question
+    // when someone clicks a category, it waits and then auto exits if no answer
+    let timeleft = 9;
+    let progressBar = document.querySelector('#progressBar');
+    let questionTimer = setInterval(function(){
+        console.log(timeleft);
+        progressBar.value = 10 - timeleft;
+        timeleft -= 1;
+        if(timeleft <= 0){
+            clearInterval(questionTimer);
+            progressBar.value = 0;
+            missedQuestion();
+        }
+    }, 1000);
+}
+
+function missedQuestion() {
+    let answerValue = document.querySelector('#answerField').dataAttribute.Value;
+    answerValue = parseInt(answerValue.slice(1));
+    updateScoreDOM(answerValue * -1);
+    resetQuestionContainer();
 }
 
 function checkIfRight(event) {
     // checks whether user input is correct
-    console.log(event.target.value);
     let userAnswer = event.target.value;
     let correctAnswer = formatText(event.target.dataAttribute.Answer);
-    let value = event.target.dataAttribute.Value;
-    value = parseInt(value.slice(1))
-    console.log(value);
+    let answerValue = event.target.dataAttribute.Value;
+    answerValue = parseInt(answerValue.slice(1));
     if (userAnswer === correctAnswer) {
         console.log('right');
-        updateScoreDOM(value);
+        updateScoreDOM(answerValue);
     } else {
         console.log('wrong');
-        updateScoreDOM(value * -1);
+        updateScoreDOM(answerValue * -1);
     }
     resetQuestionContainer();
 }
