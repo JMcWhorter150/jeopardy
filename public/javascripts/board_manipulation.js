@@ -283,7 +283,8 @@ function changeScore(currentScore, questionValue, gotRight) {
 
 function updateScoreDOM(score) {
     let userScore = document.querySelector('.score');
-    userScore.textContent = "Score: " + score;
+    let currentScore = parseInt((userScore.textContent).slice(8));
+    userScore.textContent = `Score: $${currentScore + score}`;
 }
 
 function removeQuestionDOM(event) {
@@ -299,16 +300,20 @@ function updateBoardDOM() {
 function populateBoardDOM(obj) {
     // takes show object, updates text content of each block, adds onclick to each block
     // five questions, six categories
-    resetQuestionsDOM(1); // change 1 to whatever round it is
+    resetQuestionsDOM(2); // change 1 to whatever round it is
     populateCategoriesDOM(obj);
     populateQuestionsDOM(obj);
+    addAnswerCheck();
 }
 
 function resetQuestionsDOM(factor) {
     for (let i=1;i<7;i++) {
         let questionArr = document.querySelectorAll(`.question${i}`);
-        questionArr.forEach(element => {element.textContent = `$${i * factor * 200}`;});
-        questionArr.forEach(element => {element.addEventListener('click', removeQuestionDOM);});
+        questionArr.forEach(element => {
+            element.textContent = `$${i * factor * 200}`;
+            element.addEventListener('click', populateQuestionDOM);
+            element.addEventListener('click', removeQuestionDOM);
+        });
     }
 }
 
@@ -332,8 +337,34 @@ function populateQuestionsDOM(obj) {
     }
 }
  
-function populateQuestionDOM() {
+function populateQuestionDOM(event) {
     // when question is clicked, updates result box with question, updates resultbox question value, removes question
+    let questionContainer = document.querySelector('.questionContainer');
+    let question = document.querySelector('#questionText');
+    let answer = document.querySelector('#answerField');
+    answer.dataAttribute = {
+        "Answer": event.target.dataAttribute.Answer,
+        "Value": event.target.dataAttribute.Value
+    };
+    question.textContent = event.target.dataAttribute.Question;
+    questionContainer.style.display = "flex";
+    answer.focus();
+    answer.select();
+}
+
+function resetQuestionContainer() {
+    // empties the answer box
+    let questionContainer = document.querySelector('.questionContainer');
+    let question = document.querySelector('#questionText');
+    let answer = document.querySelector('#answerField');
+    answer.dataAttribute = null;
+    question.textContent = "";
+    questionContainer.style.display = "none";
+}
+
+function addAnswerCheck() {
+    let answer = document.querySelector('#answerField');
+    answer.addEventListener('change', checkIfRight);
 }
 
 function buzzTimer() {
@@ -347,13 +378,22 @@ function answerTimer() {
     // once buzzed in, times how long they have to type the answer of the question
 }
 
-function resetAnswer() {
-    // empties the answer box
-}
-
-function checkIfRight(question, answer) {
+function checkIfRight(event) {
     // checks whether user input is correct
-    return question === answer;
+    console.log(event.target.value);
+    let userAnswer = event.target.value;
+    let correctAnswer = formatText(event.target.dataAttribute.Answer);
+    let value = event.target.dataAttribute.Value;
+    value = parseInt(value.slice(1))
+    console.log(value);
+    if (userAnswer === correctAnswer) {
+        console.log('right');
+        updateScoreDOM(value);
+    } else {
+        console.log('wrong');
+        updateScoreDOM(value * -1);
+    }
+    resetQuestionContainer();
 }
 
 function formatText(str) {
@@ -372,3 +412,4 @@ function sendDataToBackend() {
 
 
 
+populateBoardDOM(object);
