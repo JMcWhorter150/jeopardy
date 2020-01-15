@@ -6,4 +6,10 @@ router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
 
+router.get('/logout', (req, res)=>{
+  req.session.destroy(() => {
+          res.redirect('/');
+      });
+});
+
 module.exports = router;

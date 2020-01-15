@@ -6,13 +6,15 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+const loginRouter = require('./routes/login');
+const profileRouter = require('./routes/profile');
 
 var app = express();
 
 // view engine setup
 const es6Renderer = require('express-es6-template-engine');
 app.engine('html', es6Renderer);
-app.set('views', 'templates');
+app.set('views', 'views');
 app.set('view engine', 'html');
 
 app.use(logger('dev'));
@@ -23,6 +25,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/login', loginRouter);
+app.use('/profile', profileRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
