@@ -4,9 +4,18 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "dev": "nodemon --ignore './sessions/' ./bin/www"
+    "dev": "nodemon --ignore './sessions/' ./bin/www",
+    "db:delete": "dropdb jeopardy-app",
+    "db:create": "createdb jeopardy-app",
+    "db:schema": "psql -f schema.sql jeopardy-app",
+    "db:seed": "psql -f seed.sql jeopardy-app",
+    "db:init": "npm run db:create && npm run db:schema && npm run db:seed",
+    "db:reset": "npm run db:delete && npm run db:create && npm run db:schema && npm run db:seed",
+    "dev": "nodemon app.js"
   },
   "dependencies": {
+    "axios": "^0.19.1",
+    "bcryptjs": "^2.4.3",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "express": "~4.16.1",
