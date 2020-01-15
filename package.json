@@ -10,8 +10,7 @@
     "db:schema": "psql -f schema.sql jeopardy-app",
     "db:seed": "psql -f seed.sql jeopardy-app",
     "db:init": "npm run db:create && npm run db:schema && npm run db:seed",
-    "db:reset": "npm run db:delete && npm run db:create && npm run db:schema && npm run db:seed",
-    "dev": "nodemon app.js"
+    "db:reset": "npm run db:delete && npm run db:create && npm run db:schema && npm run db:seed"
   },
   "dependencies": {
     "axios": "^0.19.1",
