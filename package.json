@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
+    "dev": "nodemon --ignore './sessions/' ./bin/www",
     "db:delete": "dropdb jeopardy-app",
     "db:create": "createdb jeopardy-app",
     "db:schema": "psql -f schema.sql jeopardy-app",
@@ -13,6 +14,7 @@
     "dev": "nodemon app.js"
   },
   "dependencies": {
+    "axios": "^0.19.1",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
