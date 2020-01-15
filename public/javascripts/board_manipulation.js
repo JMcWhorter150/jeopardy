@@ -289,6 +289,7 @@ function updateScoreDOM(score) {
 function removeQuestionDOM(event) {
     event.target.textContent = "";
     event.target.removeEventListener("click", removeQuestionDOM);
+    event.target.dataAttribute = null;
 }
     
 function updateBoardDOM() {
@@ -298,19 +299,37 @@ function updateBoardDOM() {
 function populateBoardDOM(obj) {
     // takes show object, updates text content of each block, adds onclick to each block
     // five questions, six categories
+    resetQuestionsDOM(1); // change 1 to whatever round it is
     populateCategoriesDOM(obj);
     populateQuestionsDOM(obj);
 }
 
+function resetQuestionsDOM(factor) {
+    for (let i=1;i<7;i++) {
+        let questionArr = document.querySelectorAll(`.question${i}`);
+        questionArr.forEach(element => {element.textContent = `$${i * factor * 200}`;});
+        questionArr.forEach(element => {element.addEventListener('click', removeQuestionDOM);});
+    }
+}
+
 function populateCategoriesDOM(obj) {
+    // grabs first six categories from object and makes category names
     const categoryDOMArray = document.querySelectorAll('.category-item');
     for (let i=0;i<6;i++) {
-        categoryDomArray[i].textContent = obj[i].Category;
+        categoryDOMArray[i].textContent = obj[i].Category;
     }
 }
 
 function populateQuestionsDOM(obj) {
     // grabs each category of questions, and adds data to each element of category
+    const questionsDOMArray = document.querySelectorAll('.question-item');
+    for (let i=0;i<obj.length;i++) {
+        questionsDOMArray[i].dataAttribute = {
+            "Question": obj[i].Question,
+            "Answer": obj[i].Answer,
+            "Value": obj[i].Value
+        };
+    }
 }
  
 function populateQuestionDOM() {
