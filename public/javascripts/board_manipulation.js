@@ -271,6 +271,16 @@ const object = [
     }
   ];
 
+// TODO: Get object to actually pull from backend to create object
+// TODO: Make functionality to change jeopardy board and reset to double jeopardy
+// TODO: Make final jeopardy functionality
+
+// TODO: Figure out how to manipulate string text when image or <a> should be shown
+// TODO: Make it playable by multiple people
+// TODO: Export Data after game ends
+// TODO: Add daily double functionality (happens when values are not exactly 4, 8, 12, 16, 20 etc.)
+// TODO: Make alex page??????
+
 function updateScoreDOM(score) {
     let userScore = document.querySelector('.score');
     let currentScore = parseInt((userScore.textContent).slice(8));
@@ -371,11 +381,10 @@ function buzzTimer() {
 function answerTimer() {
     // once buzzed in, times how long they have to type the answer of the question
     // when someone clicks a category, it waits and then auto exits if no answer
-    let timeleft = 9;
+    let timeleft = 9; // should match whatever the progress bar max is in html
     let progressBar = document.querySelector('#progressBar');
     let questionTimer = setInterval(function(){
-        console.log(timeleft);
-        progressBar.value = 10 - timeleft;
+        progressBar.value = 10 - timeleft; // first number should be timeleft +1
         timeleft -= 1;
         if(timeleft <= 0){
             clearInterval(questionTimer);
