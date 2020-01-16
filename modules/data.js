@@ -51,8 +51,19 @@ async function getQuestionArray(date, roundName) {
     }
 }
 
+async function createArrayofArrayObject(date) {
+    const showNumber = getShowNumberFromDate(date);
+    let questionsArray = [];
+    let roundCount = 1;
+    while (roundCount < 4) {
+        questionsArray.push(await api.getQuestionsForRound(showNumber, roundCount));
+        roundCount++
+    }
+    return questionsArray;
+}
 
 
 module.exports = {
-    getQuestionArray
+    getQuestionArray,
+    createArrayofArrayObject
 }
