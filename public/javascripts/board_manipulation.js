@@ -1,12 +1,7 @@
 let questionAnswered = false;
 let ROUND = 1;
-// TODO: Make final jeopardy functionality
-//      Allow players to enter score to wager (changes value of question)
-//      Answer question, then go back to next person
-// TODO: Add daily double functionality (happens when values are not exactly 4, 8, 12, 16, 20 etc.)
+
 // TODO: add answer page after score
-
-
 // TODO: Figure out how to manipulate string text when image or <a> should be shown
 // TODO: Export Data after game ends
 // TODO: Make categories expand for mobiles
@@ -251,14 +246,14 @@ function populateQuestionsDOM(obj, roundNumber) {
     // grabs each category of questions, and adds data to each element of category
     const questionsDOMArray = document.querySelectorAll('.question-item');
     for (let i=0;i<obj.length;i++) {
-        questionsDOMArray[i].dataAttribute = {
+      let questionValue = obj[i].Value;
+      questionValue = questionValue.replace(/[$,]+/g,"");
+      questionsDOMArray[i].dataAttribute = {
             "Question": obj[i].Question,
             "Answer": obj[i].Answer,
-            "Value": obj[i].Value
+            "Value": "$" + questionValue
         };
-        let questionValue = obj[i].Value;
-        questionValue = questionValue.replace(/[$,]+/g,"");
-        if (!(questionValue % (roundNumber * 200) === 0)) {
+        if ("$" + questionValue !== questionsDOMArray[i].textContent || !(questionValue % (roundNumber * 200) === 0 )) {
           questionsDOMArray[i].addEventListener('click', dailyDouble);
           questionsDOMArray[i].addEventListener('click', populateQuestionDOM);
           questionsDOMArray[i].addEventListener('click', removeQuestionDOM);
