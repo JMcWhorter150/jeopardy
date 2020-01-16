@@ -4,11 +4,15 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+const dotenv = require('dotenv');
+dotenv.config();
+
+// Variables for routing
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-const loginRouter = require('./routes/login');
 const profileRouter = require('./routes/profile');
 const leaderboardRouter = require('./routes/leaderboard');
+const gameRouter = require('./routes/game');
 
 var app = express();
 
@@ -24,11 +28,23 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Requires Login
+function requireLogin(req, res, next) {
+  if (req.session && req.session.user) {
+      next();
+  } else {
+      res.redirect('/login');
+  }
+}
+
+
+// Routing
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/login', loginRouter);
-app.use('/profile', profileRouter);
 app.use('/leaderboard', leaderboardRouter);
+app.use('/profile', requireLogin, profileRouter);
+app.use('/game', gameRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -47,7 +63,7 @@ app.use(function(err, req, res, next) {
 });
 
 app.use('*', (req, res) => {
-  res.status(400).send("Error: Picked up by the catchall.");
+  res.status(404).send("Error: Picked up by the catchall.");
 })
 
 module.exports = app;

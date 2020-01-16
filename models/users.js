@@ -33,15 +33,13 @@ async function getByUsername(username) {
     return theUser;
 };
 
+
+
+
+
 module.exports = {
     create,
     createHash,
     login,
     getByUsername
 }
-
-
-
-
-
-
