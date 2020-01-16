@@ -51,7 +51,7 @@ function checkBoard() {
       return;
     }
   }
-  populateBoardDOM(arrayObject, 1);
+  populateBoardDOM(arrayObject[2], 2);
 }
 
 function populateBoardDOM(obj, roundNumber) {
