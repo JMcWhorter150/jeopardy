@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-const data = require('../modules/data');
+// const data = require('../modules/data');
 
 const axios = require('axios').default;
 const jeopardyAPI = 'https://jeopardy.bentleyherron.dev/api';
@@ -26,10 +26,13 @@ async function getQuestionsForRound(showNumber='5392', roundNumber) {
 router.get('/', async (req, res)=>{
     // const data = await data.createArrayofArrayObject('2008-02-05');
     const data = await getQuestionsForRound();
-    console.log(data);
     res.render('game', {
         locals: {
+            pagetitle: 'Play Jeopardy',
             arrayArrayObject: JSON.stringify(data)
+        },
+        partials: {
+          navbar: req.session.navbar.value
         }
     });
 })
