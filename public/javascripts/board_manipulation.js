@@ -15,6 +15,8 @@ let questionAnswered = false;
 // TODO: Export Data after game ends
 // TODO: Make alex page??????
 // TODO: Make categories expand for mobiles
+// TODO: Fix answers that are not text and instead are just strings
+// TODO: If score negative, change color of score box to red
 
 function finalJeopardy() {
   showRound(3);
@@ -22,6 +24,7 @@ function finalJeopardy() {
     finalJeopardyCategory();
     setTimeout(() => {
       const bet = document.querySelector('#answerField');
+      bet.removeEventListener('change', checkIfRight);
       bet.addEventListener('change', checkBet);
       bet.addEventListener('change', answerTimer);
       setBet();
@@ -31,6 +34,8 @@ function finalJeopardy() {
     }, 3000)
   }, 3000);
 }
+
+
 
 function populateQuestionFinalJeopardy() {
   // when question is clicked, updates result box with question, updates resultbox question value, removes question
@@ -67,20 +72,15 @@ function finalJeopardyCategory() {
 }
 
 function setBet() {
-  const questionContainer = document.querySelector('.questionContainer');
-  const betText = document.querySelector('#questionText');
-  const answer = document.querySelector('#answerField');
-  let score = document.querySelector('.score').dataAttribute;
+  const betContainer = document.querySelector('.betContainer');
+  const betText = document.querySelector('#betText');
+  const bet = document.querySelector('#betField');
+  let score = document.querySelector('.score').dataAttribute.Score;
   betText.textContent = `Enter in a wager up to ${score}`;
-  // changes display from none to flex to show question
-  questionContainer.style.display = "flex";
+  betContainer.style.display = "flex";
   // puts cursor in answerField
-  answer.focus();
-  answer.select();
-  // answer.dataAttribute = {
-  //   "Answer": event.target.dataAttribute.Answer,
-  //   "Value": event.target.dataAttribute.Value
-  // };
+  bet.focus();
+  bet.select();
 }
 
 // when populating dom, check for non divisible answers
@@ -93,7 +93,7 @@ function setBet() {
 
 function checkBet(event) {
   const userBet = event.target.value;
-  const totalScore = document.querySelector('.score').dataAttribute;
+  // const totalScore = document.querySelector('.score').dataAttribute.Value;
   // if (userBet > totalScore) {
   //   const betText = document.querySelector('#questionText');
   //   betText.textContent = `Wager higher than score`;
@@ -102,21 +102,33 @@ function checkBet(event) {
   // } else {
   //   const 
   // }
+  const totalScore = document.querySelector('.score').dataAttribute.Score;
+  const betContainer = document.querySelector('.betContainer');
   const answer = document.querySelector('#answerField');
+  const bet = document.querySelector('#betText');
+  answer.dataAttribute.Value = userbet;
+  bet.textContent = "";
+  betContainer.style.display = 'none';
+  populateDDQuestion();
+}
+
+function populateDDQuestion() {
+  const questionContainer = document.querySelector('.questionContainer');
   const question = document.querySelector('#questionText');
-  answer.dataAttribute = {
-    "Value": userBet
-  };
-  question.textContent = "";
+  const answer = document.querySelector('#answerField');
+  question.textContent = answer.dataAttribute.Question;
+  // changes display from none to flex to show question
+  questionContainer.style.display = "flex";
+  // puts cursor in answerField
+  answer.focus();
+  answer.select();
 }
 
 
 
-function dailyDouble(event) {
+function dailyDouble() {
   showDailyDouble();
   setBet();
-  checkBet(event);
-  populateQuestionDOM(event);
 }
 
 function showDailyDouble() {
@@ -135,11 +147,6 @@ function showDailyDouble() {
       round.textContent = "";
       }
     }, 1000);
-}
-
-function makeBet() {
-  let bet = document.querySelector('.score').value;
-
 }
 
 function showRound(roundNumber) {
@@ -198,8 +205,7 @@ function populateBoardDOM(obj, roundNumber) {
     showRound(roundNumber);
     resetQuestionsDOM(roundNumber); // change 1 to whatever round it is
     populateCategoriesDOM(obj);
-    populateQuestionsDOM(obj);
-    addAnswerCheck();
+    populateQuestionsDOM(obj, roundNumber);
 }
 
 function resetQuestionsDOM(factor) {
@@ -222,7 +228,7 @@ function populateCategoriesDOM(obj) {
     }
 }
 
-function populateQuestionsDOM(obj) {
+function populateQuestionsDOM(obj, roundNumber) {
     // grabs each category of questions, and adds data to each element of category
     const questionsDOMArray = document.querySelectorAll('.question-item');
     for (let i=0;i<obj.length;i++) {
@@ -231,6 +237,13 @@ function populateQuestionsDOM(obj) {
             "Answer": obj[i].Answer,
             "Value": obj[i].Value
         };
+        let questionValue = obj[i].Value;
+        questionValue = questionValue.replace(/[$,]+/g,"");
+        console.log(questionValue)
+        if (!(questionValue % (roundNumber * 200) === 0)) {
+          questionsDOMArray[i].removeEventListener('click', answerTimer);
+          questionsDOMArray[i].addEventListener('click', dailyDouble);
+        }
     }
 }
  
@@ -241,7 +254,8 @@ function populateQuestionDOM(event) {
     let answer = document.querySelector('#answerField');
     answer.dataAttribute = {
         "Answer": event.target.dataAttribute.Answer,
-        "Value": event.target.dataAttribute.Value
+        "Value": event.target.dataAttribute.Value,
+        "Question": event.target.dataAttribute.Question
     };
     question.textContent = event.target.dataAttribute.Question;
     // changes display from none to flex to show question
@@ -266,6 +280,11 @@ function addAnswerCheck() {
     let answer = document.querySelector('#answerField');
     // change triggers when value for input field changed and focus lost or submitted
     answer.addEventListener('change', checkIfRight);
+}
+
+function addBetCheck() {
+  let bet = document.querySelector('#betField');
+  bet.addEventListener('change', checkBet);
 }
 
 function buzzTimer() {
@@ -343,5 +362,9 @@ function sendDataToBackend() {
     // after game is done, sends game data back to backend
 }
 
+console.log(arrayObject[0])
+
 populateBoardDOM(arrayObject[0], 1);
 setInitialScore();
+addAnswerCheck();
+addBetCheck();
