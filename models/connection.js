@@ -5,8 +5,8 @@ const pgp = require('pg-promise')({
 });
 
 const options = {
-    host: 'localhost',
-    database: 'jeopardy-app'
+    host: process.env.DB_HOST,
+    database: process.env.DB_NAME
 };
 
 const db = pgp(options);

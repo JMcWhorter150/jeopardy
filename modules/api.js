@@ -16,10 +16,10 @@ async function getQuestionsFromDate(date) {
 
 async function getQuestionsForRound(showNumber, roundNumber) {
     try {
-      const response = await axios.get(jeopardyAPI + `/shows/${showNumber}/${roundNumber}`);
+        const response = await axios.get(jeopardyAPI + `/shows/${showNumber}/${roundNumber}`);
         return response.data.questions;
     } catch (error) {
-      console.error(error);
+        console.error(error);
     }
 }
 
