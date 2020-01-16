@@ -29,10 +29,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Requires Login
 function requireLogin(req, res, next) {
   if (req.session && req.session.user) {
-      // console.log('require login passes');
       next();
   } else {
-      // console.log('not logged in');
       res.redirect('/login');
   }
 }
@@ -60,7 +58,7 @@ app.use(function(err, req, res, next) {
 });
 
 app.use('*', (req, res) => {
-  res.status(400).send("Error: Picked up by the catchall.");
+  res.status(404).send("Error: Picked up by the catchall.");
 })
 
 module.exports = app;
