@@ -11,6 +11,7 @@ dotenv.config();
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const profileRouter = require('./routes/profile');
+const gameRouter = require('./routes/game');
 
 var app = express();
 
@@ -40,6 +41,7 @@ function requireLogin(req, res, next) {
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/profile', requireLogin, profileRouter);
+app.use('/game', gameRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
