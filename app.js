@@ -11,6 +11,7 @@ dotenv.config();
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const profileRouter = require('./routes/profile');
+const leaderboardRouter = require('./routes/leaderboard');
 const gameRouter = require('./routes/game');
 
 var app = express();
@@ -40,6 +41,8 @@ function requireLogin(req, res, next) {
 // Routing
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/login', loginRouter);
+app.use('/leaderboard', leaderboardRouter);
 app.use('/profile', requireLogin, profileRouter);
 app.use('/game', gameRouter);
 
