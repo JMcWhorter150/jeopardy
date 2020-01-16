@@ -1,12 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Profile</title>
+${navbar}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/js/dataTables.bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/stylesheets/profile.css">
+    <script src="/javascripts/profile.js"></script>
 </head>
 <body>
-    <h1>This is your profile.</h1>
+    <div class="container">
+        <h2>Games Played</h2>
+        <p>Here are your previously played games:</p>       
+        <table id="dtOrder" class="table table-hover table-striped table-bordered table-sm" cellspacing="0" width="100%" method="$().DataTables()">
+          <thead>
+            <tr>
+              <th>Played Date</th>
+              <th>Episode Played</th>
+              <th>Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${gamesList}
+          </tbody>
+        </table>
+      </div>
 </body>
 </html>

@@ -15,7 +15,6 @@ function create(username, password) {
         username,
         createHash
     };
-    console.log(newUser);
     return newUser;
 }
 
@@ -26,10 +25,7 @@ async function login(username, password) {
 }
 
 async function getByUsername(username) {
-    const theUser = await db.one(`
-        select * from users where name=$1
-    `, [username]);
-    
+    const theUser = await db.one(`select * from users where name=$1`, [username]);
     return theUser;
 };
 
