@@ -64,6 +64,7 @@ async function createArrayofArrayObject(date) {
 
 
 module.exports = {
+    dateToFormattedString,
     getQuestionArray,
     createArrayofArrayObject
 }
