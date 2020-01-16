@@ -39,7 +39,6 @@ function requireLogin(req, res, next) {
 
 // Routing
 app.use('/', indexRouter);
-app.use('/login', loginRouter);
 app.use('/leaderboard', leaderboardRouter);
 app.use('/profile', requireLogin, profileRouter);
 app.use('/game', gameRouter);
