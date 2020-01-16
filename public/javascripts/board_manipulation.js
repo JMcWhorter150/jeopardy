@@ -1,3 +1,6 @@
+let globalSwitch = {
+  questionAnswered: false
+};
 const object = [
     {
       'Show Number': 4931,
@@ -274,12 +277,15 @@ const object = [
 // TODO: Get object to actually pull from backend to create object
 // TODO: Make functionality to change jeopardy board and reset to double jeopardy
 // TODO: Make final jeopardy functionality
+// TODO: Add daily double functionality (happens when values are not exactly 4, 8, 12, 16, 20 etc.)
 
 // TODO: Figure out how to manipulate string text when image or <a> should be shown
 // TODO: Make it playable by multiple people
 // TODO: Export Data after game ends
-// TODO: Add daily double functionality (happens when values are not exactly 4, 8, 12, 16, 20 etc.)
 // TODO: Make alex page??????
+// TODO: Fix timer
+// TODO: Make categories expand for mobiles
+
 
 function updateScoreDOM(score) {
     let userScore = document.querySelector('.score');
@@ -386,12 +392,19 @@ function answerTimer() {
     let questionTimer = setInterval(function(){
         progressBar.value = 10 - timeleft; // first number should be timeleft +1
         timeleft -= 1;
-        if(timeleft <= 0){
-            clearInterval(questionTimer);
-            progressBar.value = 0;
-            missedQuestion();
+        if(timeleft <= 0) { // || globalSwitch.questionAnswered
+          // resetQuestionAnswered();
+          progressBar.value = 0;
+          console.log('clearing interval')
+          clearInterval(questionTimer);
+          missedQuestion();
         }
     }, 1000);
+}
+
+function resetQuestionAnswered() {
+  globalSwitch.questionAnswered = !questionAnswered;
+  console.log(`questionAnswered=${globalSwitch[questionAnswered]}`);
 }
 
 function missedQuestion() {
@@ -414,6 +427,7 @@ function checkIfRight(event) {
         console.log('wrong');
         updateScoreDOM(answerValue * -1);
     }
+    // resetQuestionAnswered();
     resetQuestionContainer();
 }
 
