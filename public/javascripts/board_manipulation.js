@@ -170,6 +170,13 @@ function setInitialScore() {
 function updateScoreDOM(score) {
     let userScore = document.querySelector('.score');
     let currentScore = userScore.dataAttribute.Score;
+    if (score + currentScore < 0) {
+      const resultContainer = document.querySelector('.resultContainer');
+      resultContainer.style.backgroundColor = "red";
+    } else {
+      const resultContainer = document.querySelector('.resultContainer');
+      resultContainer.style.backgroundColor = "#0314a2";
+    }
     userScore.textContent = `Score: $${currentScore + score}`;
     userScore.dataAttribute.Score = currentScore + score;
 }
