@@ -1,7 +1,5 @@
 let questionAnswered = false;
-
-
-
+let ROUND = 1;
 // TODO: Make final jeopardy functionality
 //      Allow players to enter score to wager (changes value of question)
 //      Answer question, then go back to next person
@@ -16,18 +14,11 @@ let questionAnswered = false;
 // TODO: If score negative, change color of score box to red
 
 function finalJeopardy() {
-  showRound(3);
+  showRound(ROUND);
   setTimeout(() => {
     finalJeopardyCategory();
     setTimeout(() => {
-      const bet = document.querySelector('#answerField');
-      bet.removeEventListener('change', checkIfRight);
-      bet.addEventListener('change', checkBet);
-      bet.addEventListener('change', answerTimer);
       setBet();
-      bet.removeEventListener('change', checkBet);
-      bet.addEventListener('change', checkIfRight);
-      populateQuestionFinalJeopardy();
     }, 3000)
   }, 3000);
 }
@@ -39,10 +30,8 @@ function populateQuestionFinalJeopardy() {
   let questionContainer = document.querySelector('.questionContainer');
   let question = document.querySelector('#questionText');
   let answer = document.querySelector('#answerField');
-  answer.dataAttribute = {
-      "Answer": arrayObject[2].Answer,
-  };
-  question.textContent = arrayObject[2].Question;
+  answer.dataAttribute.Answer = arrayObject[2][0].Answer;
+  question.textContent = arrayObject[2][0].Question;
   // changes display from none to flex to show question
   questionContainer.style.display = "flex";
   // puts cursor in answerField
@@ -83,14 +72,6 @@ function setBet() {
   bet.select();
 }
 
-// when populating dom, check for non divisible answers
-// on these, give them a different onclick event
-// on click event should show daily double page, then
-// show a bet page,
-// check their bet,
-// change the value of the answer box to be that value
-// then populate the question area with proper stuff
-
 function checkBet(event) {
   const userBet = parseInt(event.target.value);
   const totalScore = document.querySelector('.score').dataAttribute.Score;
@@ -120,7 +101,11 @@ function checkBet(event) {
   answer.dataAttribute.Value = `$${userBet}`;
   bet.textContent = "";
   betContainer.style.display = 'none';
-  populateDDQuestion();
+  if (ROUND === 3) {
+    populateQuestionFinalJeopardy();
+  } else {
+    populateDDQuestion();
+  }
 }
 
 function populateDDQuestion() {
@@ -180,7 +165,6 @@ function showRound(roundNumber) {
     }, 1000);
 }
 
-// final jeopardy = input a wager, check it against current score, then present question
 function setInitialScore() {
   let userScore = document.querySelector('.score');
   userScore.dataAttribute = {
@@ -198,7 +182,13 @@ function updateScoreDOM(score) {
 function removeQuestionDOM(event) {
     event.target.textContent = "";
     event.target.removeEventListener("click", removeQuestionDOM);
-    event.target.dataAttribute = null;
+    event.target.removeEventListener('click', populateQuestionDOM);
+    event.target.removeEventListener('click', dailyDouble);
+    event.target.dataAttribute = {
+      "Answer": null,
+      "Value": null,
+      "Question": null
+    };
 }
     
 function checkBoard() {
@@ -209,10 +199,20 @@ function checkBoard() {
       return; // exits out of function if any questions have text remaining
     }
   }
-  populateBoardDOM(arrayObject[1], 2); // only runs if all questions have no text
+  if (ROUND === 1) {
+    ROUND = 2;
+    populateBoardDOM(arrayObject[1], 2); // only runs if all questions have no text
+    return ROUND;
+  } else if (ROUND === 2) {
+    ROUND = 3;
+    finalJeopardy();
+    return ROUND;
+  } else if (ROUND === 3) {
+    console.log('game over');
+  }
 }
 
-function populateBoardDOM(obj, roundNumber) {
+function populateBoardDOM(obj=arrayObject, roundNumber=ROUND) {
     // takes show object, updates text content of each block, adds onclick to each block
     // five questions, six categories
     showRound(roundNumber);
@@ -226,7 +226,11 @@ function resetQuestionsDOM(factor) {
         let questionArr = document.querySelectorAll(`.question${i}`);
         questionArr.forEach(element => {
             element.textContent = `$${i * factor * 200}`;
-            element.dataAttribute = null;
+            element.dataAttribute = {
+              Answer: null,
+              Question: null,
+              Value: null
+            };
             element.removeEventListener("click", populateQuestionDOM);
             element.removeEventListener('click', dailyDouble);
             element.removeEventListener('click', removeQuestionDOM);
@@ -289,7 +293,11 @@ function resetQuestionContainer() {
     let questionContainer = document.querySelector('.questionContainer');
     let question = document.querySelector('#questionText');
     let answer = document.querySelector('#answerField');
-    answer.dataAttribute = null;
+    answer.dataAttribute = {
+      Answer: null,
+      Question: null,
+      Value: null
+    };
     question.textContent = "";
     questionContainer.style.display = "none";
     checkBoard();
@@ -365,7 +373,17 @@ function sendDataToBackend() {
     // after game is done, sends game data back to backend
 }
 
+function setInitialAnswerAttribute() {
+  const answer = document.querySelector('#answerField');
+  answer.dataAttribute = {
+    Question: null,
+    Value: null,
+    Answer: null
+  }
+}
 populateBoardDOM(arrayObject[0], 1);
 setInitialScore();
+setInitialAnswerAttribute();
 addAnswerCheck();
 addBetCheck();
+// bug in daily doubles where value = 1000?
