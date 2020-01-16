@@ -32,7 +32,7 @@ router.get('/', async (req, res)=>{
             arrayArrayObject: JSON.stringify(data)
         },
         partials: {
-          navbar: req.session.user.navbar
+          navbar: req.session.navbar.value
         }
     });
 })
