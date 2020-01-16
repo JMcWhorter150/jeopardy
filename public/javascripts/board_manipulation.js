@@ -1,6 +1,4 @@
-let globalSwitch = {
-  questionAnswered: false
-};
+let questionAnswered = false;
 
 
 // TODO: Make functionality to change jeopardy board and reset to double jeopardy
@@ -13,6 +11,8 @@ let globalSwitch = {
 // TODO: Make alex page??????
 // TODO: Fix timer
 // TODO: Make categories expand for mobiles
+// TODO: Fix editing text breaks score
+
 function showRound(roundNumber) {
   let jeopardyHeader = document.querySelector('.jeopardyHeader');
   jeopardyHeader.style.display = "flex";
@@ -43,14 +43,22 @@ function removeQuestionDOM(event) {
     event.target.dataAttribute = null;
 }
     
-function updateBoardDOM() {
-    // after all questions are removed, repopulates board with next set of questions and categories
+function checkBoard() {
+  let questions = document.querySelectorAll('.question-item');
+  let done = false;
+  for (let question of questions) {
+    if (question.textContent.length > 0) {
+      return;
+    }
+  }
+  populateBoardDOM(arrayObject, 1);
 }
 
-function populateBoardDOM(obj) {
+function populateBoardDOM(obj, roundNumber) {
     // takes show object, updates text content of each block, adds onclick to each block
     // five questions, six categories
-    resetQuestionsDOM(2); // change 1 to whatever round it is
+    showRound(roundNumber);
+    resetQuestionsDOM(roundNumber); // change 1 to whatever round it is
     populateCategoriesDOM(obj);
     populateQuestionsDOM(obj);
     addAnswerCheck();
@@ -113,6 +121,7 @@ function resetQuestionContainer() {
     answer.dataAttribute = null;
     question.textContent = "";
     questionContainer.style.display = "none";
+    checkBoard();
 }
 
 function addAnswerCheck() {
@@ -136,7 +145,13 @@ function answerTimer() {
     let questionTimer = setInterval(function(){
         progressBar.value = 10 - timeleft; // first number should be timeleft +1
         timeleft -= 1;
-        if(timeleft <= 0) { // || globalSwitch.questionAnswered
+        if (questionAnswered) {
+          console.log('question answered')
+          questionAnswered = false;
+          progressBar.value = 0;
+          clearInterval(questionTimer);
+          return questionAnswered;
+        } else if(timeleft <= 0) { // || globalSwitch.questionAnswered
           // resetQuestionAnswered();
           progressBar.value = 0;
           console.log('clearing interval')
@@ -173,6 +188,8 @@ function checkIfRight(event) {
     }
     // resetQuestionAnswered();
     resetQuestionContainer();
+    questionAnswered = true;
+    return questionAnswered;
 }
 
 function formatText(str) {
@@ -188,10 +205,4 @@ function sendDataToBackend() {
     // after game is done, sends game data back to backend
 }
 
-
-
-
-// populateBoardDOM(object);
-console.log(arrayObject[0]);
-console.log(arrayObject);
-populateBoardDOM(arrayObject[3]);
+  populateBoardDOM(arrayObject[0], 1);

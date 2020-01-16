@@ -26,7 +26,8 @@ html, body {
     align-items: center;
     font-size: 22px;
     font-family: Helvetica;
-    color: #8cb7fc;
+    color: white;
+    text-shadow: 2px 2px 8px black;
     text-align: center;
 }
 
@@ -40,10 +41,11 @@ html, body {
     font-size: 25px;
     font-weight: 600;
     font-family: Helvetica;
-    color: #e1b680;
+    color: #d7a249;
+    text-shadow: 2px 2px black;
 }
 
-.resultContainer, .jeopardyHeader {
+.resultContainer {
     display: flex;
     height: 20%;
     background-color: #0314a2;
@@ -51,7 +53,8 @@ html, body {
     font-family: Helvetica;
     justify-content: center;
     align-items: center;
-    color: #e1b680;
+    color: white;
+    text-shadow: 2px 2px 8px black;
 }
 
 .questionContainer {
@@ -79,7 +82,7 @@ html, body {
     position: absolute;
     left: 0;
     top: 0;
-    display: none;
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
