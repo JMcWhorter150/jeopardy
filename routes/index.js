@@ -19,7 +19,7 @@ const session = require('express-session');
 const FileStore = require('session-file-store')(session);
 router.use(session({
     store: new FileStore({}),
-    secret: 'itsthatjeopardybitch'
+    secret: process.env.SESSION_KEY
 }));
 
 
