@@ -10,10 +10,7 @@ let questionAnswered = false;
 
 
 // TODO: Figure out how to manipulate string text when image or <a> should be shown
-// TODO: Fix editing text breaks score
-// TODO: Make it playable by multiple people
 // TODO: Export Data after game ends
-// TODO: Make alex page??????
 // TODO: Make categories expand for mobiles
 // TODO: Fix answers that are not text and instead are just strings
 // TODO: If score negative, change color of score box to red
@@ -76,6 +73,9 @@ function setBet() {
   const betText = document.querySelector('#betText');
   const bet = document.querySelector('#betField');
   let score = document.querySelector('.score').dataAttribute.Score;
+  if (score < 1000) {
+    score = 1000;
+  }
   betText.textContent = `Enter in a wager up to ${score}`;
   betContainer.style.display = "flex";
   // puts cursor in answerField
@@ -92,21 +92,32 @@ function setBet() {
 // then populate the question area with proper stuff
 
 function checkBet(event) {
-  const userBet = event.target.value;
-  // const totalScore = document.querySelector('.score').dataAttribute.Value;
-  // if (userBet > totalScore) {
-  //   const betText = document.querySelector('#questionText');
-  //   betText.textContent = `Wager higher than score`;
-  //   setBet();
-  //   return;
-  // } else {
-  //   const 
-  // }
+  const userBet = parseInt(event.target.value);
   const totalScore = document.querySelector('.score').dataAttribute.Score;
+  const betField = document.querySelector('#betField');
+  if (userBet < 5) {
+    betField.focus();
+    betField.select();
+    return;
+  } else if (!Number.isInteger(userBet)) {
+    betField.focus();
+    betField.select();
+    return;
+  } else if (totalScore < 1000) {
+    if (userBet > 1000) {
+      betField.focus();
+      betField.select();
+      return
+    }
+  } else if (userBet > totalScore) {
+    betField.focus();
+    betField.select();
+    return
+  }
   const betContainer = document.querySelector('.betContainer');
   const answer = document.querySelector('#answerField');
   const bet = document.querySelector('#betText');
-  answer.dataAttribute.Value = userbet;
+  answer.dataAttribute.Value = `$${userBet}`;
   bet.textContent = "";
   betContainer.style.display = 'none';
   populateDDQuestion();
@@ -126,9 +137,11 @@ function populateDDQuestion() {
 
 
 
-function dailyDouble() {
+function dailyDouble(event) {
   showDailyDouble();
-  setBet();
+  setTimeout(() => {
+    setBet();
+  }, 3000)
 }
 
 function showDailyDouble() {
@@ -213,9 +226,11 @@ function resetQuestionsDOM(factor) {
         let questionArr = document.querySelectorAll(`.question${i}`);
         questionArr.forEach(element => {
             element.textContent = `$${i * factor * 200}`;
-            element.addEventListener('click', populateQuestionDOM);
-            element.addEventListener('click', removeQuestionDOM);
-            element.addEventListener('click', answerTimer);
+            element.dataAttribute = null;
+            element.removeEventListener("click", populateQuestionDOM);
+            element.removeEventListener('click', dailyDouble);
+            element.removeEventListener('click', removeQuestionDOM);
+            element.removeEventListener('click', answerTimer);
         });
     }
 }
@@ -239,10 +254,14 @@ function populateQuestionsDOM(obj, roundNumber) {
         };
         let questionValue = obj[i].Value;
         questionValue = questionValue.replace(/[$,]+/g,"");
-        console.log(questionValue)
         if (!(questionValue % (roundNumber * 200) === 0)) {
-          questionsDOMArray[i].removeEventListener('click', answerTimer);
           questionsDOMArray[i].addEventListener('click', dailyDouble);
+          questionsDOMArray[i].addEventListener('click', populateQuestionDOM);
+          questionsDOMArray[i].addEventListener('click', removeQuestionDOM);
+        } else {
+          questionsDOMArray[i].addEventListener('click', populateQuestionDOM);
+          questionsDOMArray[i].addEventListener('click', removeQuestionDOM);
+          questionsDOMArray[i].addEventListener('click', answerTimer);
         }
     }
 }
@@ -287,13 +306,6 @@ function addBetCheck() {
   bet.addEventListener('change', checkBet);
 }
 
-function buzzTimer() {
-    // When question selected, starts callback, exits when button clicked to allow typing
-    // ?????????
-    // let myVar = setTimeout(callback, milliseconds);
-    // clearTimeout(myVar);
-}
-
 function answerTimer() {
     // once buzzed in, times how long they have to type the answer of the question
     // when someone clicks a category, it waits and then auto exits if no answer
@@ -316,11 +328,6 @@ function answerTimer() {
           missedQuestion();
         }
     }, 1000);
-}
-
-function resetQuestionAnswered() {
-  globalSwitch.questionAnswered = !questionAnswered;
-  console.log(`questionAnswered=${globalSwitch[questionAnswered]}`);
 }
 
 function missedQuestion() {
@@ -354,15 +361,9 @@ function formatText(str) {
     return str.toLowerCase();
 }
 
-function ifNoAnswers() {
-    // update answer box to Next Question, resets answer box
-}
-
 function sendDataToBackend() {
     // after game is done, sends game data back to backend
 }
-
-console.log(arrayObject[0])
 
 populateBoardDOM(arrayObject[0], 1);
 setInitialScore();
