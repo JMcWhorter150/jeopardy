@@ -1,0 +1,22 @@
+* {
+    box-sizing: border-box;
+    outline: 1px solid red;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    background-color: white;
+}
+
+.columnContainer {
+    display: flex;
+    height: 100%;
+    width: 100%;
+}
+
+.columnContainer > * {
+    width: 30%;
+    height: 100%;
+}
+
