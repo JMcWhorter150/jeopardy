@@ -1,22 +1,128 @@
 let questionAnswered = false;
 
 
-// TODO: Make functionality to change jeopardy board and reset to double jeopardy
+
 // TODO: Make final jeopardy functionality
+//      Allow players to enter score to wager (changes value of question)
+//      Answer question, then go back to next person
 // TODO: Add daily double functionality (happens when values are not exactly 4, 8, 12, 16, 20 etc.)
+// TODO: add answer page after score
+
 
 // TODO: Figure out how to manipulate string text when image or <a> should be shown
+// TODO: Fix editing text breaks score
 // TODO: Make it playable by multiple people
 // TODO: Export Data after game ends
 // TODO: Make alex page??????
-// TODO: Fix timer
 // TODO: Make categories expand for mobiles
-// TODO: Fix editing text breaks score
 
-function showRound(roundNumber) {
+function finalJeopardy() {
+  showRound(3);
+  setTimeout(() => {
+    finalJeopardyCategory();
+    setTimeout(() => {
+      const bet = document.querySelector('#answerField');
+      bet.addEventListener('change', checkBet);
+      bet.addEventListener('change', answerTimer);
+      setBet();
+      bet.removeEventListener('change', checkBet);
+      bet.addEventListener('change', checkIfRight);
+      populateQuestionFinalJeopardy();
+    }, 3000)
+  }, 3000);
+}
+
+function populateQuestionFinalJeopardy() {
+  // when question is clicked, updates result box with question, updates resultbox question value, removes question
+  let questionContainer = document.querySelector('.questionContainer');
+  let question = document.querySelector('#questionText');
+  let answer = document.querySelector('#answerField');
+  answer.dataAttribute = {
+      "Answer": arrayObject[2].Answer,
+  };
+  question.textContent = arrayObject[2].Question;
+  // changes display from none to flex to show question
+  questionContainer.style.display = "flex";
+  // puts cursor in answerField
+  answer.focus();
+  answer.select();
+}
+
+function finalJeopardyCategory() {
   let jeopardyHeader = document.querySelector('.jeopardyHeader');
   jeopardyHeader.style.display = "flex";
-  let headerText = arrayObject[roundNumber][0].Round;
+  let categoryText = arrayObject[2][0].Category;
+  let round = document.querySelector('.round');
+  round.textContent = categoryText;
+  let timeleft = 3;
+  let categoryTimer = setInterval(function(){
+    timeleft -= 1;
+    if(timeleft <= 0) {
+      console.log('clearing category')
+      clearInterval(categoryTimer);
+      jeopardyHeader.style.display = "none";
+      round.textContent = "";
+      }
+    }, 1000);
+}
+
+function setBet() {
+  const questionContainer = document.querySelector('.questionContainer');
+  const betText = document.querySelector('#questionText');
+  const answer = document.querySelector('#answerField');
+  let score = document.querySelector('.score').dataAttribute;
+  betText.textContent = `Enter in a wager up to ${score}`;
+  // changes display from none to flex to show question
+  questionContainer.style.display = "flex";
+  // puts cursor in answerField
+  answer.focus();
+  answer.select();
+  // answer.dataAttribute = {
+  //   "Answer": event.target.dataAttribute.Answer,
+  //   "Value": event.target.dataAttribute.Value
+  // };
+}
+
+// when populating dom, check for non divisible answers
+// on these, give them a different onclick event
+// on click event should show daily double page, then
+// show a bet page,
+// check their bet,
+// change the value of the answer box to be that value
+// then populate the question area with proper stuff
+
+function checkBet(event) {
+  const userBet = event.target.value;
+  const totalScore = document.querySelector('.score').dataAttribute;
+  // if (userBet > totalScore) {
+  //   const betText = document.querySelector('#questionText');
+  //   betText.textContent = `Wager higher than score`;
+  //   setBet();
+  //   return;
+  // } else {
+  //   const 
+  // }
+  const answer = document.querySelector('#answerField');
+  const question = document.querySelector('#questionText');
+  answer.dataAttribute = {
+    "Value": userBet
+  };
+  question.textContent = "";
+}
+
+
+
+function dailyDouble(event) {
+  showDailyDouble();
+  setBet();
+  checkBet(event);
+  populateQuestionDOM(event);
+}
+
+function showDailyDouble() {
+  let jeopardyHeader = document.querySelector('.jeopardyHeader');
+  jeopardyHeader.style.display = "flex";
+  let headerText = `Daily Double!`;
   let round = document.querySelector('.round');
   round.textContent = headerText;
   let timeleft = 3;
@@ -31,10 +137,42 @@ function showRound(roundNumber) {
     }, 1000);
 }
 
+function makeBet() {
+  let bet = document.querySelector('.score').value;
+
+}
+
+function showRound(roundNumber) {
+  let jeopardyHeader = document.querySelector('.jeopardyHeader');
+  jeopardyHeader.style.display = "flex";
+  let headerText = arrayObject[roundNumber - 1][0].Round;
+  let round = document.querySelector('.round');
+  round.textContent = headerText;
+  let timeleft = 3;
+  let headerTimer = setInterval(function(){
+    timeleft -= 1;
+    if(timeleft <= 0) {
+      console.log('clearing header')
+      clearInterval(headerTimer);
+      jeopardyHeader.style.display = "none";
+      round.textContent = "";
+      }
+    }, 1000);
+}
+
+// final jeopardy = input a wager, check it against current score, then present question
+function setInitialScore() {
+  let userScore = document.querySelector('.score');
+  userScore.dataAttribute = {
+    Score: 0
+  };
+}
+
 function updateScoreDOM(score) {
     let userScore = document.querySelector('.score');
-    let currentScore = parseInt((userScore.textContent).slice(8));
+    let currentScore = userScore.dataAttribute.Score;
     userScore.textContent = `Score: $${currentScore + score}`;
+    userScore.dataAttribute.Score = currentScore + score;
 }
 
 function removeQuestionDOM(event) {
@@ -48,10 +186,10 @@ function checkBoard() {
   let done = false;
   for (let question of questions) {
     if (question.textContent.length > 0) {
-      return;
+      return; // exits out of function if any questions have text remaining
     }
   }
-  populateBoardDOM(arrayObject[2], 2);
+  populateBoardDOM(arrayObject[1], 2); // only runs if all questions have no text
 }
 
 function populateBoardDOM(obj, roundNumber) {
@@ -205,4 +343,5 @@ function sendDataToBackend() {
     // after game is done, sends game data back to backend
 }
 
-  populateBoardDOM(arrayObject[0], 1);
+populateBoardDOM(arrayObject[0], 1);
+setInitialScore();

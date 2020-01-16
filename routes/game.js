@@ -8,7 +8,7 @@ const jeopardyAPI = 'https://jeopardy.bentleyherron.dev/api';
 
 async function getQuestionsForRound(showNumber='5392', roundNumber) {
     let array = [];
-    let count = 0;
+    let count = 1;
     while (count < 4) {
         try {
             const response = await axios.get(jeopardyAPI + `/shows/${showNumber}/${count}`);
