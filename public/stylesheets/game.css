@@ -43,7 +43,7 @@ html, body {
     color: #e1b680;
 }
 
-.resultContainer {
+.resultContainer, .jeopardyHeader {
     display: flex;
     height: 20%;
     background-color: #0314a2;
@@ -73,4 +73,21 @@ html, body {
 
 #questionText {
     text-align: center;
+}
+
+.jeopardyHeader {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    height: 100vh;
+    width: 100vw;
+    background-color: #0314a2;
+    color: white;
+    text-shadow: 2px 2px 8px black;
+    font-family: Helvetica;
 }
