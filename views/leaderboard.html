@@ -4,21 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
-    <link rel="stylesheet" href="./stylesheets/leaderboard.css">
     <title>${pagetitle}</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/js/dataTables.bootstrap.min.js"></script>
+  <link rel="stylesheet" href="/stylesheets/profile.css">
 </head>
 <body>
     ${navbar}
-    <div class="columnContainer">
-        <div class="column1">
-            <h1>Top Scoring Games</h1>
-            ${topGamesList}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <h4 align="center">Top Games</h4>
+                <table id="dtOrder" class="table table-hover table-striped table-bordered table-sm" cellspacing="0" width="100%">
+                  <tbody>
+                    ${topGamesList}
+                  </tbody>
+                </table>
+            </div>
+            <div class="col-sm-6">
+                <h4 align="center">Top Total Scores</h5>
+                <table id="dtOrder" class="table table-hover table-striped table-bordered table-sm" cellspacing="0" width="100%">
+                    
+                    <tbody>
+                      ${topScoresList}
+                    </tbody>
+                  </table>
+            </div>      
         </div>
-        <div class="column2">
-            <h1>Top Total Scores</h1>
-            ${topScoresList}
-        </div>
-    </div>
+      </div>
 </body>
 </html>
