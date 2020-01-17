@@ -36,8 +36,12 @@ router.get('/', async (req, res) => {
     try {
         res.render('leaderboard', {
             locals: {
+                pagetitle: 'Leaderboard',
                 topGamesList: topGamesHTML,
                 topScoresList: topScoresHTML
+            },
+            partials: {
+                navbar: req.session.navbar.value
             }
         })
     } catch (e) {
