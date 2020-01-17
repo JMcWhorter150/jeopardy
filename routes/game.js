@@ -1,10 +1,18 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+
+const selectRouter = require('./select');
 
 // const data = require('../modules/data');
+const episodeObj = require('../lists/air-date-show');
 
 const axios = require('axios').default;
 const jeopardyAPI = 'https://jeopardy.bentleyherron.dev/api';
+
+function getRandomEpisode (obj) {
+    const keys = Object.keys(obj)
+    return obj[keys[ keys.length * Math.random() << 0]];
+};
 
 async function getQuestionsForRound(showNumber='5392', roundNumber) {
     let array = [];
@@ -24,7 +32,8 @@ async function getQuestionsForRound(showNumber='5392', roundNumber) {
 
 router.get('/', async (req, res)=>{
     // const data = await data.createArrayofArrayObject('2008-02-05');
-    const data = await getQuestionsForRound();
+    const episodeNum = getRandomEpisode(episodeObj)
+    const data = await getQuestionsForRound(episodeNum);
     res.render('game', {
         locals: {
             pagetitle: 'Play Jeopardy',
@@ -37,6 +46,10 @@ router.get('/', async (req, res)=>{
         }
     });
 })
+
+
+// Select game routing
+router.use('/select', selectRouter);
 
 
 
