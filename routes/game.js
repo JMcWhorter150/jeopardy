@@ -1,6 +1,13 @@
 var express = require('express');
 var router = express.Router();
 
+const log = require('../models/log');
+
+const bodyParser = require('body-parser');
+const parseForm = bodyParser.urlencoded({
+    extended: true
+});
+
 // const data = require('../modules/data');
 
 const axios = require('axios').default;
@@ -35,6 +42,18 @@ router.get('/', async (req, res)=>{
         }
     });
 })
+
+router.post('/', parseForm, async (req, res) => {
+    // console.log(req.body);
+    const { score, date, id, game_id, episodePlayed } = req.body;
+    console.log(`Received score: ${score}`);
+    console.log(`Date played: ${date}`);
+
+    // const gameLog = await log.logGameToDatabase(id, date, episodePlayed);
+    // const scoreLog = await log.logScoreToDatabase(id, game_id, score);
+})
+
+
 
 
 
