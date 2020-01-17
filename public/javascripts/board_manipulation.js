@@ -5,11 +5,9 @@ let ROUND = 1;
 
 // TODOS 
 // TODO: Export Data after game ends // my part done
-// TODO: add answer page after score 
 // TODO: Figure out how to manipulate string text when image or <a> should be shown
 // TODO: Fix answers that are not text and instead are just strings
 // TODO: Make categories expand for mobiles
-// TODO: Make end screen
 // TODO: Make final jeopardy not run if score is less than 0
 // TODO: Find game breaking bug that happens after second daily double, sometimes
 
@@ -48,20 +46,21 @@ bet.addEventListener('change', checkBet);
 function answerTimer() {
   // once buzzed in, times how long they have to type the answer of the question
   // when someone clicks a category, it waits and then auto exits if no answer
+  console.log('timer started');
   let timeleft = 9; // should match whatever the progress bar max is in html
   let progressBar = document.querySelector('#progressBar');
   let questionTimer = setInterval(function(){
       progressBar.value = 10 - timeleft; // first number should be timeleft +1
       timeleft -= 1;
       if (QUESTIONANSWERED) {
-        console.log('question answered')
+        console.log('question answered before timer stopped')
         QUESTIONANSWERED = false;
         progressBar.value = 0;
         clearInterval(questionTimer);
         return QUESTIONANSWERED; // resets questionanswered global variable for next question
       } else if(timeleft <= 0) {
         progressBar.value = 0;
-        console.log('clearing interval')
+        console.log('timer stopped')
         clearInterval(questionTimer);
         missedQuestion();
       }
@@ -115,15 +114,15 @@ function populateQuestionsDOM(obj, roundNumber) {
           "Question": obj[i].Question,
           "Answer": obj[i].Answer,
           "Value": "$" + questionValue
-      };
+      }; // NEVER CHANGE THE ORDER OF THE BELOW.....EVER
       if ("$" + questionValue !== questionsDOMArray[i].textContent) { // if the value of the question doesn't match what the value should be, makes it a daily double
         questionsDOMArray[i].addEventListener('click', dailyDouble); // daily double question events
         questionsDOMArray[i].addEventListener('click', populateQuestionDOM);
         questionsDOMArray[i].addEventListener('click', removeQuestionDOM);
       } else { 
         questionsDOMArray[i].addEventListener('click', populateQuestionDOM); // regular question events
-        questionsDOMArray[i].addEventListener('click', removeQuestionDOM);
         questionsDOMArray[i].addEventListener('click', answerTimer);
+        questionsDOMArray[i].addEventListener('click', removeQuestionDOM);
       }
   }
 }
