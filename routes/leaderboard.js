@@ -2,17 +2,18 @@
 var express = require('express');
 var router = express.Router();
 const leaderboard = require('../models/leaderboardFunctions');
+const stats = require('../models/stats');
 
 router.get('/', async (req, res) => {
     
 
     const topTenGames = await leaderboard.getTopTenGames();
     for (let entry of topTenGames) {
-        console.log(entry);
+        // console.log(entry);
         let userName = await leaderboard.getUsernameById(entry.user_id)
-        console.log(userName);
+        // console.log(userName);
         entry.user_id = await userName[0].name;
-        console.log(entry);
+        // console.log(entry);
     }
 
     const topGamesHTML = topTenGames.map((game) => {
@@ -26,11 +27,11 @@ router.get('/', async (req, res) => {
 
     const topTotalScores = await leaderboard.getTopTotalScores();
     for (let entry of topTotalScores) {
-        console.log(entry);
+        // console.log(entry);
         let userName = await leaderboard.getUsernameById(entry.user_id)
-        console.log(userName);
+        // console.log(userName);
         entry.user_id = await userName[0].name;
-        console.log(entry);
+        // console.log(entry);
     }
 
     const topScoresHTML = topTotalScores.map((user) => {

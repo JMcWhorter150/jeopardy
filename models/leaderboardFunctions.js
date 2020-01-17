@@ -18,7 +18,7 @@ async function getUsernameById(user_id) {
 
 async function getTopTenGames() {
     const topGamesArray = await db.query(`
-        select * from scores 
+        select * from gamesLog 
         order by score desc
         limit 10;
     `)
@@ -36,13 +36,13 @@ async function getTopTenGames() {
 async function getTopTotalScores() {
     const topScoresArray = await db.query(`
         select user_id, sum(score)
-        from scores
+        from gamesLog
         group by user_id
         order by sum desc
         limit 10;
     `)
         .then(data => {
-            console.log(data);
+            // console.log(data);
             return data;
         })
         .catch (err => {

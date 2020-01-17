@@ -47,7 +47,7 @@ router.get('/', async (req, res)=>{
 
 router.post('/', parseForm, async (req, res) => {
     // console.log(req.body);
-    const { score, date, id, game_id, episodePlayed } = req.body;
+    const { score, date, id, episodePlayed } = req.body;
     console.log(`Received score: ${score}`);
     console.log(`Date played: ${date}`);
 
