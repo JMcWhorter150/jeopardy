@@ -35,7 +35,9 @@ function setInitialAnswerAttribute() {
 function addAnswerCheck() {
   let answer = document.querySelector('#answerField');
   // change triggers when value for input field changed and focus lost or submitted
+  answer.addEventListener('change', populateAnswerDOM);
   answer.addEventListener('change', checkIfRight);
+  answer.addEventListener('change', showAnswerDOM);
 }
 
 function addBetCheck() {
@@ -221,15 +223,28 @@ function populateQuestionDOM(event) {
 }
 
 function populateAnswerDOM(event) {
-
-}
-
-function showAnswerDOM(event) {
-
+  // should fill answer page with answer data after answer is submitted and show it
+  const answerField = document.querySelector('#answerField');
+  const correctAnswerText = document.querySelector('#correctAnswerText');
+  const yourAnswerText = document.querySelector('#yourAnswerText');
+  correctAnswerText.textContent = `Correct Answer: ${answerField.dataAttribute.Answer}`;
+  yourAnswerText.textContent = `Your Answer: ${event.target.value}`;
 }
 
 function resetAnswerDOM() {
+  // cleans out the answer dom for next page
+  const answerContainer = document.querySelector('.answerContainer');
+  const correctAnswerText = document.querySelector('#correctAnswerText');
+  const yourAnswerText = document.querySelector('#yourAnswerText');
+  correctAnswerText.textContent = "";
+  yourAnswerText.textContent = "";
+  answerContainer.style.display = 'none';
+}
 
+function showAnswerDOM(event) {
+  const answerContainer = document.querySelector('.answerContainer');
+  answerContainer.style.display = 'flex';
+  setTimeout(resetAnswerDOM, 3000); // resets page after 3 seconds
 }
 
 function resetQuestionContainer() {
