@@ -16,13 +16,20 @@ let CANBUZZ = false;
 // TODO: Add timer functionality to answer    (NOW) (touchstart event is tapping the screen on mobile)
 // TODO: (BUG)If dd answered, timers don't show up (BUG)
 
-
+// When question answered, if right, add to correct questions
+// When question not answered, add to jeopardy questions not answered
+// check round and add to right place when necessary
 // ============ SET INITIAL BOARD CONDITIONS FUNCTIONS ============
 
 function setInitialScore() {
   let userScore = document.querySelector('.score');
   userScore.dataAttribute = {
-    Score: 0
+    Score: 0,
+    jeopardyQuestionsCorrect: 0,
+    jeopardyQuestionsNotAnswered: 0,
+    dJeopardyQuestionsCorrect: 0,
+    dJeopardyQuestionsNotAnswered: 0,
+    fJeopardyCorrect: 0
   };
 }
 
@@ -150,6 +157,16 @@ function updateScoreDOM(score) {
   } // updates score text and score data attribute
   userScore.textContent = `Score: $${currentScore + score}`;
   userScore.dataAttribute.Score = currentScore + score;
+  // updates question data if right
+  if (score > 0) {
+    if (ROUND === 1) {
+      userScore.dataAttribute.jeopardyQuestionsCorrect += 1;
+    } else if (ROUND === 2) {
+      userScore.dataAttribute.dJeopardyQuestionsCorrect += 1;
+    } else if (ROUND === 3) {
+      userScore.dataAttribute.dJeopardyQuestionsCorrect += 1;
+    }
+  }
 }
 
 function removeQuestionDOM(event) {
@@ -352,8 +369,18 @@ function waitForBuzz() {
       populateAnswerDOMGeneral();
       showAnswerDOM();
       resetQuestionContainer();
+      updateQuestionsNotAnswered();
     }
   }, 100)
+}
+
+function updateQuestionsNotAnswered() {
+  const userScore = document.querySelector('.score');
+  if (ROUND === 1) {
+    userScore.dataAttribute.jeopardyQuestionsNotAnswered += 1;
+  } else if (ROUND === 2) {
+    userScore.dataAttribute.dJeopardyQuestionsNotAnswered += 1;
+  }
 }
 
 function contestantBuzzed(event) {
