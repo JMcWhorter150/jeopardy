@@ -19,6 +19,7 @@ let CANBUZZ = false;
 // When question answered, if right, add to correct questions
 // When question not answered, add to jeopardy questions not answered
 // check round and add to right place when necessary
+// if user not logged in variable = null;
 // ============ SET INITIAL BOARD CONDITIONS FUNCTIONS ============
 
 function setInitialScore() {
@@ -549,9 +550,9 @@ function populateFinalScore() {
   const jeopardyHeader = document.querySelector('.jeopardyHeader');
   jeopardyHeader.style.display = 'flex';
   const text = document.querySelector('.round');
-  const score = document.querySelector('.score').dataAttribute.Score;
+  const score = document.querySelector('.score');
   let name = 'Joe'; // update to be username
-  text.textContent = `Congratulations ${name}! Your final score was: ${score}`;
+  text.textContent = `Congratulations ${name}! Your final score was: ${score.dataAttribute.Score}`;
   const form = document.createElement('form');
   form.method = "POST";
   const userIdInput = document.createElement('input');
@@ -560,18 +561,43 @@ function populateFinalScore() {
   userIdInput.style.display = "none";
   const scoreInput = document.createElement('input');
   scoreInput.name = "score";
-  scoreInput.value = score;
+  scoreInput.value = score.dataAttribute.Score;
   scoreInput.style.display = "none";
   const dateInput = document.createElement('input');
   dateInput.name = 'date';
   dateInput.value = new Date();
   dateInput.style.display = "none";
+  const jeopardyQuestionsCorrect = document.createElement('input');
+  jeopardyQuestionsCorrect.name = 'jeopardyQuestionsCorrect';
+  jeopardyQuestionsCorrect.value = score.dataAttribute.jeopardyQuestionsCorrect;
+  jeopardyQuestionsCorrect.style.display = "none";
+  const jeopardyQuestionsNotAnswered = document.createElement('input');
+  jeopardyQuestionsNotAnswered.name = 'jeopardyQuestionsNotAnswered';
+  jeopardyQuestionsNotAnswered.value = score.dataAttribute.jeopardyQuestionsNotAnswered;
+  jeopardyQuestionsNotAnswered.style.display = "none";
+  const dJeopardyQuestionsCorrect = document.createElement('input');
+  dJeopardyQuestionsCorrect.name = 'dJeopardyQuestionsCorrect';
+  dJeopardyQuestionsCorrect.value = score.dataAttribute.dJeopardyQuestionsCorrect;
+  dJeopardyQuestionsCorrect.style.display = "none";
+  const dJeopardyQuestionsNotAnswered = document.createElement('input');
+  dJeopardyQuestionsNotAnswered.name = 'dJeopardyQuestionsNotAnswered';
+  dJeopardyQuestionsNotAnswered.value = score.dataAttribute.dJeopardyQuestionsNotAnswered;
+  dJeopardyQuestionsNotAnswered.style.display = "none";
+  const fJeopardyCorrect = document.createElement('input');
+  fJeopardyCorrect.name = 'fJeopardyCorrect';
+  fJeopardyCorrect.value = score.dataAttribute.fJeopardyCorrect;
+  fJeopardyCorrect.style.display = "none";
   const submit = document.createElement('input');
   submit.type = 'submit';
   submit.value = 'Post Score';
   form.appendChild(userIdInput);
   form.appendChild(scoreInput);
   form.appendChild(dateInput);
+  form.appendChild(jeopardyQuestionsCorrect);
+  form.appendChild(jeopardyQuestionsNotAnswered);
+  form.appendChild(dJeopardyQuestionsCorrect);
+  form.appendChild(dJeopardyQuestionsNotAnswered);
+  form.appendChild(fJeopardyCorrect);
   form.appendChild(submit);
   jeopardyHeader.appendChild(form);
 }
