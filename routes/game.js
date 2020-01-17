@@ -9,6 +9,15 @@ const episodeObj = require('../lists/air-date-show');
 const axios = require('axios').default;
 const jeopardyAPI = 'https://jeopardy.bentleyherron.dev/api';
 
+// Requires Login
+function requireLogin(req, res, next) {
+    if (req.session && req.session.user) {
+        next();
+    } else {
+        res.redirect('/login');
+    }
+}
+
 function getRandomEpisode (obj) {
     const keys = Object.keys(obj)
     return obj[keys[ keys.length * Math.random() << 0]];
@@ -49,7 +58,7 @@ router.get('/', async (req, res)=>{
 
 
 // Select game routing
-router.use('/select', selectRouter);
+router.use('/select', requireLogin, selectRouter);
 
 
 
