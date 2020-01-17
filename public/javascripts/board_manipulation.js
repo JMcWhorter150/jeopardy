@@ -1,23 +1,36 @@
 // ============ GLOBAL VARIABLES ============
 
 let QUESTIONANSWERED = false;
+let BUZZED = false;
 let ROUND = 1;
+let CANBUZZ = false;
 
 // TODOS 
 // TODO: Export Data after game ends // my part done
 // TODO: Figure out how to manipulate string text when image or <a> should be shown
-// TODO: Fix answers that are not text and instead are just strings
+// TODO: Fix answers that are not text and instead are just strings --- DONE
 // TODO: Make categories expand for mobiles
-// TODO: Make final jeopardy not run if score is less than 0
-// TODO: Find game breaking bug that happens after second daily double, sometimes
+// TODO: (BUG)Make final jeopardy not run if score is less than 0
+// TODO: (BUG)Find game breaking bug that happens after second daily double, sometimes
+// TODO: Add more attributes to send back to game
+// TODO: Add timer functionality to answer    (NOW) (touchstart event is tapping the screen on mobile)
+// TODO: (BUG)If dd answered, timers don't show up (BUG)
 
-
+// When question answered, if right, add to correct questions
+// When question not answered, add to jeopardy questions not answered
+// check round and add to right place when necessary
+// if user not logged in variable = null;
 // ============ SET INITIAL BOARD CONDITIONS FUNCTIONS ============
 
 function setInitialScore() {
   let userScore = document.querySelector('.score');
   userScore.dataAttribute = {
-    Score: 0
+    Score: 0,
+    jeopardyQuestionsCorrect: 0,
+    jeopardyQuestionsNotAnswered: 0,
+    dJeopardyQuestionsCorrect: 0,
+    dJeopardyQuestionsNotAnswered: 0,
+    fJeopardyCorrect: 0
   };
 }
 
@@ -43,29 +56,11 @@ let bet = document.querySelector('#betField');
 bet.addEventListener('change', checkBet);
 }
 
-function answerTimer() {
-  // once buzzed in, times how long they have to type the answer of the question
-  // when someone clicks a category, it waits and then auto exits if no answer
-  console.log('timer started');
-  let timeleft = 9; // should match whatever the progress bar max is in html
-  let progressBar = document.querySelector('#progressBar');
-  let questionTimer = setInterval(function(){
-      progressBar.value = 10 - timeleft; // first number should be timeleft +1
-      timeleft -= 1;
-      if (QUESTIONANSWERED) {
-        console.log('question answered before timer stopped')
-        QUESTIONANSWERED = false;
-        progressBar.value = 0;
-        clearInterval(questionTimer);
-        return QUESTIONANSWERED; // resets questionanswered global variable for next question
-      } else if(timeleft <= 0) {
-        progressBar.value = 0;
-        console.log('timer stopped')
-        clearInterval(questionTimer);
-        missedQuestion();
-      }
-  }, 1000);
+function addBuzzer() {
+  document.addEventListener('keyup', contestantBuzzed);
 }
+
+
 
 // ============ RESET BOARD FUNCTIONS ============
 
@@ -82,7 +77,8 @@ function resetQuestionsDOM(factor) {
           element.removeEventListener("click", populateQuestionDOM);
           element.removeEventListener('click', dailyDouble);
           element.removeEventListener('click', removeQuestionDOM);
-          element.removeEventListener('click', answerTimer);
+          // element.removeEventListener('click', answerTimer);
+          element.removeEventListener('click', waitForBuzz);
       });
   }
 }
@@ -121,7 +117,8 @@ function populateQuestionsDOM(obj, roundNumber) {
         questionsDOMArray[i].addEventListener('click', removeQuestionDOM);
       } else { 
         questionsDOMArray[i].addEventListener('click', populateQuestionDOM); // regular question events
-        questionsDOMArray[i].addEventListener('click', answerTimer);
+        // questionsDOMArray[i].addEventListener('click', answerTimer);
+        questionsDOMArray[i].addEventListener('click', waitForBuzz);
         questionsDOMArray[i].addEventListener('click', removeQuestionDOM);
       }
   }
@@ -161,6 +158,16 @@ function updateScoreDOM(score) {
   } // updates score text and score data attribute
   userScore.textContent = `Score: $${currentScore + score}`;
   userScore.dataAttribute.Score = currentScore + score;
+  // updates question data if right
+  if (score > 0) {
+    if (ROUND === 1) {
+      userScore.dataAttribute.jeopardyQuestionsCorrect += 1;
+    } else if (ROUND === 2) {
+      userScore.dataAttribute.dJeopardyQuestionsCorrect += 1;
+    } else if (ROUND === 3) {
+      userScore.dataAttribute.dJeopardyQuestionsCorrect += 1;
+    }
+  }
 }
 
 function removeQuestionDOM(event) {
@@ -169,7 +176,8 @@ function removeQuestionDOM(event) {
   event.target.removeEventListener("click", removeQuestionDOM);
   event.target.removeEventListener('click', populateQuestionDOM);
   event.target.removeEventListener('click', dailyDouble);
-  event.target.removeEventListener('click', answerTimer);
+  // event.target.removeEventListener('click', answerTimer);
+  event.target.removeEventListener('click', waitForBuzz);
   event.target.dataAttribute = {
     "Answer": null,
     "Value": null,
@@ -217,8 +225,9 @@ function populateQuestionDOM(event) {
     // changes display from none to flex to show question
     questionContainer.style.display = "flex";
     // puts cursor in answerField
-    answer.focus();
-    answer.select();
+    questionContainer.focus();
+    // answer.focus();
+    // answer.select();
 }
 
 function populateAnswerDOM(event) {
@@ -228,6 +237,12 @@ function populateAnswerDOM(event) {
   const yourAnswerText = document.querySelector('#yourAnswerText');
   correctAnswerText.textContent = `Correct Answer: ${answerField.dataAttribute.Answer}`;
   yourAnswerText.textContent = `Your Answer: ${event.target.value}`;
+}
+
+function populateAnswerDOMGeneral() {
+  const answerField = document.querySelector('#answerField');
+  const correctAnswerText = document.querySelector('#correctAnswerText');
+  correctAnswerText.textContent = `Correct Answer: ${answerField.dataAttribute.Answer}`;
 }
 
 function resetAnswerDOM() {
@@ -256,6 +271,8 @@ function resetQuestionContainer() {
       Question: null,
       Value: null
     };
+    answer.value = "";
+    answer.style.display = "none";
     question.textContent = "";
     questionContainer.style.display = "none";
     checkBoard();
@@ -296,6 +313,88 @@ function formatText(str) {
     } else { // if answer is anything else, just return the answer
       return str;
     }
+}
+
+function answerTimer() {
+  // once buzzed in, times how long they have to type the answer of the question
+  // when someone clicks a category, it waits and then auto exits if no answer
+  console.log('timer started');
+  let timeleft = 9; // should match whatever the progress bar max is in html
+  let progressBar = document.querySelector('#answerBar');
+  progressBar.style.display = "block";
+  let questionTimer = setInterval(function(){
+      progressBar.value = 10 - timeleft; // first number should be timeleft +1
+      timeleft -= 1;
+      if (QUESTIONANSWERED) {
+        console.log('question answered before timer stopped')
+        QUESTIONANSWERED = false;
+        progressBar.style.display = "none";
+        progressBar.value = 0;
+        clearInterval(questionTimer);
+        return QUESTIONANSWERED; // resets questionanswered global variable for next question
+      } else if(timeleft <= 0) {
+        progressBar.style.display = "none";
+        progressBar.value = 0;
+        console.log('timer stopped')
+        clearInterval(questionTimer);
+        missedQuestion();
+      }
+  }, 1000);
+}
+
+function waitForBuzz() {
+  // after user selects question, question shows, if user presses a key, then show answer box, then start answer timer. If user doesn't tap, then goes to next answer.
+  CANBUZZ = true;
+  let timeleft = 50;
+  let questionBar = document.querySelector('#questionBar');
+  questionBar.style.display = "block";
+  let buzzTimer = setInterval(() => {
+    timeleft -= 1;
+    if (timeleft % 10 === 0) {
+      questionBar.value = 51 - timeleft;
+    }
+    if (BUZZED) {
+      console.log('contestant buzzed');
+      BUZZED = false;
+      questionBar.style.display = "none";
+      questionBar.value = 0;
+      clearInterval(buzzTimer);
+      CANBUZZ = false;
+      return BUZZED;
+    } else if (timeleft <= 0) {
+      CANBUZZ = false;
+      questionBar.style.display = "none";
+      questionBar.value = 0;
+      console.log('contestant no buzz');
+      clearInterval(buzzTimer);
+      populateAnswerDOMGeneral();
+      showAnswerDOM();
+      resetQuestionContainer();
+      updateQuestionsNotAnswered();
+    }
+  }, 100)
+}
+
+function updateQuestionsNotAnswered() {
+  const userScore = document.querySelector('.score');
+  if (ROUND === 1) {
+    userScore.dataAttribute.jeopardyQuestionsNotAnswered += 1;
+  } else if (ROUND === 2) {
+    userScore.dataAttribute.dJeopardyQuestionsNotAnswered += 1;
+  }
+}
+
+function contestantBuzzed(event) {
+  // when user buzzes, show answer field, start answer timer
+  if (event.code === "Enter" && CANBUZZ) {
+    const answer = document.querySelector('#answerField');
+    answer.style.display = "inline-block";
+    answer.focus();
+    answer.select();
+    answerTimer();
+    BUZZED = true;
+    return BUZZED;
+  }
 }
 
 // ============ BETTING FUNCTIONS ============
@@ -364,6 +463,7 @@ function populateDDQuestion() {
   // changes display from none to flex to show question
   questionContainer.style.display = "flex";
   // puts cursor in answerField
+  answer.style.display = 'inline-block';
   answer.focus();
   answer.select();
 }
@@ -419,6 +519,7 @@ function populateQuestionFinalJeopardy() {
   // changes display from none to flex to show question
   questionContainer.style.display = "flex";
   // puts cursor in answerField
+  answer.style.display = 'inline-block';
   answer.focus();
   answer.select();
 }
@@ -449,32 +550,63 @@ function populateFinalScore() {
   const jeopardyHeader = document.querySelector('.jeopardyHeader');
   jeopardyHeader.style.display = 'flex';
   const text = document.querySelector('.round');
-  const score = document.querySelector('.score').dataAttribute.Score;
-  let name = 'Joe'; // update to be username
-  text.textContent = `Congratulations ${name}! Your final score was: ${score}`;
+  const score = document.querySelector('.score');
+  let name = userObject.username; // update to be username
+  text.textContent = `Congratulations ${name}! Your final score was: ${score.dataAttribute.Score}`;
   const form = document.createElement('form');
   form.method = "POST";
-  const userNameInput = document.createElement('input');
-  userNameInput.name = "id";
-  userNameInput.value = "1";
-  userNameInput.style.display = "none";
+  const userIdInput = document.createElement('input');
+  userIdInput.name = "id";
+  userIdInput.value = userObject.user_id || 1;
+  userIdInput.style.display = "none";
   const scoreInput = document.createElement('input');
   scoreInput.name = "score";
-  scoreInput.value = score;
+  scoreInput.value = score.dataAttribute.Score;
   scoreInput.style.display = "none";
   const dateInput = document.createElement('input');
   dateInput.name = 'date';
   dateInput.value = new Date();
   dateInput.style.display = "none";
+  const jeopardyQuestionsCorrect = document.createElement('input');
+  jeopardyQuestionsCorrect.name = 'jeopardyQuestionsCorrect';
+  jeopardyQuestionsCorrect.value = score.dataAttribute.jeopardyQuestionsCorrect;
+  jeopardyQuestionsCorrect.style.display = "none";
+  const jeopardyQuestionsNotAnswered = document.createElement('input');
+  jeopardyQuestionsNotAnswered.name = 'jeopardyQuestionsNotAnswered';
+  jeopardyQuestionsNotAnswered.value = score.dataAttribute.jeopardyQuestionsNotAnswered;
+  jeopardyQuestionsNotAnswered.style.display = "none";
+  const dJeopardyQuestionsCorrect = document.createElement('input');
+  dJeopardyQuestionsCorrect.name = 'dJeopardyQuestionsCorrect';
+  dJeopardyQuestionsCorrect.value = score.dataAttribute.dJeopardyQuestionsCorrect;
+  dJeopardyQuestionsCorrect.style.display = "none";
+  const dJeopardyQuestionsNotAnswered = document.createElement('input');
+  dJeopardyQuestionsNotAnswered.name = 'dJeopardyQuestionsNotAnswered';
+  dJeopardyQuestionsNotAnswered.value = score.dataAttribute.dJeopardyQuestionsNotAnswered;
+  dJeopardyQuestionsNotAnswered.style.display = "none";
+  const fJeopardyCorrect = document.createElement('input');
+  fJeopardyCorrect.name = 'fJeopardyCorrect';
+  fJeopardyCorrect.value = score.dataAttribute.fJeopardyCorrect;
+  fJeopardyCorrect.style.display = "none";
   const submit = document.createElement('input');
   submit.type = 'submit';
   submit.value = 'Post Score';
-  form.appendChild(userNameInput);
+  form.appendChild(userIdInput);
   form.appendChild(scoreInput);
   form.appendChild(dateInput);
+  form.appendChild(jeopardyQuestionsCorrect);
+  form.appendChild(jeopardyQuestionsNotAnswered);
+  form.appendChild(dJeopardyQuestionsCorrect);
+  form.appendChild(dJeopardyQuestionsNotAnswered);
+  form.appendChild(fJeopardyCorrect);
   form.appendChild(submit);
   jeopardyHeader.appendChild(form);
 }
+
+// questions correct jeopardy jeopardyQuestionsCorrect ("1")
+// questions not answered jeopardy jeopardyQuestionsNotAnswered ("1")
+// questions correct double jeopardy qdjea dJeopardyQuestionsCorrect
+// questions not answered double jeopardy dJeopardyQuestionsNotAnswered
+// questions correct final jeopardy fJeopardyCorrect
 
 // ============ FUNCTIONS RUN AT BEGINNING OF GAME ============
 
@@ -483,3 +615,5 @@ setInitialScore();
 setInitialAnswerAttribute();
 addAnswerCheck(); // never removed
 addBetCheck(); // never removed
+addBuzzer(); // never removed
+// 

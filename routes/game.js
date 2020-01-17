@@ -1,5 +1,7 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+
+const selectRouter = require('./select');
 
 const log = require('../models/log');
 
@@ -9,9 +11,24 @@ const parseForm = bodyParser.urlencoded({
 });
 
 // const data = require('../modules/data');
+const episodeObj = require('../lists/air-date-show');
 
 const axios = require('axios').default;
 const jeopardyAPI = 'https://jeopardy.bentleyherron.dev/api';
+
+// Requires Login
+function requireLogin(req, res, next) {
+    if (req.session && req.session.user) {
+        next();
+    } else {
+        res.redirect('/login');
+    }
+}
+
+function getRandomEpisode (obj) {
+    const keys = Object.keys(obj)
+    return obj[keys[ keys.length * Math.random() << 0]];
+};
 
 async function getQuestionsForRound(showNumber='5392', roundNumber) {
     let array = [];
@@ -30,11 +47,25 @@ async function getQuestionsForRound(showNumber='5392', roundNumber) {
 
 
 router.get('/', async (req, res)=>{
+    // Check if user is logged in for user id object for frontend
+    if (req.session && req.session.user) {
+            userObj = {
+                user_id: req.session.user.id,
+                username: req.session.user.username
+            }
+        } else {
+            userObj = {
+                user_id: null,
+                username: 'Anonymous'
+            }
+    }
     // const data = await data.createArrayofArrayObject('2008-02-05');
-    const data = await getQuestionsForRound();
+    const episodeNum = getRandomEpisode(episodeObj)
+    const data = await getQuestionsForRound(episodeNum);
     res.render('game', {
         locals: {
             pagetitle: 'Play Jeopardy',
+            userinfo: JSON.stringify(userObj),
             arrayArrayObject: JSON.stringify(data)
         },
         partials: {
@@ -56,6 +87,10 @@ router.post('/', parseForm, async (req, res) => {
 })
 
 
+
+
+// Select game routing
+router.use('/select', requireLogin, selectRouter);
 
 
 
