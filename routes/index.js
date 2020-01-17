@@ -14,7 +14,7 @@ router.use(session({
   cookie: { secure: false }
 }));
 
-const user = require('../models/users');
+const users = require('../models/users');
 
 router.use((req, res, next) =>{
   if (req.session && req.session.navbar) {
@@ -44,7 +44,8 @@ router.get('/', function(req, res, next) {
 router.get('/login', (req, res, next) => {
   res.render('login', {
     locals: {
-      pagetitle: 'Login'
+      pagetitle: 'Login',
+      submitValue: 'Login'
     },
     partials: {
       navbar: req.session.navbar.value
@@ -55,14 +56,13 @@ router.get('/login', (req, res, next) => {
 // Login post
 router.post('/login', parseForm, async (req, res) => {
     const { name, password } = req.body;
-    const didLoginSuccessfully = await user.login(name, password);
+    const didLoginSuccessfully = await users.login(name, password);
     if (didLoginSuccessfully) {
-        const theUser = await user.getByUsername(name);
+        const theUser = await users.getByUsername(name);
         req.session.navbar.value = '/partials/navbar-loggedin';
         req.session.user = {
             name,
             id: theUser.id,
-            // navbar: '/partials/navbar-loggedin'
         };
         req.session.save(() => {
             res.redirect('/profile');
@@ -77,6 +77,31 @@ router.get('/logout', (req, res)=>{
   req.session.destroy(() => {
           res.redirect('/login');
     });
+});
+
+// Get signup page
+router.get('/signup', (req, res, next) => {
+  res.render('login', {
+    locals: {
+      pagetitle: 'Signup',
+      submitValue: 'Signup'
+    },
+    partials: {
+      navbar: req.session.navbar.value
+    }
+  });
+});
+
+// Signup post
+router.post('/signup', parseForm, async (req, res) => {
+    const { name, password } = req.body;
+    const createdUser = await users.create(name, password);
+    if (createdUser) {
+        const theUser = await users.addUserToDB(createdUser);
+        res.redirect('/login');
+    } else {
+        console.log(`incorrect login.`);
+    }
 });
 
 module.exports = router;

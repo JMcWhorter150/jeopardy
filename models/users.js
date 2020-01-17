@@ -13,7 +13,7 @@ function create(username, password) {
     const hash = createHash(password);
     const newUser = {
         username,
-        createHash
+        hash
     };
     return newUser;
 }
@@ -29,7 +29,10 @@ async function getByUsername(username) {
     return theUser;
 };
 
-
+async function addUserToDB(user) {
+    const theUser = await db.one(`insert into users (name, hash) values ($1, $2) returning id`, [user.username, user.hash]);
+    return theUser;
+}
 
 
 
@@ -37,5 +40,6 @@ module.exports = {
     create,
     createHash,
     login,
-    getByUsername
+    getByUsername,
+    addUserToDB
 }
