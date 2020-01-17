@@ -1,315 +1,226 @@
-let globalSwitch = {
-  questionAnswered: false
-};
-// const object = [
-//     {
-//       'Show Number': 4931,
-//       'Air Date': '2006-02-06',
-//       Round: 'Double Jeopardy!',
-//       Category: 'NOT A CURRENT NATIONAL CAPITAL',
-//       Value: '$400',
-//       Question: 'Ljubljana, Bratislava, Barcelona',
-//       Answer: 'Barcelona'
-//     },
-//     {
-//       'Show Number': 4931,
-//       'Air Date': '2006-02-06',
-//       Round: 'Double Jeopardy!',
-//       Category: 'U.S. WINTER OLYMPIANS',
-//       Value: '$400',
-//       Question: 'Mike Eruzione of Winthrop, Mass. was captain of the miraculous 1980 Olympic team in this sport',
-//       Answer: 'hockey'
-//     },
-//     {
-//       'Show Number': 4931,
-//       'Air Date': '2006-02-06',
-//       Round: 'Double Jeopardy!',
-//       Category: 'SCIENCE',
-//       Value: '$400',
-//       Question: 'At sea level at 70 degrees this travels 1,129 feet per second; it speeds up over 1 foot per sec. for each rising degree',
-//       Answer: 'sound'
-//     },
-//     {
-//       'Show Number': 4931,
-//       'Air Date': '2006-02-06',
-//       Round: 'Double Jeopardy!',
-//       Category: 'WORDS OF THE WRITER',
-//       Value: '$400',
-//       Question: 'I beheld the wretch--the miserable monster whom I had created',
-//       Answer: 'Mary Shelley'
-//     },
-//     {
-//       'Show Number': 4931,
-//       'Air Date': '2006-02-06',
-//       Round: 'Double Jeopardy!',
-//       Category: 'AT THE MALL',
-//       Value: '$400',
-//       Question: 'Found "just what I needed" at this "City", an electronics store',
-//       Answer: 'Circuit City'
-//     },
-//     {
-//       'Show Number': 4931,
-//       'Air Date': '2006-02-06',
-//       Round: 'Double Jeopardy!',
-//       Category: 'FROM THE GREEK',
-//       Value: '$400',
-//       Question: 'The name of this color comes from the Greek word porphyra',
-//       Answer: 'purple'
-//     },
-//     {
-//       'Show Number': 4931,
-//       'Air Date': '2006-02-06',
-//       Round: 'Double Jeopardy!',
-//       Category: 'NOT A CURRENT NATIONAL CAPITAL',
-//       Value: '$800',
-//       Question: 'Istanbul, Ottawa, Amman',
-//       Answer: 'Istanbul'
-//     },
-//     {
-//       'Show Number': 4931,
-//       'Air Date': '2006-02-06',
-//       Round: 'Double Jeopardy!',
-//       Category: 'U.S. WINTER OLYMPIANS',
-//       Value: '$800',
-//       Question: '(<a href="http://www.j-archive.com/media/2006-02-06_DJ_23.jpg" target="_blank">Jimmy of the Clue Crew puts some lines on the ice in the Olympic Oval rink at Park City, UT.</a>)  In 1998, <a href="http://www.j-archive.com/media/2006-02-06_DJ_23a.jpg" target="_blank">this U.S. skater</a> was 2nd at Nagano; in 2002, she was 3rd here in Utah',
-//       Answer: 'Michelle Kwan'
-//     },
-//     {
-//       'Show Number': 4931,
-//       'Air Date': '2006-02-06',
-//       Round: 'Double Jeopardy!',
-//       Category: 'SCIENCE',
-//       Value: '$800',
-//       Question: 'The largest tree, the General Sherman in California, is this type, also called a Sierra Redwood',
-//       Answer: 'a sequoia'
-//     },
-//     {
-//       'Show Number': 4931,
-//       'Air Date': '2006-02-06',
-//       Round: 'Double Jeopardy!',
-//       Category: 'WORDS OF THE WRITER',
-//       Value: '$800',
-//       Question: 'Take thy beak from out my heart, and take thy form from off my door!',
-//       Answer: 'Edgar Allan Poe'
-//     },
-//     {
-//       'Show Number': 4931,
-//       'Air Date': '2006-02-06',
-//       Round: 'Double Jeopardy!',
-//       Category: 'AT THE MALL',
-//       Value: '$800',
-//       Question: 'SKX is the stock symbol for this manufacturer of sporty shoes',
-//       Answer: 'Skechers'
-//     },
-//     {
-//       'Show Number': 4931,
-//       'Air Date': '2006-02-06',
-//       Round: 'Double Jeopardy!',
-//       Category: 'FROM THE GREEK',
-//       Value: '$1,000',
-//       Question: `A bowl-shaped depression, as from the impact of a meteorite, it's from the Greek for "mixing bowl`,
-//       Answer: 'crater'
-//     },
-//     {
-//       'Show Number': 4931,
-//       'Air Date': '2006-02-06',
-//       Round: 'Double Jeopardy!',
-//       Category: 'NOT A CURRENT NATIONAL CAPITAL',
-//       Value: '$1200',
-//       Question: 'Sofia, Sarajevo, Saigon',
-//       Answer: 'Saigon'
-//     },
-//     {
-//       'Show Number': 4931,
-//       'Air Date': '2006-02-06',
-//       Round: 'Double Jeopardy!',
-//       Category: 'U.S. WINTER OLYMPIANS',
-//       Value: '$1200',
-//       Question: 'Life has its ups & downs for Travis Mayer, a 2002 medalist in the event named for these little hills on the slopes',
-//       Answer: 'moguls'
-//     },
-//     {
-//       'Show Number': 4931,
-//       'Air Date': '2006-02-06',
-//       Round: 'Double Jeopardy!',
-//       Category: 'SCIENCE',
-//       Value: '$1200',
-//       Question: `(<a href="http://www.j-archive.com/media/2006-02-06_DJ_13.jpg" target="_blank">Sarah of the Clue Crew reads from the pole vault at Duke University's track in Durham, NC.</a>)  In bending an elastic solid, stress is the force causing deformation & this is the 6-letter term for <a href="http://www.j-archive.com/media/2006-02-06_DJ_13a.jpg" target="_blank">the deformation</a>`,
-//       Answer: 'strain'
-//     },
-//     {
-//       'Show Number': 4931,
-//       'Air Date': '2006-02-06',
-//       Round: 'Double Jeopardy!',
-//       Category: 'WORDS OF THE WRITER',
-//       Value: '$1,500',
-//       Question: "'Do all lawyers defend n-negroes, Atticus?'  'Of course they do, Scout'",
-//       Answer: 'Harper Lee'
-//     },
-//     {
-//       'Show Number': 4931,
-//       'Air Date': '2006-02-06',
-//       Round: 'Double Jeopardy!',
-//       Category: 'AT THE MALL',
-//       Value: '$1200',
-//       Question: 'This "Urban" store is the parent company of Anthropologie',
-//       Answer: 'Urban Outfitters'
-//     },
-//     {
-//       'Show Number': 4931,
-//       'Air Date': '2006-02-06',
-//       Round: 'Double Jeopardy!',
-//       Category: 'FROM THE GREEK',
-//       Value: '$1200',
-//       Question: `From the Greek for "false name", it's a fictitious name used by an author`,
-//       Answer: 'a pseudonym'
-//     },
-//     {
-//       'Show Number': 4931,
-//       'Air Date': '2006-02-06',
-//       Round: 'Double Jeopardy!',
-//       Category: 'NOT A CURRENT NATIONAL CAPITAL',
-//       Value: '$1600',
-//       Question: 'Bucharest, Bonn, Bern',
-//       Answer: 'Bonn'
-//     },
-//     {
-//       'Show Number': 4931,
-//       'Air Date': '2006-02-06',
-//       Round: 'Double Jeopardy!',
-//       Category: 'U.S. WINTER OLYMPIANS',
-//       Value: '$1600',
-//       Question: 'In 2002 Vonetta Flowers & Jill Bakken won gold in the 2-woman version of this high-speed sport',
-//       Answer: 'the bobsled'
-//     },
-//     {
-//       'Show Number': 4931,
-//       'Air Date': '2006-02-06',
-//       Round: 'Double Jeopardy!',
-//       Category: 'SCIENCE',
-//       Value: '$1600',
-//       Question: '6 elements once known as inert gases are now known by this aristocratic name',
-//       Answer: 'noble gases'
-//     },
-//     {
-//       'Show Number': 4931,
-//       'Air Date': '2006-02-06',
-//       Round: 'Double Jeopardy!',
-//       Category: 'WORDS OF THE WRITER',
-//       Value: '$1600',
-//       Question: 'For never man had a more faithful, loving, sincere servant, than Friday was to me',
-//       Answer: 'Daniel Defoe'
-//     },
-//     {
-//       'Show Number': 4931,
-//       'Air Date': '2006-02-06',
-//       Round: 'Double Jeopardy!',
-//       Category: 'AT THE MALL',
-//       Value: '$1600',
-//       Question: 'This bookstore chain is named for its "edgy" founders, brothers Tom & Louis',
-//       Answer: 'Borders'
-//     },
-//     {
-//       'Show Number': 4931,
-//       'Air Date': '2006-02-06',
-//       Round: 'Double Jeopardy!',
-//       Category: 'FROM THE GREEK',
-//       Value: '$1600',
-//       Question: '(<a href="http://www.j-archive.com/media/2006-02-06_DJ_04.jpg" target="_blank">Jon of the Clue Crew paddles his kayak.</a>)  Kayak is an example of this type of reversible word from the Greek for "running back again',
-//       Answer: 'a palindrome'
-//     },
-//     {
-//       'Show Number': 4931,
-//       'Air Date': '2006-02-06',
-//       Round: 'Double Jeopardy!',
-//       Category: 'NOT A CURRENT NATIONAL CAPITAL',
-//       Value: '$2000',
-//       Question: 'Belize City, Guatemala City, Panama City',
-//       Answer: 'Belize City'
-//     },
-//     {
-//       'Show Number': 4931,
-//       'Air Date': '2006-02-06',
-//       Round: 'Double Jeopardy!',
-//       Category: 'U.S. WINTER OLYMPIANS',
-//       Value: '$2000',
-//       Question: 'His "Bode" of work includes 2 Alpine skiing silver medals in 2002',
-//       Answer: 'Bode Miller'
-//     },
-//     {
-//       'Show Number': 4931,
-//       'Air Date': '2006-02-06',
-//       Round: 'Double Jeopardy!',
-//       Category: 'SCIENCE',
-//       Value: '$2000',
-//       Question: `(<a href="http://www.j-archive.com/media/2006-02-06_DJ_15.wmv">A honey-colored retriever named Max tries to lick Cheryl of the Clue Crew as she pets him at NC State University in Raleigh, NC.</a>)  Veterinarians refer to this area of an animal's body as the posterior or this region, from the Latin for "the tail`,
-//       Answer: 'the caudal region'
-//     },
-//     {
-//       'Show Number': 4931,
-//       'Air Date': '2006-02-06',
-//       Round: 'Double Jeopardy!',
-//       Category: 'WORDS OF THE WRITER',
-//       Value: '$2000',
-//       Question: "'...Why look'st thou so?'--'With my crossbow I shot the albatross'",
-//       Answer: 'Samuel Taylor Coleridge'
-//     },
-//     {
-//       'Show Number': 4931,
-//       'Air Date': '2006-02-06',
-//       Round: 'Double Jeopardy!',
-//       Category: 'AT THE MALL',
-//       Value: '$2000',
-//       Question: 'The name of this clothing store for teens is French for "airmail',
-//       Answer: 'Aéropostale'
-//     },
-//     {
-//       'Show Number': 4931,
-//       'Air Date': '2006-02-06',
-//       Round: 'Double Jeopardy!',
-//       Category: 'FROM THE GREEK',
-//       Value: '$2000',
-//       Question: "It's an outline of the contents of a course or curriculum",
-//       Answer: 'a syllabus'
-//     }
-//   ];
+let questionAnswered = false;
+let ROUND = 1;
 
-// TODO: Get object to actually pull from backend to create object
-// TODO: Make functionality to change jeopardy board and reset to double jeopardy
-// TODO: Make final jeopardy functionality
-// TODO: Add daily double functionality (happens when values are not exactly 4, 8, 12, 16, 20 etc.)
-
+// TODO: add answer page after score
 // TODO: Figure out how to manipulate string text when image or <a> should be shown
-// TODO: Make it playable by multiple people
 // TODO: Export Data after game ends
-// TODO: Make alex page??????
-// TODO: Fix timer
 // TODO: Make categories expand for mobiles
+// TODO: Fix answers that are not text and instead are just strings
+// TODO: If score negative, change color of score box to red
 
+function finalJeopardy() {
+  showRound(ROUND);
+  setTimeout(() => {
+    finalJeopardyCategory();
+    setTimeout(() => {
+      setBet();
+    }, 3000)
+  }, 3000);
+}
+
+
+
+function populateQuestionFinalJeopardy() {
+  // when question is clicked, updates result box with question, updates resultbox question value, removes question
+  let questionContainer = document.querySelector('.questionContainer');
+  let question = document.querySelector('#questionText');
+  let answer = document.querySelector('#answerField');
+  answer.dataAttribute.Answer = arrayObject[2][0].Answer;
+  question.textContent = arrayObject[2][0].Question;
+  // changes display from none to flex to show question
+  questionContainer.style.display = "flex";
+  // puts cursor in answerField
+  answer.focus();
+  answer.select();
+}
+
+function finalJeopardyCategory() {
+  let jeopardyHeader = document.querySelector('.jeopardyHeader');
+  jeopardyHeader.style.display = "flex";
+  let categoryText = arrayObject[2][0].Category;
+  let round = document.querySelector('.round');
+  round.textContent = categoryText;
+  let timeleft = 3;
+  let categoryTimer = setInterval(function(){
+    timeleft -= 1;
+    if(timeleft <= 0) {
+      console.log('clearing category')
+      clearInterval(categoryTimer);
+      jeopardyHeader.style.display = "none";
+      round.textContent = "";
+      }
+    }, 1000);
+}
+
+function setBet() {
+  const betContainer = document.querySelector('.betContainer');
+  const betText = document.querySelector('#betText');
+  const bet = document.querySelector('#betField');
+  let score = document.querySelector('.score').dataAttribute.Score;
+  if (score < 1000) {
+    score = 1000;
+  }
+  betText.textContent = `Enter in a wager up to ${score}`;
+  betContainer.style.display = "flex";
+  // puts cursor in answerField
+  bet.focus();
+  bet.select();
+}
+
+function checkBet(event) {
+  const userBet = parseInt(event.target.value);
+  const totalScore = document.querySelector('.score').dataAttribute.Score;
+  const betField = document.querySelector('#betField');
+  if (userBet < 5) {
+    betField.focus();
+    betField.select();
+    return;
+  } else if (!Number.isInteger(userBet)) {
+    betField.focus();
+    betField.select();
+    return;
+  } else if (totalScore < 1000) {
+    if (userBet > 1000) {
+      betField.focus();
+      betField.select();
+      return
+    }
+  } else if (userBet > totalScore) {
+    betField.focus();
+    betField.select();
+    return
+  }
+  const betContainer = document.querySelector('.betContainer');
+  const answer = document.querySelector('#answerField');
+  const bet = document.querySelector('#betText');
+  answer.dataAttribute.Value = `$${userBet}`;
+  bet.textContent = "";
+  betContainer.style.display = 'none';
+  if (ROUND === 3) {
+    populateQuestionFinalJeopardy();
+  } else {
+    populateDDQuestion();
+  }
+}
+
+function populateDDQuestion() {
+  const questionContainer = document.querySelector('.questionContainer');
+  const question = document.querySelector('#questionText');
+  const answer = document.querySelector('#answerField');
+  question.textContent = answer.dataAttribute.Question;
+  // changes display from none to flex to show question
+  questionContainer.style.display = "flex";
+  // puts cursor in answerField
+  answer.focus();
+  answer.select();
+}
+
+
+
+function dailyDouble(event) {
+  showDailyDouble();
+  setTimeout(() => {
+    setBet();
+  }, 3000)
+}
+
+function showDailyDouble() {
+  let jeopardyHeader = document.querySelector('.jeopardyHeader');
+  jeopardyHeader.style.display = "flex";
+  let headerText = `Daily Double!`;
+  let round = document.querySelector('.round');
+  round.textContent = headerText;
+  let timeleft = 3;
+  let headerTimer = setInterval(function(){
+    timeleft -= 1;
+    if(timeleft <= 0) {
+      console.log('clearing header')
+      clearInterval(headerTimer);
+      jeopardyHeader.style.display = "none";
+      round.textContent = "";
+      }
+    }, 1000);
+}
+
+function showRound(roundNumber) {
+  let jeopardyHeader = document.querySelector('.jeopardyHeader');
+  jeopardyHeader.style.display = "flex";
+  let headerText = arrayObject[roundNumber - 1][0].Round;
+  let round = document.querySelector('.round');
+  round.textContent = headerText;
+  let timeleft = 3;
+  let headerTimer = setInterval(function(){
+    timeleft -= 1;
+    if(timeleft <= 0) {
+      console.log('clearing header')
+      clearInterval(headerTimer);
+      jeopardyHeader.style.display = "none";
+      round.textContent = "";
+      }
+    }, 1000);
+}
+
+function setInitialScore() {
+  let userScore = document.querySelector('.score');
+  userScore.dataAttribute = {
+    Score: 0
+  };
+}
 
 function updateScoreDOM(score) {
     let userScore = document.querySelector('.score');
-    let currentScore = parseInt((userScore.textContent).slice(8));
+    let currentScore = userScore.dataAttribute.Score;
+    if (score + currentScore < 0) {
+      const resultContainer = document.querySelector('.resultContainer');
+      resultContainer.style.backgroundColor = "red";
+    } else {
+      const resultContainer = document.querySelector('.resultContainer');
+      resultContainer.style.backgroundColor = "#0314a2";
+    }
     userScore.textContent = `Score: $${currentScore + score}`;
+    userScore.dataAttribute.Score = currentScore + score;
 }
 
 function removeQuestionDOM(event) {
     event.target.textContent = "";
     event.target.removeEventListener("click", removeQuestionDOM);
-    event.target.dataAttribute = null;
+    event.target.removeEventListener('click', populateQuestionDOM);
+    event.target.removeEventListener('click', dailyDouble);
+    event.target.dataAttribute = {
+      "Answer": null,
+      "Value": null,
+      "Question": null
+    };
 }
     
-function updateBoardDOM() {
-    // after all questions are removed, repopulates board with next set of questions and categories
+function checkBoard() {
+  let questions = document.querySelectorAll('.question-item');
+  let done = false;
+  for (let question of questions) {
+    if (question.textContent.length > 0) {
+      return; // exits out of function if any questions have text remaining
+    }
+  }
+  if (ROUND === 1) {
+    ROUND = 2;
+    populateBoardDOM(arrayObject[1], 2); // only runs if all questions have no text
+    return ROUND;
+  } else if (ROUND === 2) {
+    ROUND = 3;
+    finalJeopardy();
+    return ROUND;
+  } else if (ROUND === 3) {
+    console.log('game over');
+  }
 }
 
-function populateBoardDOM(obj) {
+function populateBoardDOM(obj=arrayObject, roundNumber=ROUND) {
     // takes show object, updates text content of each block, adds onclick to each block
     // five questions, six categories
-    resetQuestionsDOM(2); // change 1 to whatever round it is
+    showRound(roundNumber);
+    resetQuestionsDOM(roundNumber); // change 1 to whatever round it is
     populateCategoriesDOM(obj);
-    populateQuestionsDOM(obj);
-    addAnswerCheck();
+    populateQuestionsDOM(obj, roundNumber);
 }
 
 function resetQuestionsDOM(factor) {
@@ -317,9 +228,15 @@ function resetQuestionsDOM(factor) {
         let questionArr = document.querySelectorAll(`.question${i}`);
         questionArr.forEach(element => {
             element.textContent = `$${i * factor * 200}`;
-            element.addEventListener('click', populateQuestionDOM);
-            element.addEventListener('click', removeQuestionDOM);
-            element.addEventListener('click', answerTimer);
+            element.dataAttribute = {
+              Answer: null,
+              Question: null,
+              Value: null
+            };
+            element.removeEventListener("click", populateQuestionDOM);
+            element.removeEventListener('click', dailyDouble);
+            element.removeEventListener('click', removeQuestionDOM);
+            element.removeEventListener('click', answerTimer);
         });
     }
 }
@@ -332,15 +249,26 @@ function populateCategoriesDOM(obj) {
     }
 }
 
-function populateQuestionsDOM(obj) {
+function populateQuestionsDOM(obj, roundNumber) {
     // grabs each category of questions, and adds data to each element of category
     const questionsDOMArray = document.querySelectorAll('.question-item');
     for (let i=0;i<obj.length;i++) {
-        questionsDOMArray[i].dataAttribute = {
+      let questionValue = obj[i].Value;
+      questionValue = questionValue.replace(/[$,]+/g,"");
+      questionsDOMArray[i].dataAttribute = {
             "Question": obj[i].Question,
             "Answer": obj[i].Answer,
-            "Value": obj[i].Value
+            "Value": "$" + questionValue
         };
+        if ("$" + questionValue !== questionsDOMArray[i].textContent || !(questionValue % (roundNumber * 200) === 0 )) {
+          questionsDOMArray[i].addEventListener('click', dailyDouble);
+          questionsDOMArray[i].addEventListener('click', populateQuestionDOM);
+          questionsDOMArray[i].addEventListener('click', removeQuestionDOM);
+        } else {
+          questionsDOMArray[i].addEventListener('click', populateQuestionDOM);
+          questionsDOMArray[i].addEventListener('click', removeQuestionDOM);
+          questionsDOMArray[i].addEventListener('click', answerTimer);
+        }
     }
 }
  
@@ -351,7 +279,8 @@ function populateQuestionDOM(event) {
     let answer = document.querySelector('#answerField');
     answer.dataAttribute = {
         "Answer": event.target.dataAttribute.Answer,
-        "Value": event.target.dataAttribute.Value
+        "Value": event.target.dataAttribute.Value,
+        "Question": event.target.dataAttribute.Question
     };
     question.textContent = event.target.dataAttribute.Question;
     // changes display from none to flex to show question
@@ -366,9 +295,14 @@ function resetQuestionContainer() {
     let questionContainer = document.querySelector('.questionContainer');
     let question = document.querySelector('#questionText');
     let answer = document.querySelector('#answerField');
-    answer.dataAttribute = null;
+    answer.dataAttribute = {
+      Answer: null,
+      Question: null,
+      Value: null
+    };
     question.textContent = "";
     questionContainer.style.display = "none";
+    checkBoard();
 }
 
 function addAnswerCheck() {
@@ -377,11 +311,9 @@ function addAnswerCheck() {
     answer.addEventListener('change', checkIfRight);
 }
 
-function buzzTimer() {
-    // When question selected, starts callback, exits when button clicked to allow typing
-    // ?????????
-    // let myVar = setTimeout(callback, milliseconds);
-    // clearTimeout(myVar);
+function addBetCheck() {
+  let bet = document.querySelector('#betField');
+  bet.addEventListener('change', checkBet);
 }
 
 function answerTimer() {
@@ -392,7 +324,13 @@ function answerTimer() {
     let questionTimer = setInterval(function(){
         progressBar.value = 10 - timeleft; // first number should be timeleft +1
         timeleft -= 1;
-        if(timeleft <= 0) { // || globalSwitch.questionAnswered
+        if (questionAnswered) {
+          console.log('question answered')
+          questionAnswered = false;
+          progressBar.value = 0;
+          clearInterval(questionTimer);
+          return questionAnswered;
+        } else if(timeleft <= 0) { // || globalSwitch.questionAnswered
           // resetQuestionAnswered();
           progressBar.value = 0;
           console.log('clearing interval')
@@ -400,11 +338,6 @@ function answerTimer() {
           missedQuestion();
         }
     }, 1000);
-}
-
-function resetQuestionAnswered() {
-  globalSwitch.questionAnswered = !questionAnswered;
-  console.log(`questionAnswered=${globalSwitch[questionAnswered]}`);
 }
 
 function missedQuestion() {
@@ -429,6 +362,8 @@ function checkIfRight(event) {
     }
     // resetQuestionAnswered();
     resetQuestionContainer();
+    questionAnswered = true;
+    return questionAnswered;
 }
 
 function formatText(str) {
@@ -436,16 +371,21 @@ function formatText(str) {
     return str.toLowerCase();
 }
 
-function ifNoAnswers() {
-    // update answer box to Next Question, resets answer box
-}
-
 function sendDataToBackend() {
     // after game is done, sends game data back to backend
 }
 
-
-
-
-// populateBoardDOM(object);
-populateBoardDOM(arrayObject[3]);
+function setInitialAnswerAttribute() {
+  const answer = document.querySelector('#answerField');
+  answer.dataAttribute = {
+    Question: null,
+    Value: null,
+    Answer: null
+  }
+}
+populateBoardDOM(arrayObject[0], 1);
+setInitialScore();
+setInitialAnswerAttribute();
+addAnswerCheck();
+addBetCheck();
+// bug in daily doubles where value = 1000?
