@@ -1,8 +1,9 @@
-// GLOBAL VARIABLES
+// ============ GLOBAL VARIABLES ============
 
 let QUESTIONANSWERED = false;
 let ROUND = 1;
 
+// TODOS 
 // TODO: Export Data after game ends // my part done
 // TODO: add answer page after score 
 // TODO: Figure out how to manipulate string text when image or <a> should be shown
@@ -13,7 +14,7 @@ let ROUND = 1;
 // TODO: Find game breaking bug that happens after second daily double, sometimes
 
 
-// SET INITIAL BOARD CONDITIONS FUNCTIONS
+// ============ SET INITIAL BOARD CONDITIONS FUNCTIONS ============
 
 function setInitialScore() {
   let userScore = document.querySelector('.score');
@@ -55,7 +56,7 @@ function answerTimer() {
         QUESTIONANSWERED = false;
         progressBar.value = 0;
         clearInterval(questionTimer);
-        return QUESTIONANSWERED;
+        return QUESTIONANSWERED; // resets questionanswered global variable for next question
       } else if(timeleft <= 0) {
         progressBar.value = 0;
         console.log('clearing interval')
@@ -65,18 +66,18 @@ function answerTimer() {
   }, 1000);
 }
 
-// RESET BOARD FUNCTIONS
+// ============ RESET BOARD FUNCTIONS ============
 
 function resetQuestionsDOM(factor) {
   for (let i=1;i<7;i++) {
       let questionArr = document.querySelectorAll(`.question${i}`);
       questionArr.forEach(element => {
-          element.textContent = `$${i * factor * 200}`;
+          element.textContent = `$${i * factor * 200}`; // sets values for each question box to be regular jeopardy or double jeopardy
           element.dataAttribute = {
             Answer: null,
             Question: null,
             Value: null
-          };
+          }; // add any other onclick functionality functions here
           element.removeEventListener("click", populateQuestionDOM);
           element.removeEventListener('click', dailyDouble);
           element.removeEventListener('click', removeQuestionDOM);
@@ -88,10 +89,10 @@ function resetQuestionsDOM(factor) {
 function populateBoardDOM(obj=arrayObject, roundNumber=ROUND) {
   // takes show object, updates text content of each block, adds onclick to each block
   // five questions, six categories
-  showRound(roundNumber);
-  resetQuestionsDOM(roundNumber); // change 1 to whatever round it is
-  populateCategoriesDOM(obj);
-  populateQuestionsDOM(obj, roundNumber);
+  showRound(roundNumber); // shows page while stuff happens behind jeopardyHeader container
+  resetQuestionsDOM(roundNumber); // resets the question values (200 for reg jeopardy, 400 for double jeopardy) and resets onclick buttons
+  populateCategoriesDOM(obj); // updates the category names to be the first six categories from the arrayObj
+  populateQuestionsDOM(obj, roundNumber); // updates all the questions to have data attribute with question, answer, and value and onclick buttons
 }
 
 function populateCategoriesDOM(obj) {
@@ -117,8 +118,8 @@ function populateQuestionsDOM(obj, roundNumber) {
         questionsDOMArray[i].addEventListener('click', dailyDouble); // daily double question events
         questionsDOMArray[i].addEventListener('click', populateQuestionDOM);
         questionsDOMArray[i].addEventListener('click', removeQuestionDOM);
-      } else { // regular question events
-        questionsDOMArray[i].addEventListener('click', populateQuestionDOM);
+      } else { 
+        questionsDOMArray[i].addEventListener('click', populateQuestionDOM); // regular question events
         questionsDOMArray[i].addEventListener('click', removeQuestionDOM);
         questionsDOMArray[i].addEventListener('click', answerTimer);
       }
@@ -126,6 +127,7 @@ function populateQuestionsDOM(obj, roundNumber) {
 }
 
 function showRound(roundNumber) {
+  // shows round (jeopardy, double jeopardy, final jeopardy) for 3 secs
   let jeopardyHeader = document.querySelector('.jeopardyHeader');
   jeopardyHeader.style.display = "flex";
   let headerText = arrayObject[roundNumber - 1][0].Round;
@@ -143,35 +145,39 @@ function showRound(roundNumber) {
     }, 1000);
 }
 
-// UPDATE DOM DURING GAME FUNCTIONS
+// ============ UPDATE DOM DURING GAME FUNCTIONS ============
 
 function updateScoreDOM(score) {
-    let userScore = document.querySelector('.score');
-    let currentScore = userScore.dataAttribute.Score;
-    if (score + currentScore < 0) {
-      const resultContainer = document.querySelector('.resultContainer');
-      resultContainer.style.backgroundColor = "red";
-    } else {
-      const resultContainer = document.querySelector('.resultContainer');
-      resultContainer.style.backgroundColor = "#0314a2";
-    }
-    userScore.textContent = `Score: $${currentScore + score}`;
-    userScore.dataAttribute.Score = currentScore + score;
+  // updates score after each question. also updates the color of the score container
+  let userScore = document.querySelector('.score');
+  let currentScore = userScore.dataAttribute.Score;
+  if (score + currentScore < 0) { // if score less than zero, makes container red
+    const resultContainer = document.querySelector('.resultContainer');
+    resultContainer.style.backgroundColor = "red";
+  } else { // if positive, makes container blue
+    const resultContainer = document.querySelector('.resultContainer');
+    resultContainer.style.backgroundColor = "#0314a2";
+  } // updates score text and score data attribute
+  userScore.textContent = `Score: $${currentScore + score}`;
+  userScore.dataAttribute.Score = currentScore + score;
 }
 
 function removeQuestionDOM(event) {
-    event.target.textContent = "";
-    event.target.removeEventListener("click", removeQuestionDOM);
-    event.target.removeEventListener('click', populateQuestionDOM);
-    event.target.removeEventListener('click', dailyDouble);
-    event.target.dataAttribute = {
-      "Answer": null,
-      "Value": null,
-      "Question": null
-    };
+  // removes text and resets dataattribute and onclicks after question selected
+  event.target.textContent = "";
+  event.target.removeEventListener("click", removeQuestionDOM);
+  event.target.removeEventListener('click', populateQuestionDOM);
+  event.target.removeEventListener('click', dailyDouble);
+  event.target.removeEventListener('click', answerTimer);
+  event.target.dataAttribute = {
+    "Answer": null,
+    "Value": null,
+    "Question": null
+  };
 }
     
 function checkBoard() {
+  // checks after each question to see if round is over
   let questions = document.querySelectorAll('.question-item');
   let done = false;
   for (let question of questions) {
@@ -179,21 +185,25 @@ function checkBoard() {
       return; // exits out of function if any questions have text remaining
     }
   }
+  // only runs after all questions gone
   if (ROUND === 1) {
+    // update board to double jeopardy
     ROUND = 2;
     populateBoardDOM(arrayObject[1], 2); // only runs if all questions have no text
     return ROUND;
   } else if (ROUND === 2) {
+    // starts final jeopardy
     ROUND = 3;
     finalJeopardy();
     return ROUND;
   } else if (ROUND === 3) {
+    // sets final game screen after final jeopardy
     populateFinalScore();
   }
 }
  
 function populateQuestionDOM(event) {
-    // when question is clicked, updates result box with question, updates resultbox question value, removes question
+    // when question is clicked, updates result box with question, updates resultbox question value
     let questionContainer = document.querySelector('.questionContainer');
     let question = document.querySelector('#questionText');
     let answer = document.querySelector('#answerField');
@@ -210,8 +220,20 @@ function populateQuestionDOM(event) {
     answer.select();
 }
 
+function populateAnswerDOM(event) {
+
+}
+
+function showAnswerDOM(event) {
+
+}
+
+function resetAnswerDOM() {
+
+}
+
 function resetQuestionContainer() {
-    // empties the answer box
+    // empties the question box, hides question box, and checks board state
     let questionContainer = document.querySelector('.questionContainer');
     let question = document.querySelector('#questionText');
     let answer = document.querySelector('#answerField');
@@ -226,6 +248,7 @@ function resetQuestionContainer() {
 }
 
 function missedQuestion() {
+    // used when person doesn't answer in time, then resets question and lowers score
     let answerValue = document.querySelector('#answerField').dataAttribute.Value;
     answerValue = parseInt(answerValue.slice(1));
     updateScoreDOM(answerValue * -1);
@@ -234,10 +257,10 @@ function missedQuestion() {
 
 function checkIfRight(event) {
     // checks whether user input is correct
-    let userAnswer = event.target.value;
+    let userAnswer = formatText(event.target.value);
     let correctAnswer = formatText(event.target.dataAttribute.Answer);
     let answerValue = event.target.dataAttribute.Value;
-    answerValue = parseInt(answerValue.slice(1));
+    answerValue = parseInt(answerValue.slice(1)); // reformatting answer value from '$1000' to 1000
     if (userAnswer === correctAnswer) {
         console.log('right');
         updateScoreDOM(answerValue);
@@ -245,25 +268,31 @@ function checkIfRight(event) {
         console.log('wrong');
         updateScoreDOM(answerValue * -1);
     }
-    // resetQUESTIONANSWERED();
     resetQuestionContainer();
     QUESTIONANSWERED = true;
-    return QUESTIONANSWERED;
+    return QUESTIONANSWERED; // returned to update global variable to turn off timer function
 }
 
 function formatText(str) {
-    // changes users answer and question answer
-    return str.toLowerCase();
+    // changes users answer question answer
+    if (Number.isInteger(parseInt(str))) { // if answer is number
+      return str;
+    } else if (typeof str === 'string') { // if answer is string
+      return str.toLowerCase();
+    } else { // if answer is anything else, just return the answer
+      return str;
+    }
 }
 
-// BETTING FUNCTIONS
+// ============ BETTING FUNCTIONS ============
 
 function setBet() {
+  // shows bet container, allows user to make a bet for the question
   const betContainer = document.querySelector('.betContainer');
   const betText = document.querySelector('#betText');
   const bet = document.querySelector('#betField');
   let score = document.querySelector('.score').dataAttribute.Score;
-  if (score < 1000) {
+  if (score < 1000) { // jeopardy rules that if you are betting at less than 1000, you can bet up to 1000
     score = 1000;
   }
   betText.textContent = `Enter in a wager up to ${score}`;
@@ -274,24 +303,25 @@ function setBet() {
 }
 
 function checkBet(event) {
+  // makes sure bet is valid, then populates question
   const userBet = parseInt(event.target.value);
   const totalScore = document.querySelector('.score').dataAttribute.Score;
   const betField = document.querySelector('#betField');
-  if (userBet < 5) {
+  if (userBet < 5) { // jeopardy minimum bet is 5 except for final jeopardy
     betField.focus();
     betField.select();
     return;
-  } else if (!Number.isInteger(userBet)) {
+  } else if (!Number.isInteger(userBet)) { // makes them enter a number
     betField.focus();
     betField.select();
     return;
-  } else if (totalScore < 1000) {
+  } else if (totalScore < 1000) { // checks to make sure if their score is less than 1000, that they can bet up to 1000 and no more
     if (userBet > 1000) {
       betField.focus();
       betField.select();
       return
     }
-  } else if (userBet > totalScore) {
+  } else if (userBet > totalScore) { // cant bet more than they have
     betField.focus();
     betField.select();
     return
@@ -302,16 +332,17 @@ function checkBet(event) {
   answer.dataAttribute.Value = `$${userBet}`;
   bet.textContent = "";
   betContainer.style.display = 'none';
-  if (ROUND === 3) {
+  if (ROUND === 3) { // different question population after bet for final jeopardy
     populateQuestionFinalJeopardy();
-  } else {
+  } else { // regular daily double functionality
     populateDDQuestion();
   }
 }
 
-// DAILY DOUBLE FUNCTIONS
+// ============ DAILY DOUBLE FUNCTIONS ============
 
 function populateDDQuestion() {
+  // puts question on screen after betting for daily double
   const questionContainer = document.querySelector('.questionContainer');
   const question = document.querySelector('#questionText');
   const answer = document.querySelector('#answerField');
@@ -326,13 +357,15 @@ function populateDDQuestion() {
 
 
 function dailyDouble(event) {
-  showDailyDouble();
-  setTimeout(() => {
+  // when daily double question clicked, does daily double functions
+  showDailyDouble(); // shows daily double screen
+  setTimeout(() => { // waits to show bet screen
     setBet();
-  }, 3000)
+  }, 3000) // should match showDailyDouble timeleft
 }
 
 function showDailyDouble() {
+  // shows daily double screen (like round screen)
   let jeopardyHeader = document.querySelector('.jeopardyHeader');
   jeopardyHeader.style.display = "flex";
   let headerText = `Daily Double!`;
@@ -350,14 +383,14 @@ function showDailyDouble() {
     }, 1000);
 }
 
-// FINAL JEOPARDY FUNCTIONS
+// ============ FINAL JEOPARDY FUNCTIONS ============
 
 function finalJeopardy() {
-  showRound(3);
+  showRound(3); // shows final jeopardy screen
   setTimeout(() => {
-    finalJeopardyCategory();
+    finalJeopardyCategory(); // shows category
     setTimeout(() => {
-      setBet();
+      setBet(); // lets them set their final jeopardy bet
     }, 3000)
   }, 3000);
 }
@@ -367,8 +400,8 @@ function populateQuestionFinalJeopardy() {
   let questionContainer = document.querySelector('.questionContainer');
   let question = document.querySelector('#questionText');
   let answer = document.querySelector('#answerField');
-  answer.dataAttribute.Answer = arrayObject[2][0].Answer;
-  question.textContent = arrayObject[2][0].Question;
+  answer.dataAttribute.Answer = arrayObject[2][0].Answer; // update 2 and 0 if data is not array of 3 arrayobjects with all the questions
+  question.textContent = arrayObject[2][0].Question; // see above
   // changes display from none to flex to show question
   questionContainer.style.display = "flex";
   // puts cursor in answerField
@@ -377,9 +410,10 @@ function populateQuestionFinalJeopardy() {
 }
 
 function finalJeopardyCategory() {
+  // shows final category screen before bet
   let jeopardyHeader = document.querySelector('.jeopardyHeader');
   jeopardyHeader.style.display = "flex";
-  let categoryText = arrayObject[2][0].Category;
+  let categoryText = arrayObject[2][0].Category; // update 2 and 0 if data is not array of 3 arrayobjects with all the questions
   let round = document.querySelector('.round');
   round.textContent = categoryText;
   let timeleft = 3;
@@ -394,14 +428,15 @@ function finalJeopardyCategory() {
     }, 1000);
 }
 
-// SENDING DATA AFTER GAME FUNCTIONS
+// ============ SENDING DATA AFTER GAME FUNCTIONS ============
 
 function populateFinalScore() {
+  // shows final screen and allows score submission
   const jeopardyHeader = document.querySelector('.jeopardyHeader');
   jeopardyHeader.style.display = 'flex';
   const text = document.querySelector('.round');
   const score = document.querySelector('.score').dataAttribute.Score;
-  let name = 'Joe';
+  let name = 'Joe'; // update to be username
   text.textContent = `Congratulations ${name}! Your final score was: ${score}`;
   const form = document.createElement('form');
   form.method = "POST";
@@ -422,10 +457,10 @@ function populateFinalScore() {
   jeopardyHeader.appendChild(form);
 }
 
-// FUNCTIONS RUN AT BEGINNING OF GAME
+// ============ FUNCTIONS RUN AT BEGINNING OF GAME ============
 
-populateBoardDOM(arrayObject[0], 1);
+populateBoardDOM(arrayObject[0], ROUND); // sets up first jeopardy, then checkboard runs the rest of the game
 setInitialScore();
 setInitialAnswerAttribute();
-addAnswerCheck();
-addBetCheck();
+addAnswerCheck(); // never removed
+addBetCheck(); // never removed
