@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
         return `<tr>
             <td>${date}</td>\n
             <td>${game.episodeplayed}</td>\n
-            <td></td>\n
+            <td>$${game.score}</td>\n
         </tr>\n
         `
     });
