@@ -6,6 +6,19 @@ var router = express.Router();
 const axios = require('axios').default;
 const jeopardyAPI = 'https://jeopardy.bentleyherron.dev/api';
 
+// Check if user is logged in for user id object for frontend
+if (req.session && req.session.user) {
+        userObj = {
+            user_id: req.session.user.id,
+            username: req.session.user.username
+        }
+    } else {
+        userObj = {
+            user_id: null,
+            username: 'Anonymous'
+        }
+}
+
 async function getQuestionsForRound(showNumber='5392', roundNumber) {
     let array = [];
     let count = 1;
@@ -28,6 +41,7 @@ router.get('/', async (req, res)=>{
     res.render('game', {
         locals: {
             pagetitle: 'Play Jeopardy',
+            userinfo: JSON.stringify(userObj),
             arrayArrayObject: JSON.stringify(data)
         },
         partials: {
