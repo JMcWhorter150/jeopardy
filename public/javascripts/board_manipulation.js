@@ -6,7 +6,6 @@ let ROUND = 1;
 // TODO: Export Data after game ends
 // TODO: Make categories expand for mobiles
 // TODO: Fix answers that are not text and instead are just strings
-// TODO: If score negative, change color of score box to red
 
 function finalJeopardy() {
   showRound(ROUND);
