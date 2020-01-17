@@ -1,14 +1,20 @@
 let questionAnswered = false;
 let ROUND = 1;
 
+// TODO: Export Data after game ends
 // TODO: add answer page after score
 // TODO: Figure out how to manipulate string text when image or <a> should be shown
-// TODO: Export Data after game ends
-// TODO: Make categories expand for mobiles
 // TODO: Fix answers that are not text and instead are just strings
+// TODO: Make categories expand for mobiles
+// TODO: Make end screen
+// TODO: Make final jeopardy not run if score is less than 0
+// TODO: Find game breaking bug that happens after second daily double, sometimes
+
+
+
 
 function finalJeopardy() {
-  showRound(ROUND);
+  showRound(3);
   setTimeout(() => {
     finalJeopardyCategory();
     setTimeout(() => {
@@ -253,17 +259,17 @@ function populateQuestionsDOM(obj, roundNumber) {
     const questionsDOMArray = document.querySelectorAll('.question-item');
     for (let i=0;i<obj.length;i++) {
       let questionValue = obj[i].Value;
-      questionValue = questionValue.replace(/[$,]+/g,"");
+      questionValue = questionValue.replace(/[$,]+/g,""); // gets rid of all $ and , using regex (was breaking score)
       questionsDOMArray[i].dataAttribute = {
             "Question": obj[i].Question,
             "Answer": obj[i].Answer,
             "Value": "$" + questionValue
         };
-        if ("$" + questionValue !== questionsDOMArray[i].textContent || !(questionValue % (roundNumber * 200) === 0 )) {
-          questionsDOMArray[i].addEventListener('click', dailyDouble);
+        if ("$" + questionValue !== questionsDOMArray[i].textContent) { // if the value of the question doesn't match what the value should be, makes it a daily double
+          questionsDOMArray[i].addEventListener('click', dailyDouble); // daily double question events
           questionsDOMArray[i].addEventListener('click', populateQuestionDOM);
           questionsDOMArray[i].addEventListener('click', removeQuestionDOM);
-        } else {
+        } else { // regular question events
           questionsDOMArray[i].addEventListener('click', populateQuestionDOM);
           questionsDOMArray[i].addEventListener('click', removeQuestionDOM);
           questionsDOMArray[i].addEventListener('click', answerTimer);
@@ -373,6 +379,18 @@ function formatText(str) {
 function sendDataToBackend() {
     // after game is done, sends game data back to backend
 }
+
+function populateFinalScore() {
+  let formDiv = document.createElement('div');
+  formDiv.className = 'submitForm';
+  let congratulations = document.createElement('h2');
+  let userName = document.createElement('h4');
+  let paragraph = document.createElement('p');
+  let score = document.querySelector('.score').dataAttribute.Value;
+
+
+}
+
 
 function setInitialAnswerAttribute() {
   const answer = document.querySelector('#answerField');
