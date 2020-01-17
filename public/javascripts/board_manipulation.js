@@ -454,6 +454,10 @@ function populateFinalScore() {
   text.textContent = `Congratulations ${name}! Your final score was: ${score}`;
   const form = document.createElement('form');
   form.method = "POST";
+  const userNameInput = document.createElement('input');
+  userNameInput.name = "id";
+  userNameInput.value = "1";
+  userNameInput.style.display = "none";
   const scoreInput = document.createElement('input');
   scoreInput.name = "score";
   scoreInput.value = score;
@@ -465,6 +469,7 @@ function populateFinalScore() {
   const submit = document.createElement('input');
   submit.type = 'submit';
   submit.value = 'Post Score';
+  form.appendChild(userNameInput);
   form.appendChild(scoreInput);
   form.appendChild(dateInput);
   form.appendChild(submit);
