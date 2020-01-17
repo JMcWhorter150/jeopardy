@@ -435,6 +435,7 @@ function populateDDQuestion() {
   // changes display from none to flex to show question
   questionContainer.style.display = "flex";
   // puts cursor in answerField
+  answer.style.display = 'inline-block';
   answer.focus();
   answer.select();
 }
@@ -490,6 +491,7 @@ function populateQuestionFinalJeopardy() {
   // changes display from none to flex to show question
   questionContainer.style.display = "flex";
   // puts cursor in answerField
+  answer.style.display = 'inline-block';
   answer.focus();
   answer.select();
 }
