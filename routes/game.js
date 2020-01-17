@@ -40,12 +40,25 @@ async function getQuestionsForRound(showNumber='5392', roundNumber) {
 
 
 router.get('/', async (req, res)=>{
+    // Check if user is logged in for user id object for frontend
+    if (req.session && req.session.user) {
+            userObj = {
+                user_id: req.session.user.id,
+                username: req.session.user.username
+            }
+        } else {
+            userObj = {
+                user_id: null,
+                username: 'Anonymous'
+            }
+    }
     // const data = await data.createArrayofArrayObject('2008-02-05');
     const episodeNum = getRandomEpisode(episodeObj)
     const data = await getQuestionsForRound(episodeNum);
     res.render('game', {
         locals: {
             pagetitle: 'Play Jeopardy',
+            userinfo: JSON.stringify(userObj),
             arrayArrayObject: JSON.stringify(data)
         },
         partials: {
