@@ -551,13 +551,13 @@ function populateFinalScore() {
   jeopardyHeader.style.display = 'flex';
   const text = document.querySelector('.round');
   const score = document.querySelector('.score');
-  let name = 'Joe'; // update to be username
+  let name = userObject.username; // update to be username
   text.textContent = `Congratulations ${name}! Your final score was: ${score.dataAttribute.Score}`;
   const form = document.createElement('form');
   form.method = "POST";
   const userIdInput = document.createElement('input');
   userIdInput.name = "id";
-  userIdInput.value = "1";
+  userIdInput.value = userObject.user_id || 1;
   userIdInput.style.display = "none";
   const scoreInput = document.createElement('input');
   scoreInput.name = "score";
