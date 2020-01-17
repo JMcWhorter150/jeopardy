@@ -3,6 +3,13 @@ const router = express.Router();
 
 const selectRouter = require('./select');
 
+const log = require('../models/log');
+
+const bodyParser = require('body-parser');
+const parseForm = bodyParser.urlencoded({
+    extended: true
+});
+
 // const data = require('../modules/data');
 const episodeObj = require('../lists/air-date-show');
 
@@ -68,6 +75,18 @@ router.get('/', async (req, res)=>{
         }
     });
 })
+
+router.post('/', parseForm, async (req, res) => {
+    // console.log(req.body);
+    // const { score, date, id, episodePlayed } = req.body;
+    // console.log(`Received score: ${score}`);
+    // console.log(`Date played: ${date}`);
+
+    // const gameLog = await log.logGameToDatabase(id, date, episodePlayed);
+    // const scoreLog = await log.logScoreToDatabase(id, game_id, score);
+})
+
+
 
 
 // Select game routing

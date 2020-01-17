@@ -8,7 +8,7 @@ insert into users
         ('david', '$2a$10$NLix9sQzNo0UjD04vaq/CeIGQcxxHVI9F0ezsY1nScgdPLcPQE4x.');
 
 insert into gamesLog 
-        (winner_id, datePlayed, episodePlayed, score)
+        (user_id, datePlayed, episodePlayed, score)
     values 
         (2, '2019/12/15', 7180, 8363),
         (3, '2019/10/30', 2492, 13229),
@@ -1013,19 +1013,12 @@ insert into gamesLog
 ;
 
 
-insert into scores
-        (user_id, game_id, score)
+insert into stats
+        (game_id, questionsCorrectJeopardy, questionsNotAnsweredJeopardy, questionsCorrectDoubleJeopardy, questionsNotAnsweredDoubleJeopardy, questionsCorrectFinalJeopardy)
     values 
-        (1, 1, '1234'),
-        (2, 2, '3456'),
-        (1, 3, '4567'),
-        (2, 4, '5678'),
-        (3, 5, '6789'),
-        (2, 6, '12340'),
-        (1, 7, '34560'),
-        (3, 8, '45670'),
-        (1, 9, '56780'),
-        (1, 10, '67890')
-;
+        (1, 20, 10, 5, 25, 1),
+        (2, 10, 20, 10, 20, 1),
+        (3, 5, 25, 15, 15, 1),
+        (4, 15, 15, 10, 20, 0);
 
 
