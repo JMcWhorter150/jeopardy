@@ -34,7 +34,9 @@ router.get('/', function(req, res, next) {
         pagetitle: 'Home',
       },
       partials: {
-        navbar: req.session.navbar.value
+        head: '/partials/head',
+        navbar: req.session.navbar.value,
+        footer: '/partials/footer'
       }
   });
 });
@@ -48,7 +50,9 @@ router.get('/login', (req, res, next) => {
       submitValue: 'Login'
     },
     partials: {
-      navbar: req.session.navbar.value
+      head: '/partials/head',
+      navbar: req.session.navbar.value,
+      footer: '/partials/footer'
     }
   });
 });
@@ -87,7 +91,9 @@ router.get('/signup', (req, res, next) => {
       submitValue: 'Signup'
     },
     partials: {
-      navbar: req.session.navbar.value
+      head: '/partials/head',
+      navbar: req.session.navbar.value,
+      footer: 'partials/footer'
     }
   });
 });

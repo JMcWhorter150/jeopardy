@@ -31,7 +31,9 @@ router.get('/', async (req, res)=>{
             arrayArrayObject: JSON.stringify(data)
         },
         partials: {
-          navbar: req.session.navbar.value
+            head: '/partials/head',
+            navbar: req.session.navbar.value,
+            footer: '/partials/footer'
         }
     });
 })
