@@ -1,8 +1,8 @@
 let questionAnswered = false;
 let ROUND = 1;
 
-// TODO: Export Data after game ends
-// TODO: add answer page after score
+// TODO: Export Data after game ends // my part done
+// TODO: add answer page after score 
 // TODO: Figure out how to manipulate string text when image or <a> should be shown
 // TODO: Fix answers that are not text and instead are just strings
 // TODO: Make categories expand for mobiles
@@ -215,7 +215,7 @@ function checkBoard() {
     finalJeopardy();
     return ROUND;
   } else if (ROUND === 3) {
-    console.log('game over');
+    populateFinalScore();
   }
 }
 
@@ -381,14 +381,29 @@ function sendDataToBackend() {
 }
 
 function populateFinalScore() {
-  let formDiv = document.createElement('div');
-  formDiv.className = 'submitForm';
-  let congratulations = document.createElement('h2');
-  let userName = document.createElement('h4');
-  let paragraph = document.createElement('p');
-  let score = document.querySelector('.score').dataAttribute.Value;
-
-
+  const jeopardyHeader = document.querySelector('.jeopardyHeader');
+  jeopardyHeader.style.display = 'flex';
+  const text = document.querySelector('.round');
+  const score = document.querySelector('.score').dataAttribute.Score;
+  let name = 'Joe';
+  text.textContent = `Congratulations ${name}! Your final score was: ${score}`;
+  const form = document.createElement('form');
+  form.method = "POST";
+  const scoreInput = document.createElement('input');
+  scoreInput.name = "score";
+  scoreInput.value = score;
+  scoreInput.style.display = "none";
+  const dateInput = document.createElement('input');
+  dateInput.name = 'date';
+  dateInput.value = new Date();
+  dateInput.style.display = "none";
+  const submit = document.createElement('input');
+  submit.type = 'submit';
+  submit.value = 'Post Score';
+  form.appendChild(scoreInput);
+  form.appendChild(dateInput);
+  form.appendChild(submit);
+  jeopardyHeader.appendChild(form);
 }
 
 
