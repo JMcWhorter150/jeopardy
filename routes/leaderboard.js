@@ -6,7 +6,6 @@ const leaderboard = require('../models/leaderboardFunctions');
 router.get('/', async (req, res) => {
     
 
-
     const topTenGames = await leaderboard.getTopTenGames();
     for (let entry of topTenGames) {
         console.log(entry);
@@ -15,11 +14,16 @@ router.get('/', async (req, res) => {
         entry.user_id = await userName[0].name;
         console.log(entry);
     }
-    // console.log(topTenGames);
+
     const topGamesHTML = topTenGames.map((game) => {
-        return `<p>${game.user_id}: ${game.score}</p>`
+        return `<tr>
+            <td>${game.user_id}</td>\n
+            <td>${game.score}</td>\n
+        </tr>\n
+        `
     }).join('');
-    
+
+
     const topTotalScores = await leaderboard.getTopTotalScores();
     for (let entry of topTotalScores) {
         console.log(entry);
@@ -28,10 +32,14 @@ router.get('/', async (req, res) => {
         entry.user_id = await userName[0].name;
         console.log(entry);
     }
+
     const topScoresHTML = topTotalScores.map((user) => {
-        return `<p>${user.user_id}: ${user.sum}</p>`
+        return `<tr>
+            <td>${user.user_id}</td>\n
+            <td>${user.sum}</td>\n
+        </tr>\n
+        `
     }).join('');
-    // console.log(topScoresHTML);
 
     try {
         res.render('leaderboard', {
