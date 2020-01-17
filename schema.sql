@@ -8,7 +8,8 @@ create table gamesLog (
     id serial primary key,
     winner_id integer references users (id),
     datePlayed date,
-    episodePlayed integer
+    episodePlayed integer,
+    score integer
 );
 
 create table scores (
