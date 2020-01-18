@@ -8,10 +8,7 @@ let CANBUZZ = false;
 // TODOS 
 // TODO: Figure out how to manipulate string text when image or <a> should be shown
 // TODO: Make categories expand for mobiles
-// TODO: (BUG)Make final jeopardy not run if score is less than 0
 // TODO: (BUG)Find game breaking bug that happens after second daily double, sometimes
-// TODO: Add more attributes to send back to game
-// TODO: Add timer functionality to answer    (NOW) (touchstart event is tapping the screen on mobile)
 // TODO: (BUG)If dd answered, timers don't show up (BUG)
 // TODO: Weird space on bottom of game
 
@@ -202,8 +199,13 @@ function checkBoard() {
   } else if (ROUND === 2) {
     // starts final jeopardy
     ROUND = 3;
-    setTimeout(finalJeopardy,3000)
-    return ROUND;
+    let score = document.querySelector('.score').dataAttribute.Score;
+    if (score < 0) { // final jeopardy doesn't run if score less than 0
+      setTimeout(populateFinalScore, 3000);
+    } else {
+      setTimeout(finalJeopardy,3000);
+      return ROUND;
+    }
   } else if (ROUND === 3) {
     // sets final game screen after final jeopardy
     setTimeout(populateFinalScore, 3000);
