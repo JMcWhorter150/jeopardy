@@ -107,7 +107,7 @@ router.get('/:episodeNum(\\d+)', async (req, res)=>{
 
 router.post('/', parseForm, async (req, res) => {
     console.log(req.body);
-    let { score, date, id, episodePlayed, jeopardyQuestionsCorrect, jeopardyQuestionsNotAnswered, dJeopardyQuestionsCorrect, dJeopardyQuestionsNotAnswered, fJeopardyCorrect } = req.body;
+    let { Score, date, id, episodePlayed, jeopardyQuestionsCorrect, jeopardyQuestionsNotAnswered, dJeopardyQuestionsCorrect, dJeopardyQuestionsNotAnswered, fJeopardyCorrect } = req.body;
 
     const formattedDate = new Date(date);
     // console.log(formattedDate);
@@ -116,7 +116,7 @@ router.post('/', parseForm, async (req, res) => {
 
     id = parseInt(id);
     episodePlayed = parseInt(episodePlayed);
-    score = parseInt(score);
+    score = parseInt(Score);
     
 
     const gameLog = await log.logGameToDatabase(id, dateString, episodePlayed, score);
@@ -129,7 +129,8 @@ router.post('/', parseForm, async (req, res) => {
 
 router.post('/:episodeNum(\\d+)', parseForm, async (req, res) => {
     console.log(req.body);
-    let { score, date, id, episodePlayed, jeopardyQuestionsCorrect, jeopardyQuestionsNotAnswered, dJeopardyQuestionsCorrect, dJeopardyQuestionsNotAnswered, fJeopardyCorrect } = req.body;
+    let { Score, date, id, episodePlayed, jeopardyQuestionsCorrect, jeopardyQuestionsNotAnswered, dJeopardyQuestionsCorrect, dJeopardyQuestionsNotAnswered, fJeopardyCorrect } = req.body;
+    console.log(`Score is ${score}`);
 
     const formattedDate = new Date(date);
     // console.log(formattedDate);
@@ -138,7 +139,7 @@ router.post('/:episodeNum(\\d+)', parseForm, async (req, res) => {
 
     id = parseInt(id);
     episodePlayed = parseInt(episodePlayed);
-    score = parseInt(score);
+    score = parseInt(Score);
     
 
     const gameLog = await log.logGameToDatabase(id, dateString, episodePlayed, score);
