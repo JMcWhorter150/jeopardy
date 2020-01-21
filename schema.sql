@@ -17,7 +17,10 @@ create table stats (
     game_id integer references gamesLog (id),
     questionsCorrectJeopardy integer,
     questionsNotAnsweredJeopardy integer,
+    questionsIncorrectJeopardy integer,
     questionsCorrectDoubleJeopardy integer,
     questionsNotAnsweredDoubleJeopardy integer,
+    questionsIncorrectDoubleJeopardy integer,
     questionsCorrectFinalJeopardy integer
+    questionsIncorrectFinalJeopardy integer
 )

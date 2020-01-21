@@ -1,6 +1,7 @@
 insert into users 
         (name, hash)
     values
+        ('anonymous', 'null'),
         ('bentley', '$2a$10$o5aycnAEos8IC.Xqna3NPu.8uyQ83AJdPlaXRTg4Ka7vcUHTu7Dq6'),
         -- testUser1 password is 'password
         ('joe', '$2a$10$NLix9sQzNo0UjD04vaq/CeIGQcxxHVI9F0ezsY1nScgdPLcPQE4x.'),
@@ -1014,11 +1015,11 @@ insert into gamesLog
 
 
 insert into stats
-        (game_id, questionsCorrectJeopardy, questionsNotAnsweredJeopardy, questionsCorrectDoubleJeopardy, questionsNotAnsweredDoubleJeopardy, questionsCorrectFinalJeopardy)
+        (game_id, questionsCorrectJeopardy, questionsNotAnsweredJeopardy, questionsIncorrectJeopardy, questionsCorrectDoubleJeopardy, questionsNotAnsweredDoubleJeopardy, questionsIncorrectDoubleJeopardy, questionsCorrectFinalJeopardy, questionsIncorrectFinalJeopardy)
     values 
-        (1, 20, 10, 5, 25, 1),
-        (2, 10, 20, 10, 20, 1),
-        (3, 5, 25, 15, 15, 1),
-        (4, 15, 15, 10, 20, 0);
+        (1, 20, 8, 2, 5, 15, 10, 1, 0),
+        (2, 10, 15, 5, 10, 10, 10, 1, 0),
+        (3, 5, 20, 5, 15, 11, 4, 1, 0),
+        (4, 15, 12, 3, 10, 9, 11, 0, 1);
 
 
