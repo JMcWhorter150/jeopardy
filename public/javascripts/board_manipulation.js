@@ -18,9 +18,12 @@ function setInitialScore() {
     Score: 0,
     jeopardyQuestionsCorrect: 0,
     jeopardyQuestionsNotAnswered: 0,
+    jeopardyQuestionsIncorrect: 0,
     dJeopardyQuestionsCorrect: 0,
+    dJeopardyQuestionsIncorrect: 0,
     dJeopardyQuestionsNotAnswered: 0,
-    fJeopardyCorrect: 0
+    fJeopardyCorrect: 0,
+    fJeopardyIncorrect: 0
   };
 }
 
@@ -334,13 +337,37 @@ function checkIfRight(event) {
     if (userAnswer === correctAnswer) {
         console.log('right');
         updateScoreDOM(answerValue);
+        gotRightStats();
     } else {
         console.log('wrong');
         updateScoreDOM(answerValue * -1);
+        gotWrongStats();
     }
     resetQuestionContainer();
     QUESTIONANSWERED = true;
     return QUESTIONANSWERED; // returned to update global variable to turn off timer function
+}
+
+function gotRightStats() {
+  let userScore = document.querySelector('.score');
+  if (ROUND === 1) {
+    userScore.dataAttribute.jeopardyQuestionsCorrect += 1;
+  } else if (ROUND === 2) {
+    userScore.dataAttribute.dJeopardyQuestionsCorrect += 1;
+  } else if (ROUND === 3) {
+    userScore.dataAttribute.fJeopardyCorrect += 1;
+  }
+}
+
+function gotWrongStats() {
+  let userScore = document.querySelector('.score');
+  if (ROUND === 1) {
+    userScore.dataAttribute.jeopardyQuestionsIncorrect += 1;
+  } else if (ROUND === 2) {
+    userScore.dataAttribute.dJeopardyQuestionsIncorrect += 1;
+  } else if (ROUND === 3) {
+    userScore.dataAttribute.fJeopardyIncorrect += 1;
+  }
 }
 
 function formatText(str) {
@@ -598,34 +625,19 @@ function populateFinalScore() {
   userIdInput.name = "id";
   userIdInput.value = userObject.user_id || 1;
   userIdInput.style.display = "none";
-  const scoreInput = document.createElement('input');
-  scoreInput.name = "score";
-  scoreInput.value = score.dataAttribute.Score;
-  scoreInput.style.display = "none";
+  appendFormInput(form, 'Score');
   const dateInput = document.createElement('input');
   dateInput.name = 'date';
   dateInput.value = new Date();
   dateInput.style.display = "none";
-  const jeopardyQuestionsCorrect = document.createElement('input');
-  jeopardyQuestionsCorrect.name = 'jeopardyQuestionsCorrect';
-  jeopardyQuestionsCorrect.value = score.dataAttribute.jeopardyQuestionsCorrect;
-  jeopardyQuestionsCorrect.style.display = "none";
-  const jeopardyQuestionsNotAnswered = document.createElement('input');
-  jeopardyQuestionsNotAnswered.name = 'jeopardyQuestionsNotAnswered';
-  jeopardyQuestionsNotAnswered.value = score.dataAttribute.jeopardyQuestionsNotAnswered;
-  jeopardyQuestionsNotAnswered.style.display = "none";
-  const dJeopardyQuestionsCorrect = document.createElement('input');
-  dJeopardyQuestionsCorrect.name = 'dJeopardyQuestionsCorrect';
-  dJeopardyQuestionsCorrect.value = score.dataAttribute.dJeopardyQuestionsCorrect;
-  dJeopardyQuestionsCorrect.style.display = "none";
-  const dJeopardyQuestionsNotAnswered = document.createElement('input');
-  dJeopardyQuestionsNotAnswered.name = 'dJeopardyQuestionsNotAnswered';
-  dJeopardyQuestionsNotAnswered.value = score.dataAttribute.dJeopardyQuestionsNotAnswered;
-  dJeopardyQuestionsNotAnswered.style.display = "none";
-  const fJeopardyCorrect = document.createElement('input');
-  fJeopardyCorrect.name = 'fJeopardyCorrect';
-  fJeopardyCorrect.value = score.dataAttribute.fJeopardyCorrect;
-  fJeopardyCorrect.style.display = "none";
+  appendFormInput(form, 'jeopardyQuestionsCorrect');
+  appendFormInput(form, 'jeopardyQuestionsIncorrect');
+  appendFormInput(form, `JeopardyQuestionsNotAnswered`);
+  appendFormInput(form, `dJeopardyQuestionsCorrect`);
+  appendFormInput(form, 'dJeopardyQuestionsIncorrect');
+  appendFormInput(form, 'dJeopardyQuestionsNotAnswered');
+  appendFormInput(form, `fJeopardyCorrect`);
+  appendFormInput(form, 'fJeopardyIncorrect');
   const episodePlayed = document.createElement('input');
   episodePlayed.name = "episodePlayed";
   episodePlayed.value = arrayObject[0][0]["Show Number"];
@@ -634,16 +646,19 @@ function populateFinalScore() {
   submit.type = 'submit';
   submit.value = 'Post Score';
   form.appendChild(userIdInput);
-  form.appendChild(scoreInput);
   form.appendChild(dateInput);
-  form.appendChild(jeopardyQuestionsCorrect);
-  form.appendChild(jeopardyQuestionsNotAnswered);
-  form.appendChild(dJeopardyQuestionsCorrect);
-  form.appendChild(dJeopardyQuestionsNotAnswered);
-  form.appendChild(fJeopardyCorrect);
   form.appendChild(episodePlayed);
   form.appendChild(submit);
   jeopardyHeader.appendChild(form);
+}
+
+function appendFormInput(element, string) {
+  const input = document.createElement('input');
+  const score = document.querySelector('.score');
+  input.name = string;
+  input.value = score.dataAttribute[string];
+  input.style.display = "none";
+  element.appendChild(input);
 }
 
 // questions correct jeopardy jeopardyQuestionsCorrect ("1")
