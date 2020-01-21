@@ -16,10 +16,13 @@ router.get('/', async (req, res) => {
         // console.log(entry);
     }
 
+    let gamesCount = 0;
     const topGamesHTML = topTenGames.map((game) => {
+        gamesCount++;
         return `<tr>
+            <td>${gamesCount}</td>\n
             <td>${game.user_id}</td>\n
-            <td>${game.score}</td>\n
+            <td>$${game.score.toFixed(0)}</td>\n
         </tr>\n
         `
     }).join('');
@@ -34,10 +37,13 @@ router.get('/', async (req, res) => {
         // console.log(entry);
     }
 
+    let scoresCount = 0;
     const topScoresHTML = topTotalScores.map((user) => {
+        scoresCount++;
         return `<tr>
+            <td>${scoresCount}</td>\n
             <td>${user.user_id}</td>\n
-            <td>${user.sum}</td>\n
+            <td>$${user.sum}</td>\n
         </tr>\n
         `
     }).join('');
