@@ -528,10 +528,6 @@ function checkBet(event) {
   }
 }
 
-function checkDDBet(userBet) {
-
-}
-
 // ============ DAILY DOUBLE FUNCTIONS ============
 
 function populateDDQuestion() {
@@ -1165,3 +1161,4 @@ String.prototype.removeStopWords = function() {
 	}
 	return cleansed_string.replace(/^\s+|\s+$/g, "");
 }
+};
