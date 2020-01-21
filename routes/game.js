@@ -51,7 +51,7 @@ router.get('/', async (req, res)=>{
     if (req.session && req.session.user) {
             userObj = {
                 user_id: req.session.user.id,
-                username: req.session.user.username
+                username: req.session.user.name
             }
         } else {
             userObj = {
