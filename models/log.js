@@ -1,26 +1,47 @@
 const db = require('./connection');
 
-async function logGameToDatabase(winner_id, datePlayed, episodePlayed) {
+function dateToFormattedString(dateObject) {
+    const year = dateObject.getFullYear();  // YYYY
+    let month = dateObject.getMonth() + 1;  // MM
+    if (month < 10) {
+        month = `0${month}`;
+    }
+    let day = dateObject.getDate();         // DD
+    if (day < 10) {
+        day = `0${day}`;
+    }
+    const dateString = `${year}/${month}/${day}`;
+    return dateString;
+}
+
+async function logGameToDatabase(user_id, datePlayed, episodePlayed, score) {
     try {
         const gameLog = await db.one(`
         insert into gamesLog
-            (winner_id, datePlayed, episodePlayed)
+            (user_id, datePlayed, episodePlayed, score)
         values
-            ($1, $2, $3)
-        `, [winner_id, datePlayed, episodePlayed]);
-    } catch (err) {
+            ($1, $2, $3, $4)
+        returning id
+        `, [user_id, datePlayed, episodePlayed, score]);
+        console.log('Game successfully logged');
+        return gameLog.id;
+    } catch(err) {
         console.log(err);
     }
 }
 
-async function logScoreToDatabase(user_id, game_id, score) {
+async function logStatsToDatabase(game_id, jeopardyQuestionsCorrect, jeopardyQuestionsNotAnswered, dJeopardyQuestionsCorrect, dJeopardyQuestionsNotAnswered, fJeopardyCorrect) {
     try {
-        const scoreLog = await db.one(`
-        insert into scores
-            (user_id, game_id, score)
+        const statsLog = await db.one(`
+        insert into stats
+        (game_id, questionsCorrectJeopardy, questionsNotAnsweredJeopardy, questionsCorrectDoubleJeopardy, questionsNotAnsweredDoubleJeopardy, questionsCorrectFinalJeopardy)
         values
-            ($1, $2, $3)
-        `, [user_id, game_id, score]);
+            ($1, $2, $3, $4, $5, $6)
+        returning game_id
+        `, [game_id, jeopardyQuestionsCorrect, jeopardyQuestionsNotAnswered, dJeopardyQuestionsCorrect, dJeopardyQuestionsNotAnswered, fJeopardyCorrect]);
+        // console.log(statsLog);
+        console.log('Stats successfully logged');
+        return statsLog.game_id;
     } catch (err) {
         console.log(err);
     }
@@ -28,6 +49,7 @@ async function logScoreToDatabase(user_id, game_id, score) {
 
 
 module.exports = {
+    dateToFormattedString,
     logGameToDatabase,
-    logScoreToDatabase
+    logStatsToDatabase
 }

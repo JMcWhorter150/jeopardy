@@ -7,14 +7,20 @@ html, body {
     width: 100%;
     height: 100%;
     background-color: black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .grid-container {
     display: grid;
-    height: 85%;
-    grid-template-columns: auto auto auto auto auto auto;
+    width: 100%;
+    height: 90%;
+    /* grid-template-columns: auto auto auto auto auto auto; */
+    grid-template-columns: repeat(6, 1fr);
     background-color: black;
-    padding: 10px 10px 0 10px;
+    padding: 5px;
 }
 
 .category-item {
@@ -24,10 +30,10 @@ html, body {
     /* padding: 10px; */
     justify-content: center;
     align-items: center;
-    font-size: 22px;
+    font-size: 2vw;
     font-family: Helvetica;
+    text-shadow: 2px 2px black;
     color: white;
-    text-shadow: 2px 2px 8px black;
     text-align: center;
 }
 
@@ -38,19 +44,24 @@ html, body {
     /* padding: 10px; */
     justify-content: center;
     align-items: center;
-    font-size: 25px;
+    font-size: 2.5vw;
     font-weight: 600;
     font-family: Helvetica;
     color: #d7a249;
-    text-shadow: 2px 2px black;
+    text-shadow: 2px 2px 8px black;
+    /* text-shadow: 2px 2px black; */
 }
 
 .resultContainer {
     display: flex;
-    height: 20%;
+    height: 10%;
+    width: 100%;
     background-color: #0314a2;
-    border: 20px solid black;
+    border: 10px solid black;
+    /* padding: 5px; */
+    /* margin-bottom: 10px; */
     font-family: Helvetica;
+    font-size: 1.5vw;
     justify-content: center;
     align-items: center;
     color: white;
@@ -68,6 +79,8 @@ html, body {
     z-index: 1;
     height: 100vh;
     width: 100vw;
+    /* height: 100%;
+    width: 100%; */
     background-color: #0314a2;
     color: white;
     text-shadow: 2px 2px 8px black;
