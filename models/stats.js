@@ -27,7 +27,7 @@ async function getTotalCorrectAnswers(user_id) {
         group by user_id;
     `, [user_id])
         .then(data => {
-            // console.log(data);
+            console.log(data);
             return data;
         })
         .catch (err => {
