@@ -8,7 +8,6 @@ let BASEAMOUNT = 100;
 
 // TODOS 
 // TODO: Figure out how to manipulate string text when image or <a> should be shown
-// TODO: Weird space on bottom of game
 
 
 // ============ SET INITIAL BOARD CONDITIONS FUNCTIONS ============
@@ -19,9 +18,12 @@ function setInitialScore() {
     Score: 0,
     jeopardyQuestionsCorrect: 0,
     jeopardyQuestionsNotAnswered: 0,
+    jeopardyQuestionsIncorrect: 0,
     dJeopardyQuestionsCorrect: 0,
+    dJeopardyQuestionsIncorrect: 0,
     dJeopardyQuestionsNotAnswered: 0,
-    fJeopardyCorrect: 0
+    fJeopardyCorrect: 0,
+    fJeopardyIncorrect: 0
   };
 }
 
@@ -216,24 +218,57 @@ function checkBoard() {
     setTimeout(populateFinalScore, 3000);
   }
 }
- 
+
 function populateQuestionDOM(event) {
-    // when question is clicked, updates result box with question, updates resultbox question value
-    let questionContainer = document.querySelector('.questionContainer');
-    let question = document.querySelector('#questionText');
-    let answer = document.querySelector('#answerField');
-    answer.dataAttribute = {
-        "Answer": event.target.dataAttribute.Answer,
-        "Value": event.target.dataAttribute.Value,
-        "Question": event.target.dataAttribute.Question
-    };
+  // when question is clicked, updates result box with question, updates resultbox question value
+  let questionContainer = document.querySelector('.questionContainer');
+  let question = document.querySelector('#questionText');
+  let answer = document.querySelector('#answerField');
+  answer.dataAttribute = {
+      "Answer": event.target.dataAttribute.Answer,
+      "Value": event.target.dataAttribute.Value,
+      "Question": event.target.dataAttribute.Question
+  };
+  let href = getHref(event.target.dataAttribute.Question);
+  if (href) {
+    populateImg(href);
+    question.textContent = removeAnchors(event.target.dataAttribute.Question)
+  } else {
     question.textContent = event.target.dataAttribute.Question;
-    // changes display from none to flex to show question
-    questionContainer.style.display = "flex";
-    // puts cursor in answerField
-    questionContainer.focus();
-    // answer.focus();
-    // answer.select();
+  }
+  // changes display from none to flex to show question
+  questionContainer.style.display = "flex";
+  // puts cursor in answerField
+  questionContainer.focus();
+  // answer.focus();
+  // answer.select();
+}
+
+function getHref(string) {
+let removeString = string.substring(string.indexOf(`<a href`), string.indexOf(`_blank">`) + 8);
+let href = removeString.substring(removeString.indexOf(`http`), removeString.indexOf(`" target`));
+return href;
+}
+
+function removeAnchors(string) {
+let removeString = string.substring(string.indexOf(`<a href`), string.indexOf(`_blank">`) + 8);
+let finalAnchorPosition = string.indexOf('</a>');
+let finalAnchor = string.substring(finalAnchorPosition, finalAnchorPosition + 4);
+string.replace(removeString, "");
+string.replace(finalAnchor, "");
+return string;
+}
+
+function populateImg(hrefStr) {
+const img = document.querySelector('.qImg');
+img.style.display = "flex";
+img.src = hrefStr;
+}
+
+function clearImg() {
+const img = document.querySelector('.qImg');
+img.href = "";
+img.style.display = "none";
 }
 
 function populateAnswerDOM(event) {
@@ -277,6 +312,7 @@ function resetQuestionContainer() {
       Question: null,
       Value: null
     };
+    clearImg();
     answer.value = "";
     answer.style.display = "none";
     question.textContent = "";
@@ -301,13 +337,37 @@ function checkIfRight(event) {
     if (userAnswer === correctAnswer) {
         console.log('right');
         updateScoreDOM(answerValue);
+        gotRightStats();
     } else {
         console.log('wrong');
         updateScoreDOM(answerValue * -1);
+        gotWrongStats();
     }
     resetQuestionContainer();
     QUESTIONANSWERED = true;
     return QUESTIONANSWERED; // returned to update global variable to turn off timer function
+}
+
+function gotRightStats() {
+  let userScore = document.querySelector('.score');
+  if (ROUND === 1) {
+    userScore.dataAttribute.jeopardyQuestionsCorrect += 1;
+  } else if (ROUND === 2) {
+    userScore.dataAttribute.dJeopardyQuestionsCorrect += 1;
+  } else if (ROUND === 3) {
+    userScore.dataAttribute.fJeopardyCorrect += 1;
+  }
+}
+
+function gotWrongStats() {
+  let userScore = document.querySelector('.score');
+  if (ROUND === 1) {
+    userScore.dataAttribute.jeopardyQuestionsIncorrect += 1;
+  } else if (ROUND === 2) {
+    userScore.dataAttribute.dJeopardyQuestionsIncorrect += 1;
+  } else if (ROUND === 3) {
+    userScore.dataAttribute.fJeopardyIncorrect += 1;
+  }
 }
 
 function formatText(str) {
@@ -565,34 +625,19 @@ function populateFinalScore() {
   userIdInput.name = "id";
   userIdInput.value = userObject.user_id || 1;
   userIdInput.style.display = "none";
-  const scoreInput = document.createElement('input');
-  scoreInput.name = "score";
-  scoreInput.value = score.dataAttribute.Score;
-  scoreInput.style.display = "none";
+  appendFormInput(form, 'Score');
   const dateInput = document.createElement('input');
   dateInput.name = 'date';
   dateInput.value = new Date();
   dateInput.style.display = "none";
-  const jeopardyQuestionsCorrect = document.createElement('input');
-  jeopardyQuestionsCorrect.name = 'jeopardyQuestionsCorrect';
-  jeopardyQuestionsCorrect.value = score.dataAttribute.jeopardyQuestionsCorrect;
-  jeopardyQuestionsCorrect.style.display = "none";
-  const jeopardyQuestionsNotAnswered = document.createElement('input');
-  jeopardyQuestionsNotAnswered.name = 'jeopardyQuestionsNotAnswered';
-  jeopardyQuestionsNotAnswered.value = score.dataAttribute.jeopardyQuestionsNotAnswered;
-  jeopardyQuestionsNotAnswered.style.display = "none";
-  const dJeopardyQuestionsCorrect = document.createElement('input');
-  dJeopardyQuestionsCorrect.name = 'dJeopardyQuestionsCorrect';
-  dJeopardyQuestionsCorrect.value = score.dataAttribute.dJeopardyQuestionsCorrect;
-  dJeopardyQuestionsCorrect.style.display = "none";
-  const dJeopardyQuestionsNotAnswered = document.createElement('input');
-  dJeopardyQuestionsNotAnswered.name = 'dJeopardyQuestionsNotAnswered';
-  dJeopardyQuestionsNotAnswered.value = score.dataAttribute.dJeopardyQuestionsNotAnswered;
-  dJeopardyQuestionsNotAnswered.style.display = "none";
-  const fJeopardyCorrect = document.createElement('input');
-  fJeopardyCorrect.name = 'fJeopardyCorrect';
-  fJeopardyCorrect.value = score.dataAttribute.fJeopardyCorrect;
-  fJeopardyCorrect.style.display = "none";
+  appendFormInput(form, 'jeopardyQuestionsCorrect');
+  appendFormInput(form, 'jeopardyQuestionsIncorrect');
+  appendFormInput(form, `JeopardyQuestionsNotAnswered`);
+  appendFormInput(form, `dJeopardyQuestionsCorrect`);
+  appendFormInput(form, 'dJeopardyQuestionsIncorrect');
+  appendFormInput(form, 'dJeopardyQuestionsNotAnswered');
+  appendFormInput(form, `fJeopardyCorrect`);
+  appendFormInput(form, 'fJeopardyIncorrect');
   const episodePlayed = document.createElement('input');
   episodePlayed.name = "episodePlayed";
   episodePlayed.value = arrayObject[0][0]["Show Number"];
@@ -601,16 +646,19 @@ function populateFinalScore() {
   submit.type = 'submit';
   submit.value = 'Post Score';
   form.appendChild(userIdInput);
-  form.appendChild(scoreInput);
   form.appendChild(dateInput);
-  form.appendChild(jeopardyQuestionsCorrect);
-  form.appendChild(jeopardyQuestionsNotAnswered);
-  form.appendChild(dJeopardyQuestionsCorrect);
-  form.appendChild(dJeopardyQuestionsNotAnswered);
-  form.appendChild(fJeopardyCorrect);
   form.appendChild(episodePlayed);
   form.appendChild(submit);
   jeopardyHeader.appendChild(form);
+}
+
+function appendFormInput(element, string) {
+  const input = document.createElement('input');
+  const score = document.querySelector('.score');
+  input.name = string;
+  input.value = score.dataAttribute[string];
+  input.style.display = "none";
+  element.appendChild(input);
 }
 
 // questions correct jeopardy jeopardyQuestionsCorrect ("1")
