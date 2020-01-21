@@ -8,7 +8,6 @@ let BASEAMOUNT = 100;
 
 // TODOS 
 // TODO: Figure out how to manipulate string text when image or <a> should be shown
-// TODO: Weird space on bottom of game
 
 
 // ============ SET INITIAL BOARD CONDITIONS FUNCTIONS ============
@@ -216,24 +215,57 @@ function checkBoard() {
     setTimeout(populateFinalScore, 3000);
   }
 }
- 
+
 function populateQuestionDOM(event) {
-    // when question is clicked, updates result box with question, updates resultbox question value
-    let questionContainer = document.querySelector('.questionContainer');
-    let question = document.querySelector('#questionText');
-    let answer = document.querySelector('#answerField');
-    answer.dataAttribute = {
-        "Answer": event.target.dataAttribute.Answer,
-        "Value": event.target.dataAttribute.Value,
-        "Question": event.target.dataAttribute.Question
-    };
+  // when question is clicked, updates result box with question, updates resultbox question value
+  let questionContainer = document.querySelector('.questionContainer');
+  let question = document.querySelector('#questionText');
+  let answer = document.querySelector('#answerField');
+  answer.dataAttribute = {
+      "Answer": event.target.dataAttribute.Answer,
+      "Value": event.target.dataAttribute.Value,
+      "Question": event.target.dataAttribute.Question
+  };
+  let href = getHref(event.target.dataAttribute.Question);
+  if (href) {
+    populateImg(href);
+    question.textContent = removeAnchors(event.target.dataAttribute.Question)
+  } else {
     question.textContent = event.target.dataAttribute.Question;
-    // changes display from none to flex to show question
-    questionContainer.style.display = "flex";
-    // puts cursor in answerField
-    questionContainer.focus();
-    // answer.focus();
-    // answer.select();
+  }
+  // changes display from none to flex to show question
+  questionContainer.style.display = "flex";
+  // puts cursor in answerField
+  questionContainer.focus();
+  // answer.focus();
+  // answer.select();
+}
+
+function getHref(string) {
+let removeString = string.substring(string.indexOf(`<a href`), string.indexOf(`_blank">`) + 8);
+let href = removeString.substring(removeString.indexOf(`http`), removeString.indexOf(`" target`));
+return href;
+}
+
+function removeAnchors(string) {
+let removeString = string.substring(string.indexOf(`<a href`), string.indexOf(`_blank">`) + 8);
+let finalAnchorPosition = string.indexOf('</a>');
+let finalAnchor = string.substring(finalAnchorPosition, finalAnchorPosition + 4);
+string.replace(removeString, "");
+string.replace(finalAnchor, "");
+return string;
+}
+
+function populateImg(hrefStr) {
+const img = document.querySelector('.qImg');
+img.style.display = "flex";
+img.src = hrefStr;
+}
+
+function clearImg() {
+const img = document.querySelector('.qImg');
+img.href = "";
+img.style.display = "none";
 }
 
 function populateAnswerDOM(event) {
@@ -277,6 +309,7 @@ function resetQuestionContainer() {
       Question: null,
       Value: null
     };
+    clearImg();
     answer.value = "";
     answer.style.display = "none";
     question.textContent = "";
