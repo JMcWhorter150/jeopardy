@@ -267,7 +267,7 @@ img.src = hrefStr;
 
 function clearImg() {
 const img = document.querySelector('.qImg');
-img.href = "";
+img.src = "";
 img.style.display = "none";
 }
 
@@ -661,11 +661,6 @@ function appendFormInput(element, string) {
   element.appendChild(input);
 }
 
-// questions correct jeopardy jeopardyQuestionsCorrect ("1")
-// questions not answered jeopardy jeopardyQuestionsNotAnswered ("1")
-// questions correct double jeopardy qdjea dJeopardyQuestionsCorrect
-// questions not answered double jeopardy dJeopardyQuestionsNotAnswered
-// questions correct final jeopardy fJeopardyCorrect
 
 // ============ FUNCTIONS RUN AT BEGINNING OF GAME ============
 
