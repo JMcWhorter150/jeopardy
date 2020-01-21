@@ -56,15 +56,18 @@ function addBuzzer() {
 
 // ============ RESET BOARD FUNCTIONS ============
 
-function getBaseAmount() {
-
+function getBaseAmount(obj=arrayObject) { // updates the base amount to be 100, 200 etc. for old games. Breaks if first question is a daily double
+  let initialValue = parseInt(obj[0][0]["Value"].slice(1)); // gets "$100" and converts it to int
+  let checkInitialValue = parseInt(obj[0][1]["Value"].slice(1)); // checks the second question value and converts it to int
+  initialValue = (initialValue < checkInitialValue) ? initialValue : checkInitialValue; // makes initial value the lower of the two (guessing that daily doubles would be a higher amount wagered)
+  BASEAMOUNT = initialValue;
 }
 
 function resetQuestionsDOM(factor) {
   for (let i=1;i<7;i++) {
       let questionArr = document.querySelectorAll(`.question${i}`);
       questionArr.forEach(element => {
-          element.textContent = `$${i * factor * 200}`; // sets values for each question box to be regular jeopardy or double jeopardy
+          element.textContent = `$${i * factor * BASEAMOUNT}`; // sets values for each question box to be regular jeopardy or double jeopardy
           element.dataAttribute = {
             Answer: null,
             Question: null,
@@ -618,6 +621,7 @@ function populateFinalScore() {
 
 // ============ FUNCTIONS RUN AT BEGINNING OF GAME ============
 
+getBaseAmount(); // Sets the question amounts ($100 or $200);
 populateBoardDOM(arrayObject[0], ROUND); // sets up first jeopardy, then checkboard runs the rest of the game
 setInitialScore();
 setInitialAnswerAttribute();
