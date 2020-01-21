@@ -4,12 +4,10 @@ let QUESTIONANSWERED = false;
 let BUZZED = false;
 let ROUND = 1;
 let CANBUZZ = false;
+let BASEAMOUNT = 100;
 
 // TODOS 
 // TODO: Figure out how to manipulate string text when image or <a> should be shown
-// TODO: Make categories expand for mobiles
-// TODO: (BUG)Find game breaking bug that happens after second daily double, sometimes
-// TODO: (BUG)If dd answered, timers don't show up (BUG)
 // TODO: Weird space on bottom of game
 
 
@@ -57,6 +55,10 @@ function addBuzzer() {
 
 
 // ============ RESET BOARD FUNCTIONS ============
+
+function getBaseAmount() {
+
+}
 
 function resetQuestionsDOM(factor) {
   for (let i=1;i<7;i++) {
@@ -588,6 +590,10 @@ function populateFinalScore() {
   fJeopardyCorrect.name = 'fJeopardyCorrect';
   fJeopardyCorrect.value = score.dataAttribute.fJeopardyCorrect;
   fJeopardyCorrect.style.display = "none";
+  const episodePlayed = document.createElement('input');
+  episodePlayed.name = "episodePlayed";
+  episodePlayed.value = arrayObject[0][0]["Show Number"];
+  episodePlayed.style.display = "none";
   const submit = document.createElement('input');
   submit.type = 'submit';
   submit.value = 'Post Score';
@@ -599,6 +605,7 @@ function populateFinalScore() {
   form.appendChild(dJeopardyQuestionsCorrect);
   form.appendChild(dJeopardyQuestionsNotAnswered);
   form.appendChild(fJeopardyCorrect);
+  form.appendChild(episodePlayed);
   form.appendChild(submit);
   jeopardyHeader.appendChild(form);
 }
