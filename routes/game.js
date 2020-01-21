@@ -106,21 +106,50 @@ router.get('/:episodeNum(\\d+)', async (req, res)=>{
 })
 
 router.post('/', parseForm, async (req, res) => {
-    // console.log(req.body);
-    // const { score, date, id, episodePlayed } = req.body;
-    // console.log(`Received score: ${score}`);
-    // console.log(`Date played: ${date}`);
+    console.log(req.body);
+    let { score, date, id, episodePlayed, jeopardyQuestionsCorrect, jeopardyQuestionsNotAnswered, dJeopardyQuestionsCorrect, dJeopardyQuestionsNotAnswered, fJeopardyCorrect } = req.body;
 
-    // const gameLog = await log.logGameToDatabase(id, date, episodePlayed);
-    // const scoreLog = await log.logScoreToDatabase(id, game_id, score);
+    const formattedDate = new Date(date);
+    // console.log(formattedDate);
+    const dateString = log.dateToFormattedString(formattedDate);
+    console.log(dateString);
+
+    id = parseInt(id);
+    episodePlayed = parseInt(episodePlayed);
+    score = parseInt(score);
+    
+
+    const gameLog = await log.logGameToDatabase(id, dateString, episodePlayed, score);
+
+    const statsLog = await log.logStatsToDatabase(gameLog, jeopardyQuestionsCorrect, jeopardyQuestionsNotAnswered, dJeopardyQuestionsCorrect, dJeopardyQuestionsNotAnswered, fJeopardyCorrect);
+    // console.log(statsLog);
+
+    res.redirect('/');
 })
 
+router.post('/:episodeNum(\\d+)', parseForm, async (req, res) => {
+    console.log(req.body);
+    let { score, date, id, episodePlayed, jeopardyQuestionsCorrect, jeopardyQuestionsNotAnswered, dJeopardyQuestionsCorrect, dJeopardyQuestionsNotAnswered, fJeopardyCorrect } = req.body;
 
+    const formattedDate = new Date(date);
+    // console.log(formattedDate);
+    const dateString = log.dateToFormattedString(formattedDate);
+    console.log(dateString);
 
+    id = parseInt(id);
+    episodePlayed = parseInt(episodePlayed);
+    score = parseInt(score);
+    
+
+    const gameLog = await log.logGameToDatabase(id, dateString, episodePlayed, score);
+
+    const statsLog = await log.logStatsToDatabase(gameLog, jeopardyQuestionsCorrect, jeopardyQuestionsNotAnswered, dJeopardyQuestionsCorrect, dJeopardyQuestionsNotAnswered, fJeopardyCorrect);
+    // console.log(statsLog);
+
+    res.redirect('/');
+})
 
 // Select game routing
 router.use('/select', requireLogin, selectRouter);
-
-
 
 module.exports = router;
