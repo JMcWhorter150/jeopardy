@@ -49,13 +49,45 @@ router.get('/', async (req, res) => {
     </tr>\n`;
     }
 
+    const totalIncorrectAnswers = await stats.getTotalIncorrectAnswers(req.session.user.id);
+    // console.log(totalCorrectAnswers);
+    let totalIncorrectAnswersHTML;
+    if (totalIncorrectAnswers.length === 1) {
+        totalIncorrectAnswersHTML = `<tr>
+        <td>Incorrect Answers</td>\n
+        <td>${totalIncorrectAnswers[0].total}</td>\n
+    </tr>\n`;
+    } else {
+        totalIncorrectAnswersHTML = `<tr>
+        <td>Incorrect Answers</td>\n
+        <td>0</td>\n
+    </tr>\n`;
+    }
+
+    const totalNotAnswered = await stats.gettotalNotAnswered(req.session.user.id);
+    // console.log(totalCorrectAnswers);
+    let totalNotAnsweredHTML;
+    if (totalNotAnswered.length === 1) {
+        totalNotAnsweredHTML = `<tr>
+        <td>Not Answered</td>\n
+        <td>${totalNotAnswered[0].total}</td>\n
+    </tr>\n`;
+    } else {
+        totalNotAnsweredHTML = `<tr>
+        <td>Not Answered</td>\n
+        <td>0</td>\n
+    </tr>\n`;
+    }
+
     res.render('profile', {
         locals: {
             pagetitle: `${req.session.user.name}'s Profile`,
             username: req.session.user.name,
             gamesList: gamesList.join(''),
             totalGamesPlayed: totalGamesPlayedHTML,
-            totalCorrectAnswers: totalCorrectAnswersHTML
+            totalCorrectAnswers: totalCorrectAnswersHTML,
+            totalIncorrectAnswers: totalIncorrectAnswersHTML,
+            totalNotAnswered: totalNotAnsweredHTML
         },
         partials: {
             head: '/partials/head',

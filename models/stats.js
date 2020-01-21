@@ -37,7 +37,47 @@ async function getTotalCorrectAnswers(user_id) {
     return correctAnswerObject;
 }
 
+async function getTotalIncorrectAnswers(user_id) {
+        // get all games played by user
+    // get all stats for games played by that user
+    const incorrectAnswerObject = await db.query(`
+        select user_id, (sum(questionsIncorrectJeopardy) + sum(questionsIncorrectDoubleJeopardy) + sum(questionsIncorrectFinalJeopardy)) as Total
+        from stats, gameslog
+        where gameslog.user_id=$1 and stats.game_id=gameslog.id
+        group by user_id;
+    `, [user_id])
+        .then(data => {
+            console.log(data);
+            return data;
+        })
+        .catch (err => {
+            console.log(err);
+            return [];
+        })
+    return incorrectAnswerObject;
+}
+
+async function getTotalNotAnswered(user_id) {
+    const notAnsweredObject = await db.query(`
+        select user_id, (sum(questionsNotAnsweredJeopardy) + sum(questionsNotAnsweredDoubleJeopardy)) as Total
+        from stats, gameslog
+        where gameslog.user_id=$1 and stats.game_id=gameslog.id
+        group by user_id;
+    `, [user_id])
+        .then(data => {
+            console.log(data);
+            return data;
+        })
+        .catch (err => {
+            console.log(err);
+            return [];
+        })
+    return notAnsweredObject;
+}
+
 module.exports = {
     getTotalGamesPlayed,
-    getTotalCorrectAnswers
+    getTotalCorrectAnswers,
+    getTotalIncorrectAnswers,
+    getTotalNotAnswered
 }
