@@ -50,7 +50,7 @@ bet.addEventListener('change', checkBet);
 }
 
 function addBuzzer() {
-  document.addEventListener('keyup', contestantBuzzed);
+  document.addEventListener('keydown', contestantBuzzed);
   document.addEventListener('touchend', contestantBuzzed); // for mobile
 }
 
@@ -58,7 +58,7 @@ function addBuzzer() {
 
 // ============ RESET BOARD FUNCTIONS ============
 
-function getBaseAmount(obj=arrayObject) { // updates the base amount to be 100, 200 etc. for old games. Breaks if first question is a daily double
+function getBaseAmount(obj=arrayObject) { // updates the base amount to be 100, 200 etc. for old games
   let initialValue = parseInt(obj[0][0]["Value"].slice(1)); // gets "$100" and converts it to int
   let checkInitialValue = parseInt(obj[0][1]["Value"].slice(1)); // checks the second question value and converts it to int
   initialValue = (initialValue < checkInitialValue) ? initialValue : checkInitialValue; // makes initial value the lower of the two (guessing that daily doubles would be a higher amount wagered)
@@ -78,7 +78,6 @@ function resetQuestionsDOM(factor) {
           element.removeEventListener("click", populateQuestionDOM);
           element.removeEventListener('click', dailyDouble);
           element.removeEventListener('click', removeQuestionDOM);
-          // element.removeEventListener('click', answerTimer);
           element.removeEventListener('click', waitForBuzz);
       });
   }
@@ -168,7 +167,6 @@ function removeQuestionDOM(event) {
   event.target.removeEventListener("click", removeQuestionDOM);
   event.target.removeEventListener('click', populateQuestionDOM);
   event.target.removeEventListener('click', dailyDouble);
-  // event.target.removeEventListener('click', answerTimer);
   event.target.removeEventListener('click', waitForBuzz);
   event.target.dataAttribute = {
     "Answer": null,
@@ -180,7 +178,6 @@ function removeQuestionDOM(event) {
 function checkBoard() {
   // checks after each question to see if round is over
   let questions = document.querySelectorAll('.question-item');
-  let done = false;
   for (let question of questions) {
     if (question.textContent.length > 0) {
       return; // exits out of function if any questions have text remaining
@@ -374,7 +371,8 @@ function formatText(str) {
     if (Number.isInteger(parseInt(str))) { // if answer is number
       return str;
     } else if (typeof str === 'string') { // if answer is string
-      return str.toLowerCase();
+      str = str.toLowerCase();
+      return str.removeStopWords();
     } else { // if answer is anything else, just return the answer
       return str;
     }
@@ -421,11 +419,10 @@ function waitForBuzz() {
     if (BUZZED) {
       console.log('contestant buzzed');
       BUZZED = false;
+      CANBUZZ = false;
       questionBar.style.display = "none";
       questionBar.value = 0;
       clearInterval(buzzTimer);
-      CANBUZZ = false;
-      return BUZZED;
     } else if (timeleft <= 0) {
       CANBUZZ = false;
       questionBar.style.display = "none";
@@ -451,14 +448,13 @@ function updateQuestionsNotAnswered() {
 
 function contestantBuzzed(event) {
   // when user buzzes, show answer field, start answer timer
-  if (event.code === "Enter" && CANBUZZ) {
+  if (event.code === "Enter" && CANBUZZ) { // NEED TO UPDATE WITH TOUCH EVENT CODE OR WHATEVER
     const answer = document.querySelector('#answerField');
     answer.style.display = "inline-block";
     answer.focus();
     answer.select();
     answerTimer();
     BUZZED = true;
-    return BUZZED;
   }
 }
 
@@ -673,3 +669,480 @@ addAnswerCheck(); // never removed
 addBetCheck(); // never removed
 addBuzzer(); // never removed
 // 
+
+/* Gotten from the internet to make this work a bit better
+ * String method to remove stop words
+ * Written by GeekLad http://geeklad.com
+ * Stop words obtained from http://www.lextek.com/manuals/onix/stopwords1.html
+ *   Usage: string_variable.removeStopWords();
+ *   Output: The original String with stop words removed
+ */
+String.prototype.removeStopWords = function() {
+	var x;
+	var y;
+	var word;
+	var stop_word;
+	var regex_str;
+	var regex;
+	var cleansed_string = this.valueOf();
+	var stop_words = new Array(
+		'a',
+		'about',
+		'above',
+		'across',
+		'after',
+		'again',
+		'against',
+		'all',
+		'almost',
+		'alone',
+		'along',
+		'already',
+		'also',
+		'although',
+		'always',
+		'among',
+		'an',
+		'and',
+		'another',
+		'any',
+		'anybody',
+		'anyone',
+		'anything',
+		'anywhere',
+		'are',
+		'area',
+		'areas',
+		'around',
+		'as',
+		'ask',
+		'asked',
+		'asking',
+		'asks',
+		'at',
+		'away',
+		'b',
+		'back',
+		'backed',
+		'backing',
+		'backs',
+		'be',
+		'became',
+		'because',
+		'become',
+		'becomes',
+		'been',
+		'before',
+		'began',
+		'behind',
+		'being',
+		'beings',
+		'best',
+		'better',
+		'between',
+		'big',
+		'both',
+		'but',
+		'by',
+		'c',
+		'came',
+		'can',
+		'cannot',
+		'case',
+		'cases',
+		'certain',
+		'certainly',
+		'clear',
+		'clearly',
+		'come',
+		'could',
+		'd',
+		'did',
+		'differ',
+		'different',
+		'differently',
+		'do',
+		'does',
+		'done',
+		'down',
+		'down',
+		'downed',
+		'downing',
+		'downs',
+		'during',
+		'e',
+		'each',
+		'early',
+		'either',
+		'end',
+		'ended',
+		'ending',
+		'ends',
+		'enough',
+		'even',
+		'evenly',
+		'ever',
+		'every',
+		'everybody',
+		'everyone',
+		'everything',
+		'everywhere',
+		'f',
+		'face',
+		'faces',
+		'fact',
+		'facts',
+		'far',
+		'felt',
+		'few',
+		'find',
+		'finds',
+		'first',
+		'for',
+		'four',
+		'from',
+		'full',
+		'fully',
+		'further',
+		'furthered',
+		'furthering',
+		'furthers',
+		'g',
+		'gave',
+		'general',
+		'generally',
+		'get',
+		'gets',
+		'give',
+		'given',
+		'gives',
+		'go',
+		'going',
+		'good',
+		'goods',
+		'got',
+		'great',
+		'greater',
+		'greatest',
+		'group',
+		'grouped',
+		'grouping',
+		'groups',
+		'h',
+		'had',
+		'has',
+		'have',
+		'having',
+		'he',
+		'her',
+		'here',
+		'herself',
+		'high',
+		'high',
+		'high',
+		'higher',
+		'highest',
+		'him',
+		'himself',
+		'his',
+		'how',
+		'however',
+		'i',
+		'if',
+		'important',
+		'in',
+		'interest',
+		'interested',
+		'interesting',
+		'interests',
+		'into',
+		'is',
+		'it',
+		'its',
+		'itself',
+		'j',
+		'just',
+		'k',
+		'keep',
+		'keeps',
+		'kind',
+		'knew',
+		'know',
+		'known',
+		'knows',
+		'l',
+		'large',
+		'largely',
+		'last',
+		'later',
+		'latest',
+		'least',
+		'less',
+		'let',
+		'lets',
+		'like',
+		'likely',
+		'long',
+		'longer',
+		'longest',
+		'm',
+		'made',
+		'make',
+		'making',
+		'man',
+		'many',
+		'may',
+		'me',
+		'member',
+		'members',
+		'men',
+		'might',
+		'more',
+		'most',
+		'mostly',
+		'mr',
+		'mrs',
+		'much',
+		'must',
+		'my',
+		'myself',
+		'n',
+		'necessary',
+		'need',
+		'needed',
+		'needing',
+		'needs',
+		'never',
+		'new',
+		'new',
+		'newer',
+		'newest',
+		'next',
+		'no',
+		'nobody',
+		'non',
+		'noone',
+		'not',
+		'nothing',
+		'now',
+		'nowhere',
+		'number',
+		'numbers',
+		'o',
+		'of',
+		'off',
+		'often',
+		'old',
+		'older',
+		'oldest',
+		'on',
+		'once',
+		'one',
+		'only',
+		'open',
+		'opened',
+		'opening',
+		'opens',
+		'or',
+		'order',
+		'ordered',
+		'ordering',
+		'orders',
+		'other',
+		'others',
+		'our',
+		'out',
+		'over',
+		'p',
+		'part',
+		'parted',
+		'parting',
+		'parts',
+		'per',
+		'perhaps',
+		'place',
+		'places',
+		'point',
+		'pointed',
+		'pointing',
+		'points',
+		'possible',
+		'present',
+		'presented',
+		'presenting',
+		'presents',
+		'problem',
+		'problems',
+		'put',
+		'puts',
+		'q',
+		'quite',
+		'r',
+		'rather',
+		'really',
+		'right',
+		'right',
+		'room',
+		'rooms',
+		's',
+		'said',
+		'same',
+		'saw',
+		'say',
+		'says',
+		'second',
+		'seconds',
+		'see',
+		'seem',
+		'seemed',
+		'seeming',
+		'seems',
+		'sees',
+		'several',
+		'shall',
+		'she',
+		'should',
+		'show',
+		'showed',
+		'showing',
+		'shows',
+		'side',
+		'sides',
+		'since',
+		'small',
+		'smaller',
+		'smallest',
+		'so',
+		'some',
+		'somebody',
+		'someone',
+		'something',
+		'somewhere',
+		'state',
+		'states',
+		'still',
+		'still',
+		'such',
+		'sure',
+		't',
+		'take',
+		'taken',
+		'than',
+		'that',
+		'the',
+		'their',
+		'them',
+		'then',
+		'there',
+		'therefore',
+		'these',
+		'they',
+		'thing',
+		'things',
+		'think',
+		'thinks',
+		'this',
+		'those',
+		'though',
+		'thought',
+		'thoughts',
+		'three',
+		'through',
+		'thus',
+		'to',
+		'today',
+		'together',
+		'too',
+		'took',
+		'toward',
+		'turn',
+		'turned',
+		'turning',
+		'turns',
+		'two',
+		'u',
+		'under',
+		'until',
+		'up',
+		'upon',
+		'us',
+		'use',
+		'used',
+		'uses',
+		'v',
+		'very',
+		'w',
+		'want',
+		'wanted',
+		'wanting',
+		'wants',
+		'was',
+		'way',
+		'ways',
+		'we',
+		'well',
+		'wells',
+		'went',
+		'were',
+		'what',
+		'when',
+		'where',
+		'whether',
+		'which',
+		'while',
+		'who',
+		'whole',
+		'whose',
+		'why',
+		'will',
+		'with',
+		'within',
+		'without',
+		'work',
+		'worked',
+		'working',
+		'works',
+		'would',
+		'x',
+		'y',
+		'year',
+		'years',
+		'yet',
+		'you',
+		'young',
+		'younger',
+		'youngest',
+		'your',
+		'yours',
+		'z'
+	)
+		
+	// Split out all the individual words in the phrase
+	words = cleansed_string.match(/[^\s]+|\s+[^\s+]$/g)
+
+	// Review all the words
+	for(x=0; x < words.length; x++) {
+		// For each word, check all the stop words
+		for(y=0; y < stop_words.length; y++) {
+			// Get the current word
+			word = words[x].replace(/\s+|[^a-z]+/ig, "");	// Trim the word and remove non-alpha
+			
+			// Get the stop word
+			stop_word = stop_words[y];
+			
+			// If the word matches the stop word, remove it from the keywords
+			if(word.toLowerCase() == stop_word) {
+				// Build the regex
+				regex_str = "^\\s*"+stop_word+"\\s*$";		// Only word
+				regex_str += "|^\\s*"+stop_word+"\\s+";		// First word
+				regex_str += "|\\s+"+stop_word+"\\s*$";		// Last word
+				regex_str += "|\\s+"+stop_word+"\\s+";		// Word somewhere in the middle
+				regex = new RegExp(regex_str, "ig");
+			
+				// Remove the word from the keywords
+				cleansed_string = cleansed_string.replace(regex, " ");
+			}
+		}
+	}
+	return cleansed_string.replace(/^\s+|\s+$/g, "");
+}
