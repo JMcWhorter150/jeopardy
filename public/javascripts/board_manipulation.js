@@ -4,22 +4,13 @@ let QUESTIONANSWERED = false;
 let BUZZED = false;
 let ROUND = 1;
 let CANBUZZ = false;
+let BASEAMOUNT = 100;
 
 // TODOS 
-// TODO: Export Data after game ends // my part done
 // TODO: Figure out how to manipulate string text when image or <a> should be shown
-// TODO: Fix answers that are not text and instead are just strings --- DONE
-// TODO: Make categories expand for mobiles
-// TODO: (BUG)Make final jeopardy not run if score is less than 0
-// TODO: (BUG)Find game breaking bug that happens after second daily double, sometimes
-// TODO: Add more attributes to send back to game
-// TODO: Add timer functionality to answer    (NOW) (touchstart event is tapping the screen on mobile)
-// TODO: (BUG)If dd answered, timers don't show up (BUG)
+// TODO: Weird space on bottom of game
 
-// When question answered, if right, add to correct questions
-// When question not answered, add to jeopardy questions not answered
-// check round and add to right place when necessary
-// if user not logged in variable = null;
+
 // ============ SET INITIAL BOARD CONDITIONS FUNCTIONS ============
 
 function setInitialScore() {
@@ -58,11 +49,16 @@ bet.addEventListener('change', checkBet);
 
 function addBuzzer() {
   document.addEventListener('keyup', contestantBuzzed);
+  document.addEventListener('touchend', contestantBuzzed); // for mobile
 }
 
 
 
 // ============ RESET BOARD FUNCTIONS ============
+
+function getBaseAmount() {
+
+}
 
 function resetQuestionsDOM(factor) {
   for (let i=1;i<7;i++) {
@@ -198,16 +194,23 @@ function checkBoard() {
   if (ROUND === 1) {
     // update board to double jeopardy
     ROUND = 2;
-    populateBoardDOM(arrayObject[1], 2); // only runs if all questions have no text
+    setTimeout(() => { // only runs if all questions have no text, and waits for answer card to finish
+      populateBoardDOM(arrayObject[1], 2)
+    }, 3000);
     return ROUND;
   } else if (ROUND === 2) {
     // starts final jeopardy
     ROUND = 3;
-    finalJeopardy();
-    return ROUND;
+    let score = document.querySelector('.score').dataAttribute.Score;
+    if (score < 0) { // final jeopardy doesn't run if score less than 0
+      setTimeout(populateFinalScore, 3000);
+    } else {
+      setTimeout(finalJeopardy,3000);
+      return ROUND;
+    }
   } else if (ROUND === 3) {
     // sets final game screen after final jeopardy
-    populateFinalScore();
+    setTimeout(populateFinalScore, 3000);
   }
 }
  
@@ -587,6 +590,10 @@ function populateFinalScore() {
   fJeopardyCorrect.name = 'fJeopardyCorrect';
   fJeopardyCorrect.value = score.dataAttribute.fJeopardyCorrect;
   fJeopardyCorrect.style.display = "none";
+  const episodePlayed = document.createElement('input');
+  episodePlayed.name = "episodePlayed";
+  episodePlayed.value = arrayObject[0][0]["Show Number"];
+  episodePlayed.style.display = "none";
   const submit = document.createElement('input');
   submit.type = 'submit';
   submit.value = 'Post Score';
@@ -598,6 +605,7 @@ function populateFinalScore() {
   form.appendChild(dJeopardyQuestionsCorrect);
   form.appendChild(dJeopardyQuestionsNotAnswered);
   form.appendChild(fJeopardyCorrect);
+  form.appendChild(episodePlayed);
   form.appendChild(submit);
   jeopardyHeader.appendChild(form);
 }
