@@ -115,3 +115,14 @@ html, body {
 #answerField {
     display: none;
 }
+
+.pictureFrame {
+    display: none;
+    height: 15vh;
+    width: 15vw;
+}
+
+.qImg {
+    display: none;
+    height: 100%;
+}

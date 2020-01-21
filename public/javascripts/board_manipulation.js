@@ -160,15 +160,6 @@ function updateScoreDOM(score) {
   userScore.textContent = `Score: $${currentScore + score}`;
   userScore.dataAttribute.Score = currentScore + score;
   // updates question data if right
-  if (score > 0) {
-    if (ROUND === 1) {
-      userScore.dataAttribute.jeopardyQuestionsCorrect += 1;
-    } else if (ROUND === 2) {
-      userScore.dataAttribute.dJeopardyQuestionsCorrect += 1;
-    } else if (ROUND === 3) {
-      userScore.dataAttribute.dJeopardyQuestionsCorrect += 1;
-    }
-  }
 }
 
 function removeQuestionDOM(event) {
@@ -197,25 +188,29 @@ function checkBoard() {
   }
   // only runs after all questions gone
   if (ROUND === 1) {
-    // update board to double jeopardy
-    ROUND = 2;
-    setTimeout(() => { // only runs if all questions have no text, and waits for answer card to finish
-      populateBoardDOM(arrayObject[1], 2)
-    }, 3000);
-    return ROUND;
+    startDoubleJeopardy();
   } else if (ROUND === 2) {
-    // starts final jeopardy
-    ROUND = 3;
-    let score = document.querySelector('.score').dataAttribute.Score;
-    if (score < 0) { // final jeopardy doesn't run if score less than 0
-      setTimeout(populateFinalScore, 3000);
-    } else {
-      setTimeout(finalJeopardy,3000);
-      return ROUND;
-    }
+    startFinalJeopardy();
   } else if (ROUND === 3) {
     // sets final game screen after final jeopardy
     setTimeout(populateFinalScore, 3000);
+  }
+}
+
+function startDoubleJeopardy() {
+  ROUND = 2;
+  setTimeout(() => { // only runs if all questions have no text, and waits for answer card to finish
+    populateBoardDOM(arrayObject[1], 2)
+  }, 3000);
+}
+
+function startFinalJeopardy() {
+  ROUND = 3;
+  let score = document.querySelector('.score').dataAttribute.Score;
+  if (score < 0) { // final jeopardy doesn't run if score less than 0
+    setTimeout(populateFinalScore, 3000);
+  } else {
+    setTimeout(finalJeopardy,3000);
   }
 }
 
@@ -245,29 +240,33 @@ function populateQuestionDOM(event) {
 }
 
 function getHref(string) {
-let removeString = string.substring(string.indexOf(`<a href`), string.indexOf(`_blank">`) + 8);
-let href = removeString.substring(removeString.indexOf(`http`), removeString.indexOf(`" target`));
-return href;
+  let removeString = string.substring(string.indexOf(`<a href`), string.indexOf(`_blank">`) + 8);
+  let href = removeString.substring(removeString.indexOf(`http`), removeString.indexOf(`" target`));
+  return href;
 }
 
 function removeAnchors(string) {
-let removeString = string.substring(string.indexOf(`<a href`), string.indexOf(`_blank">`) + 8);
-let finalAnchorPosition = string.indexOf('</a>');
-let finalAnchor = string.substring(finalAnchorPosition, finalAnchorPosition + 4);
-string.replace(removeString, "");
-string.replace(finalAnchor, "");
-return string;
+  let removeString = string.substring(string.indexOf(`<a href`), string.indexOf(`_blank">`) + 8);
+  let finalAnchorPosition = string.indexOf('</a>');
+  let finalAnchor = string.substring(finalAnchorPosition, finalAnchorPosition + 4);
+  string = string.replace(removeString, "");
+  string = string.replace(finalAnchor, "");
+  return string;
 }
 
 function populateImg(hrefStr) {
 const img = document.querySelector('.qImg');
+const pictureFrame = document.querySelector('.pictureFrame');
+pictureFrame.style.display = "flex";
 img.style.display = "flex";
 img.src = hrefStr;
 }
 
 function clearImg() {
 const img = document.querySelector('.qImg');
-img.href = "";
+const pictureFrame = document.querySelector('.pictureFrame');
+pictureFrame.style.display = "none";
+img.src = "";
 img.style.display = "none";
 }
 
@@ -632,7 +631,7 @@ function populateFinalScore() {
   dateInput.style.display = "none";
   appendFormInput(form, 'jeopardyQuestionsCorrect');
   appendFormInput(form, 'jeopardyQuestionsIncorrect');
-  appendFormInput(form, `JeopardyQuestionsNotAnswered`);
+  appendFormInput(form, `jeopardyQuestionsNotAnswered`);
   appendFormInput(form, `dJeopardyQuestionsCorrect`);
   appendFormInput(form, 'dJeopardyQuestionsIncorrect');
   appendFormInput(form, 'dJeopardyQuestionsNotAnswered');
@@ -652,6 +651,8 @@ function populateFinalScore() {
   jeopardyHeader.appendChild(form);
 }
 
+// adds a comment to update nodemon
+
 function appendFormInput(element, string) {
   const input = document.createElement('input');
   const score = document.querySelector('.score');
@@ -661,11 +662,6 @@ function appendFormInput(element, string) {
   element.appendChild(input);
 }
 
-// questions correct jeopardy jeopardyQuestionsCorrect ("1")
-// questions not answered jeopardy jeopardyQuestionsNotAnswered ("1")
-// questions correct double jeopardy qdjea dJeopardyQuestionsCorrect
-// questions not answered double jeopardy dJeopardyQuestionsNotAnswered
-// questions correct final jeopardy fJeopardyCorrect
 
 // ============ FUNCTIONS RUN AT BEGINNING OF GAME ============
 
