@@ -481,21 +481,36 @@ function checkBet(event) {
   const userBet = parseInt(event.target.value);
   const totalScore = document.querySelector('.score').dataAttribute.Score;
   const betField = document.querySelector('#betField');
-  if (userBet < 5) { // jeopardy minimum bet is 5 except for final jeopardy
-    betField.focus();
-    betField.select();
-    return;
-  } else if (!Number.isInteger(userBet)) { // makes them enter a number
-    betField.focus();
-    betField.select();
-    return;
-  } else if (totalScore < 1000) { // checks to make sure if their score is less than 1000, that they can bet up to 1000 and no more
-    if (userBet > 1000) {
+  if (ROUND < 3) {
+    if (userBet < 5) { // jeopardy minimum bet is 5 except for final jeopardy
+      betField.focus();
+      betField.select();
+      return;
+    } else if (!Number.isInteger(userBet)) { // makes them enter a number
+      betField.focus();
+      betField.select();
+      return;
+    } else if (totalScore < ROUND * 1000) { // checks to make sure if their score is less than 1000, that they can bet up to 1000 and no more
+      if (userBet > ROUND * 1000) {
+        betField.focus();
+        betField.select();
+        return
+      }
+    } else if (userBet > totalScore) { // cant bet more than they have
       betField.focus();
       betField.select();
       return
     }
+  } else if (ROUND === 3) {
+    if (!Number.isInteger(userBet)) { // makes them enter a number
+      betField.focus();
+      betField.select();
+      return;
   } else if (userBet > totalScore) { // cant bet more than they have
+    betField.focus();
+    betField.select();
+    return
+  } else if (userBet < 0) {
     betField.focus();
     betField.select();
     return
@@ -511,6 +526,10 @@ function checkBet(event) {
   } else { // regular daily double functionality
     populateDDQuestion();
   }
+}
+
+function checkDDBet(userBet) {
+
 }
 
 // ============ DAILY DOUBLE FUNCTIONS ============
