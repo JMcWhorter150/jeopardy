@@ -240,28 +240,32 @@ function populateQuestionDOM(event) {
 }
 
 function getHref(string) {
-let removeString = string.substring(string.indexOf(`<a href`), string.indexOf(`_blank">`) + 8);
-let href = removeString.substring(removeString.indexOf(`http`), removeString.indexOf(`" target`));
-return href;
+  let removeString = string.substring(string.indexOf(`<a href`), string.indexOf(`_blank">`) + 8);
+  let href = removeString.substring(removeString.indexOf(`http`), removeString.indexOf(`" target`));
+  return href;
 }
 
 function removeAnchors(string) {
-let removeString = string.substring(string.indexOf(`<a href`), string.indexOf(`_blank">`) + 8);
-let finalAnchorPosition = string.indexOf('</a>');
-let finalAnchor = string.substring(finalAnchorPosition, finalAnchorPosition + 4);
-string.replace(removeString, "");
-string.replace(finalAnchor, "");
-return string;
+  let removeString = string.substring(string.indexOf(`<a href`), string.indexOf(`_blank">`) + 8);
+  let finalAnchorPosition = string.indexOf('</a>');
+  let finalAnchor = string.substring(finalAnchorPosition, finalAnchorPosition + 4);
+  string = string.replace(removeString, "");
+  string = string.replace(finalAnchor, "");
+  return string;
 }
 
 function populateImg(hrefStr) {
 const img = document.querySelector('.qImg');
+const pictureFrame = document.querySelector('.pictureFrame');
+pictureFrame.style.display = "flex";
 img.style.display = "flex";
 img.src = hrefStr;
 }
 
 function clearImg() {
 const img = document.querySelector('.qImg');
+const pictureFrame = document.querySelector('.pictureFrame');
+pictureFrame.style.display = "none";
 img.src = "";
 img.style.display = "none";
 }
@@ -627,7 +631,7 @@ function populateFinalScore() {
   dateInput.style.display = "none";
   appendFormInput(form, 'jeopardyQuestionsCorrect');
   appendFormInput(form, 'jeopardyQuestionsIncorrect');
-  appendFormInput(form, `JeopardyQuestionsNotAnswered`);
+  appendFormInput(form, `jeopardyQuestionsNotAnswered`);
   appendFormInput(form, `dJeopardyQuestionsCorrect`);
   appendFormInput(form, 'dJeopardyQuestionsIncorrect');
   appendFormInput(form, 'dJeopardyQuestionsNotAnswered');
@@ -646,6 +650,8 @@ function populateFinalScore() {
   form.appendChild(submit);
   jeopardyHeader.appendChild(form);
 }
+
+// adds a comment to update nodemon
 
 function appendFormInput(element, string) {
   const input = document.createElement('input');
