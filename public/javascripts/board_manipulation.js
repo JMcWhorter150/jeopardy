@@ -160,15 +160,6 @@ function updateScoreDOM(score) {
   userScore.textContent = `Score: $${currentScore + score}`;
   userScore.dataAttribute.Score = currentScore + score;
   // updates question data if right
-  if (score > 0) {
-    if (ROUND === 1) {
-      userScore.dataAttribute.jeopardyQuestionsCorrect += 1;
-    } else if (ROUND === 2) {
-      userScore.dataAttribute.dJeopardyQuestionsCorrect += 1;
-    } else if (ROUND === 3) {
-      userScore.dataAttribute.dJeopardyQuestionsCorrect += 1;
-    }
-  }
 }
 
 function removeQuestionDOM(event) {
@@ -217,6 +208,17 @@ function checkBoard() {
     // sets final game screen after final jeopardy
     setTimeout(populateFinalScore, 3000);
   }
+}
+
+function startDoubleJeopardy() {
+  ROUND = 2;
+  setTimeout(() => { // only runs if all questions have no text, and waits for answer card to finish
+    populateBoardDOM(arrayObject[1], 2)
+  }, 3000);
+}
+
+function startFinalJeopardy() {
+
 }
 
 function populateQuestionDOM(event) {
