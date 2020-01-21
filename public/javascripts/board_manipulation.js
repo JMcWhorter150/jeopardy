@@ -188,22 +188,9 @@ function checkBoard() {
   }
   // only runs after all questions gone
   if (ROUND === 1) {
-    // update board to double jeopardy
-    ROUND = 2;
-    setTimeout(() => { // only runs if all questions have no text, and waits for answer card to finish
-      populateBoardDOM(arrayObject[1], 2)
-    }, 3000);
-    return ROUND;
+    startDoubleJeopardy();
   } else if (ROUND === 2) {
-    // starts final jeopardy
-    ROUND = 3;
-    let score = document.querySelector('.score').dataAttribute.Score;
-    if (score < 0) { // final jeopardy doesn't run if score less than 0
-      setTimeout(populateFinalScore, 3000);
-    } else {
-      setTimeout(finalJeopardy,3000);
-      return ROUND;
-    }
+    startFinalJeopardy();
   } else if (ROUND === 3) {
     // sets final game screen after final jeopardy
     setTimeout(populateFinalScore, 3000);
@@ -218,7 +205,13 @@ function startDoubleJeopardy() {
 }
 
 function startFinalJeopardy() {
-
+  ROUND = 3;
+  let score = document.querySelector('.score').dataAttribute.Score;
+  if (score < 0) { // final jeopardy doesn't run if score less than 0
+    setTimeout(populateFinalScore, 3000);
+  } else {
+    setTimeout(finalJeopardy,3000);
+  }
 }
 
 function populateQuestionDOM(event) {
