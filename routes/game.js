@@ -76,6 +76,35 @@ router.get('/', async (req, res)=>{
     });
 })
 
+router.get('/:episodeNum(\\d+)', async (req, res)=>{
+    const { episodeNum } = req.params;
+    // Check if user is logged in for user id object for frontend
+    if (req.session && req.session.user) {
+            userObj = {
+                user_id: req.session.user.id,
+                username: req.session.user.username
+            }
+        } else {
+            userObj = {
+                user_id: null,
+                username: 'Anonymous'
+            }
+    }
+    const data = await getQuestionsForRound(episodeNum);
+    res.render('game', {
+        locals: {
+            pagetitle: 'Play Jeopardy',
+            userinfo: JSON.stringify(userObj),
+            arrayArrayObject: JSON.stringify(data)
+        },
+        partials: {
+            head: '/partials/head',
+            navbar: req.session.navbar.value,
+            footer: '/partials/footer'
+        }
+    });
+})
+
 router.post('/', parseForm, async (req, res) => {
     // console.log(req.body);
     // const { score, date, id, episodePlayed } = req.body;

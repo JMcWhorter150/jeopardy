@@ -52,9 +52,9 @@ router.get('/', async (req, res)=>{
 router.post('/', parseForm, async (req, res) => {
     const { date } = req.body;
     const showNumber = data.getShowNumberFromDate(date);
-    const showQuestions = await getQuestionsForRound(showNumber);
-    if (showQuestions) {
-        
+    // const showQuestions = await getQuestionsForRound(showNumber);
+    if (showNumber) {
+        res.redirect(`/game/${showNumber}`);
     } else {
         console.log(`Error in getting show.`);
     }
