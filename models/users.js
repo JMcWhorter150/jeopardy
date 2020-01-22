@@ -26,6 +26,12 @@ async function login(username, password) {
     return bcrypt.compareSync(password, theUser.hash);
 }
 
+async function checkUsername(username) {
+    const lowerUser = username.toLowerCase();
+    const theUser = await db.query(`select * from users where name=$1`, [lowerUser]);
+    return theUser;
+};
+
 async function getByUsername(username) {
     const lowerUser = username.toLowerCase();
     const theUser = await db.one(`select * from users where name=$1`, [lowerUser]);
@@ -55,5 +61,6 @@ module.exports = {
     login,
     getByUsername,
     addUserToDB,
-    updatePassword
+    updatePassword,
+    checkUsername
 }
