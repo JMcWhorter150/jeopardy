@@ -20,7 +20,6 @@ router.get('/', async (req, res) => {
     });
 
     const totalGamesPlayed = await stats.getTotalGamesPlayed(req.session.user.id);
-    // console.log(totalGamesPlayed);
     let totalGamesPlayedHTML;
     if (totalGamesPlayed.length === 1) {
         totalGamesPlayedHTML = `<tr>
@@ -35,7 +34,6 @@ router.get('/', async (req, res) => {
     }
     
     const totalCorrectAnswers = await stats.getTotalCorrectAnswers(req.session.user.id);
-    // console.log(totalCorrectAnswers);
     let totalCorrectAnswersHTML;
     if (totalCorrectAnswers.length === 1) {
         totalCorrectAnswersHTML = `<tr>
@@ -50,7 +48,6 @@ router.get('/', async (req, res) => {
     }
 
     const questionsNotAttempted = await stats.getQuestionsNotAttempted(req.session.user.id);
-    // console.log(totalCorrectAnswers);
     let questionsNotAttemptedHTML;
     if (questionsNotAttempted.length === 1) {
         questionsNotAttemptedHTML = `<tr>

@@ -23,10 +23,9 @@ async function logGameToDatabase(user_id, datePlayed, episodePlayed, score) {
             ($1, $2, $3, $4)
         returning id
         `, [user_id, datePlayed, episodePlayed, score]);
-        console.log('Game successfully logged');
         return gameLog.id;
     } catch(err) {
-        console.log(err);
+        // console.log(err);
     }
 }
 
@@ -39,11 +38,9 @@ async function logStatsToDatabase(game_id, jeopardyQuestionsCorrect, jeopardyQue
             ($1, $2, $3, $4, $5, $6)
         returning game_id
         `, [game_id, jeopardyQuestionsCorrect, jeopardyQuestionsNotAnswered, dJeopardyQuestionsCorrect, dJeopardyQuestionsNotAnswered, fJeopardyCorrect]);
-        // console.log(statsLog);
-        console.log('Stats successfully logged');
         return statsLog.game_id;
     } catch (err) {
-        console.log(err);
+        // console.log(err);
     }
 }
 

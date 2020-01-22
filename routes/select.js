@@ -37,7 +37,6 @@ router.get('/', async (req, res)=>{
             pagetitle: 'Select Jeopardy Game',
             dateList,
             submitValue: 'Select Game'
-            // arrayArrayObject: JSON.stringify(data)
         },
         partials: {
             analytics: 'partials/analytics',
@@ -53,11 +52,10 @@ router.get('/', async (req, res)=>{
 router.post('/', parseForm, async (req, res) => {
     const { date } = req.body;
     const showNumber = data.getShowNumberFromDate(date);
-    // const showQuestions = await getQuestionsForRound(showNumber);
     if (showNumber) {
         res.redirect(`/game/${showNumber}`);
     } else {
-        console.log(`Error in getting show.`);
+
     }
 });
 
