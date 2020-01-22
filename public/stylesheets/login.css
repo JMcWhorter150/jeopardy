@@ -1,10 +1,6 @@
-
-
 /* BASIC */
 
-html {
-
-}
+html {}
 
 body {
 	font-family: "Poppins", sans-serif;
@@ -148,7 +144,6 @@ input[type=text]:focus {
 input[type=text]:placeholder {
 	color: #cccccc;
 }
-
 
 input[type=password] {
 	background-color: #f6f6f6;

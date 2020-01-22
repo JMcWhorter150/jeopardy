@@ -1,72 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>${pagetitle}</title>
-  ${analytics}
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  ${head}
-</head>
-<body>
-  ${navbar}
-  <div class="container-fluid text-center">    
-    <div class="row content">
-      <div class="col-sm-2 sidenav">
-
-      </div>
-      <div class="col-sm-8 justify-content-center">
-        <div class="row">
-          <div class="col-sm-5">
-            <br>
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>${pagetitle}</title>
+      ${analytics}
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+      ${head}
+      <style>
+         body {
+         height: 89vh;
+         }
+         .wrapper {
+         display: flex;
+         align-items: center;
+         flex-direction: column;
+         justify-content: center;
+         width: 100%;
+         min-height: 100%;
+         padding: 20px;
+         }
+         #icon {
+         width: 40%;
+         }
+         .align-stuff {
+         padding: 30px;
+         width: 90%;
+         position: relative;
+         padding: 0px;
+         text-align: center;
+         }
+      </style>
+   </head>
+   <body>
+      ${navbar}
+      <div class="wrapper">
+         <div class="align-stuff">
             <img src="/images/logo.svg" id="icon" alt="Jeopardy Logo" /></h2>
-          </div>
-        </div>
-        <hr>
-        <p><b>A playable Jeopardy game with leaderboards, saved scores and other such and stuff.</b></p>
-        <hr>
-        <div class="text-left">
-          <h3>Rules:</h3>
-          <p>
-            <ul>
-              <li>
-                The Jeopardy! and Double Jeopardy rounds feature six categories, each of which contains five clues, which are ostensibly valued by difficulty.
-              </li>
-              <li>
-                The Jeopardy! round begins when the contestant selects any position on the game board by clicking on it. The underlying clue is revealed and displayed on the screen, where the contestant can enter their answer. 
-              </li>
-              <li>
-                The contestant to ring-in by pressing "Enter" or "Return". If the contestant does not ring in within five seconds, the game will return to the board, and they may select a new clue. If they decide to respond, the contestant will have 10 seconds to type their answer.
-              </li>
-              <li>
-                If the contestant responds correctly, the clue's dollar value is added to the contestant's score, and they may select a new clue from the board. An incorrect response, or a failure to respond within five seconds, deducts the clue's value from the contestant's score.
-              </li>
-              <li>
-                Contestants are encouraged to select the clues in order from lowest to highest value, as the show's writers write the clues in each category to flow from one to the next. Contestants are not required to do so unless the category requires clues to be taken in order.
-              </li>
-              <li>
-                The second round, Double Jeopardy!, features six new categories of clues. Clue values are doubled from the Jeopardy! round.
-              </li>
-              <li>
-                A "Daily Double" is hidden behind one clue in the Jeopardy! round, and two in Double Jeopardy! Daily Double clues with a sound or video component are known as "Audio Daily Doubles" and "Video Daily Doubles" respectively. Before the clue is revealed, the contestant who selects the Daily Double must declare a wager, from a minimum of $5 to a maximum of his/her entire score (known as a "true Daily Double") or the highest clue value available in the round, whichever is greater. The contestant is given the exclusive right to answer the clue but must do so; a correct response adds the value of the wager to the contestant's score, while an incorrect response deducts it. Not answering the Daily Double also deducts the wager.
-              </li>
-              <li>
-                Contestants who finish Double Jeopardy! with $0 or a negative score are automatically eliminated from the game at that point.
-              </li>
-              <li>
-                The Final Jeopardy! round features a single clue. At the end of the Double Jeopardy! round, the host announces the Final Jeopardy! category the contestant makes a final wager. Then the Final Jeopardy! clue is revealed. The contestants have 30 seconds to write their responses. A correct response adds the amount of the contestant's wager to his/her score, while a miss or failure to respond deducts it.
-              </li>
-            </ul>
-          </p>
-        </div>
-        </div>
-      <div class="col-sm-2 sidenav">
-
+            <br>
+            <hr>
+            <p><b>A playable Jeopardy game with leaderboards, saved scores and other such and stuff.</b></p>
+            <hr>
+            <div class="text-left">
+               <h3>Rules:</h3>
+               <p>
+               <ul>
+                  <li>
+                     The Jeopardy! and Double Jeopardy rounds feature six categories, each of which contains five clues, which are ostensibly valued by difficulty.
+                  </li>
+                  <li>
+                     The Jeopardy! round begins when the contestant selects any position on the game board. The underlying clue is revealed and displayed on the screen, where the contestant can enter their answer. 
+                  </li>
+                  <li>
+                     The contestant can ring-in by pressing "Enter" or "Return" or tapping on mobile. If the contestant does not ring in within five seconds, the game will return to the board, and they may select a new clue. If they decide to respond, the contestant will have 10 seconds to type their answer.
+                  </li>
+                  <li>
+                     If the contestant responds correctly, the clue's dollar value is added to the contestant's score, and they may select a new clue from the board. An incorrect response, or a failure to type a response within 10 seconds, deducts the clue's value from the contestant's score.
+                  </li>
+                  <li>
+                     Contestants are encouraged to select the clues in order from lowest to highest value, as the show's writers write the clues in each category to flow from one to the next. Contestants are not required to do so unless the category requires clues to be taken in order.
+                  </li>
+                  <li>
+                     The second round, Double Jeopardy!, features six new categories of clues. Clue values are doubled from the Jeopardy! round.
+                  </li>
+                  <li>
+                     A "Daily Double" is hidden behind one clue in the Jeopardy! round, and two in Double Jeopardy! Daily Double clues with a sound or video component are known as "Audio Daily Doubles" and "Video Daily Doubles" respectively. Before the clue is revealed, the contestant must declare a wager, from a minimum of $5 to a maximum of his/her entire score (known as a "true Daily Double") or the highest clue value available in the round, whichever is greater. The contestant is given the exclusive right to answer the clue but must do so; a correct response adds the value of the wager to the contestant's score, while an incorrect response deducts it. Not answering the Daily Double also deducts the wager.
+                  </li>
+                  <li>
+                     Contestants who finish Double Jeopardy! with $0 or a negative score are automatically eliminated from the game at that point.
+                  </li>
+                  <li>
+                     The Final Jeopardy! round features a single clue. At the end of the Double Jeopardy! round, the host announces the Final Jeopardy! category the contestant makes a final wager. Then the Final Jeopardy! clue is revealed. A correct response adds the amount of the contestant's wager to his/her score, while a miss or failure to respond deducts it.
+                  </li>
+               </ul>
+               </p>
+            </div>
+         </div>
       </div>
-    </div>
-  </div>
-${footer}
-</body>
+      ${footer}
+   </body>
 </html>
