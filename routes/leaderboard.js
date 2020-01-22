@@ -56,6 +56,7 @@ router.get('/', async (req, res) => {
                 topScoresList: topScoresHTML
             },
             partials: {
+                analytics: 'partials/analytics',
                 head: '/partials/head',
                 navbar: req.session.navbar.value,
                 footer: 'partials/footer'

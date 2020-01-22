@@ -34,6 +34,7 @@ router.get('/', function(req, res, next) {
         pagetitle: 'Home',
       },
       partials: {
+        analytics: 'partials/analytics',
         head: '/partials/head',
         navbar: req.session.navbar.value,
         footer: '/partials/footer'
@@ -50,6 +51,7 @@ router.get('/login', (req, res, next) => {
       submitValue: 'Login'
     },
     partials: {
+      analytics: 'partials/analytics',
       head: '/partials/head',
       navbar: req.session.navbar.value,
       footer: '/partials/footer'
@@ -91,6 +93,7 @@ router.get('/signup', (req, res, next) => {
       submitValue: 'Signup'
     },
     partials: {
+      analytics: 'partials/analytics',
       head: '/partials/head',
       navbar: req.session.navbar.value,
       footer: 'partials/footer'

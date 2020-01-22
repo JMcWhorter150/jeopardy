@@ -58,6 +58,7 @@ router.get('/', async (req, res) => {
             totalCorrectAnswers: totalCorrectAnswersHTML
         },
         partials: {
+            analytics: 'partials/analytics',
             head: '/partials/head',
             navbar: req.session.navbar.value,
             footer: 'partials/footer'
