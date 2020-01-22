@@ -1,44 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>${pagetitle}</title>
-  ${analytics}
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/js/dataTables.bootstrap.min.js"></script>
-  <link rel="stylesheet" href="/stylesheets/profile.css">
-  <script src="/javascripts/profile.js"></script>
-  ${head}
-</head>
-<body>
-  ${navbar}
-    <div class="container">
-      <h2>Stats</h2>
-          <table class="table table-hover table-striped table-bordered table-sm" cellspacing="0" width="100%">
-              <tbody>
-                ${totalGamesPlayed}
-                ${totalCorrectAnswers}
-                ${questionsNotAttempted}
-              </tbody>
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>${pagetitle}</title>
+      ${analytics}
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/js/jquery.dataTables.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/js/dataTables.bootstrap.min.js"></script>
+      <link rel="stylesheet" href="/stylesheets/profile.css">
+      <script src="/javascripts/profile.js"></script>
+      ${head}
+   </head>
+   <body>
+      ${navbar}
+      <div class="wrapper">
+         <div class="container">
+            <h2>Stats</h2>
+            <table class="table table-hover table-striped table-bordered table-sm" cellspacing="0" width="100%">
+               <tbody>
+                  ${totalGamesPlayed}
+                  ${totalCorrectAnswers}
+                  ${questionsNotAttempted}
+               </tbody>
             </table>
-        <h2>Games Played</h2>
-        <p>Here are your previously played games:</p>       
-        <table id="dtOrder" class="table table-hover table-striped table-bordered table-sm" cellspacing="0" width="100%">
-          <thead>
-            <tr>
-              <th>Played Date</th>
-              <th>Episode Played</th>
-              <th>Score</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${gamesList}
-          </tbody>
-        </table>
+            <h2>Games Played</h2>
+            <p>Here are your previously played games:</p>
+            <table id="dtOrder" class="table table-hover table-striped table-bordered table-sm" cellspacing="0" width="100%">
+               <thead>
+                  <tr>
+                     <th>Played Date</th>
+                     <th>Episode Played</th>
+                     <th>Score</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  ${gamesList}
+               </tbody>
+            </table>
+         </div>
       </div>
-</body>
+      ${footer}
+   </body>
 </html>

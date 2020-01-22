@@ -1,32 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>${pagetitle}</title>
-  ${analytics}
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.css" />
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.js"></script>
-  ${head}
-</head>
-<body>
-${navbar}
-<div class="container">
-  <h2>Select Your Game</h2>
-  <form method=POST>
-    <div class="form-group">
-      <label for="sel1">Select Game (select one):</label>
-      <select name="date" data-live-search="true" data-live-search-style="startsWith" class="selectpicker">
-        <option value="" selected disabled>Please Select a Date</option>
-        ${dateList}
-      </select>
-    <input type="submit" class="btn btn-primary" value=${submitValue}>
-    </div>
-  </form>
-</div>
-${footer}
-</body>
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>${pagetitle}</title>
+      ${analytics}
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.css" />
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.js"></script>
+      ${head}
+      <style>
+         body {
+         height: 89vh;
+         }
+         .wrapper {
+         display: flex;
+         align-items: center;
+         flex-direction: column;
+         justify-content: center;
+         width: 100%;
+         min-height: 100%;
+         padding: 20px;
+         }
+      </style>
+   </head>
+   <body>
+      ${navbar}
+      <div class="wrapper">
+         <div class="container">
+            <h2>Select Your Game</h2>
+            <form method=POST>
+               <div class="form-group">
+                  <label for="sel1">Select Game (select one):</label>
+                  <select name="date" data-live-search="true" data-live-search-style="startsWith" class="selectpicker">
+                     <option value="" selected disabled>Please Select a Date</option>
+                     ${dateList}
+                  </select>
+                  <input type="submit" class="btn btn-primary" value=${submitValue}>
+               </div>
+            </form>
+         </div>
+      </div>
+      ${footer}
+   </body>
 </html>

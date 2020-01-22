@@ -1,43 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>${pagetitle}</title>
-  ${analytics}
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <link href="/stylesheets/login.css" rel="stylesheet">
-  ${head}
-</head>
-<body>
-${navbar}
-<div class="wrapper fadeInDown">
-  <div id="formContent">
-
-    <!-- Icon -->
-    <div class="fadeIn first">
-      <br>
-      <img src="/images/logo.svg" id="icon" alt="Jeopardy Logo" />
-      <br>
-      <h1>${pagetitle}</h1>
-    </div>
-
-    <!-- Login Form -->
-    <form method="POST">
-      <input type="text" id="name" class="fadeIn second" name="name" placeholder="username">
-      <input type="password" id="password" class="fadeIn third" name="password" placeholder="password">
-      <input type="submit" class="fadeIn fourth" value=${submitValue}>
-    </form>
-
-    <!-- Remind Passowrd -->
-    <!-- <div id="formFooter">
-      <a class="underlineHover" href="#">Forgot Password?</a>
-    </div> -->
-
-  </div>
-</div>
-${footer}
-</body>
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>${pagetitle}</title>
+      ${analytics}
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+      <link href="/stylesheets/login.css" rel="stylesheet">
+      ${head}
+   </head>
+   <body>
+      ${navbar}
+      <div class="wrapper fadeInDown">
+         <div id="formContent">
+            <!-- Icon -->
+            <div class="fadeIn first">
+               <br>
+               <img src="/images/logo.svg" id="icon" alt="Jeopardy Logo" />
+               <br>
+               <h1>${pagetitle}</h1>
+            </div>
+            <!-- Login Form -->
+            <form method="POST">
+               <input type="text" id="name" class="fadeIn second" name="name" placeholder="username">
+               <input type="password" id="password" class="fadeIn third" name="password" placeholder="password">
+               <input type="submit" class="fadeIn fourth" value=${submitValue}>
+            </form>
+            <!-- Remind Passowrd -->
+            <!-- <div id="formFooter">
+               <a class="underlineHover" href="#">Forgot Password?</a>
+               </div> -->
+         </div>
+      </div>
+      ${footer}
+   </body>
 </html>
