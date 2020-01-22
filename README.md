@@ -22,7 +22,7 @@
 
 ![Leaderboard](screenshots/Leaderboard.png)
 
-# Problem Solved By Application
+# Problems Solved By Application
 
 * Jeopardy is an entertainment application that allows users to select from an archive of past games or play randomly-selected games. 
 
