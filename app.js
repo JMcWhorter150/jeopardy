@@ -61,6 +61,7 @@ app.use(function(err, req, res, next) {
       pagetitle: 'Error'
     },
     partials: {
+      analytics: 'partials/analytics',
       head: 'partials/head',
       navbar: req.session.navbar.value
     }
