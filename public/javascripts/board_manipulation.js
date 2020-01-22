@@ -385,6 +385,7 @@ function formatText(str) {
 function answerTimer() {
   // once buzzed in, times how long they have to type the answer of the question
   // when someone clicks a category, it waits and then auto exits if no answer
+  QUESTIONANSWERED = false;
   let timeleft = 9; // should match whatever the progress bar max is in html
   let progressBar = document.querySelector('#answerBar');
   progressBar.style.display = "block";
