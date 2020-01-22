@@ -132,7 +132,7 @@ router.post('/', parseForm, async (req, res) => {
 router.post('/:episodeNum(\\d+)', parseForm, async (req, res) => {
     console.log(req.body);
     let { Score, date, id, episodePlayed, jeopardyQuestionsCorrect, jeopardyQuestionsNotAnswered, dJeopardyQuestionsCorrect, dJeopardyQuestionsNotAnswered, fJeopardyCorrect } = req.body;
-    console.log(`Score is ${score}`);
+    console.log(`Score is ${Score}`);
 
     const formattedDate = new Date(date);
     // console.log(formattedDate);
