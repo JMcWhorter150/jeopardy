@@ -30,8 +30,7 @@
 
 # API Utilized
 
-* Jeopardy Archive
-    * API URL: jeopardy-api.bentelyherron.dev
+* ![Jeopardy Archive](jeopardy-api.bentleyherron.dev)
 
 # Future Features
 
