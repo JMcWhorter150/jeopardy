@@ -54,7 +54,25 @@ function addBuzzer() {
   document.addEventListener('touchend', contestantBuzzed); // for mobile
 }
 
+function playJeopardyTheme() {
+  let theme = document.querySelector('#finalJeopardyTheme');
+  theme.play();
+}
 
+function playJeopardyStartTheme() {
+  let theme = document.querySelector('#openingTheme');
+  theme.play();
+}
+
+function dailyDoubleTheme() {
+  let dd = document.querySelector('#dailyDoubleTheme');
+  dd.play();
+}
+
+function timesUp() {
+  let timesUp = document.querySelector('#timesUpTheme');
+  timesUp.play();
+}
 
 // ============ RESET BOARD FUNCTIONS ============
 
@@ -322,6 +340,7 @@ function missedQuestion() {
     answerValue = parseInt(answerValue.slice(1));
     updateScoreDOM(answerValue * -1);
     resetQuestionContainer();
+    timesUp();
 }
 
 function checkIfRight(event) {
@@ -433,6 +452,7 @@ function waitForBuzz() {
       showAnswerDOM();
       resetQuestionContainer();
       updateQuestionsNotAnswered();
+      timesUp();
     }
   }, 100)
 }
@@ -561,6 +581,7 @@ function showDailyDouble() {
   let headerText = `Daily Double!`;
   let round = document.querySelector('.round');
   round.textContent = headerText;
+  dailyDoubleTheme();
   let timeleft = 3;
   let headerTimer = setInterval(function(){
     timeleft -= 1;
@@ -594,6 +615,7 @@ function populateQuestionFinalJeopardy() {
   question.textContent = arrayObject[2][0].Question; // see above
   // changes display from none to flex to show question
   questionContainer.style.display = "flex";
+  playJeopardyTheme();
   // puts cursor in answerField
   answer.style.display = 'inline-block';
   answer.focus();
@@ -677,7 +699,8 @@ function appendFormInput(element, string) {
 // ============ FUNCTIONS RUN AT BEGINNING OF GAME ============
 
 getBaseAmount(); // Sets the question amounts ($100 or $200);
-populateBoardDOM(arrayObject[0], ROUND); // sets up first jeopardy, then checkboard runs the rest of the game
+populateBoardDOM(arrayObject[0], ROUND);// sets up first jeopardy, then checkboard runs the rest of the game
+playJeopardyStartTheme();
 setInitialScore();
 setInitialAnswerAttribute();
 addAnswerCheck(); // never removed
