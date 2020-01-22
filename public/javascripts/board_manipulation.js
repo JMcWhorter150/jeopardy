@@ -84,6 +84,29 @@ function resetQuestionsDOM(factor) {
   }
 }
 
+function resetQuestionsFinal() {
+  let categoriesArr = document.querySelectorAll('.category-item');
+  categoriesArr.forEach(element => {
+    element.textContent = "";
+  });
+  for (let i=1;i<7;i++) {
+    let questionArr = document.querySelectorAll(`.question${i}`);
+    questionArr.forEach(element => {
+        element.textContent = ""; // sets values for each question box to be regular jeopardy or double jeopardy
+        element.dataAttribute = {
+          Answer: null,
+          Question: null,
+          Value: null
+        }; // add any other onclick functionality functions here
+        element.removeEventListener("click", populateQuestionDOM);
+        element.removeEventListener('click', dailyDouble);
+        element.removeEventListener('click', removeQuestionDOM);
+        // element.removeEventListener('click', answerTimer);
+        element.removeEventListener('click', waitForBuzz);
+    });
+}
+}
+
 function populateBoardDOM(obj=arrayObject, roundNumber=ROUND) {
   // takes show object, updates text content of each block, adds onclick to each block
   // five questions, six categories
@@ -204,6 +227,7 @@ function startDoubleJeopardy() {
 }
 
 function startFinalJeopardy() {
+  resetQuestionsFinal();
   ROUND = 3;
   let score = document.querySelector('.score').dataAttribute.Score;
   if (score < 0) { // final jeopardy doesn't run if score less than 0
@@ -478,8 +502,10 @@ function setBet() {
   const betText = document.querySelector('#betText');
   const bet = document.querySelector('#betField');
   let score = document.querySelector('.score').dataAttribute.Score;
-  if (score < 1000) { // jeopardy rules that if you are betting at less than 1000, you can bet up to 1000
-    score = 1000;
+  if (ROUND !== 3) {  
+    if (score < ROUND * BASEAMOUNT * 5) { // jeopardy rules that if you are betting at less than 1000, you can bet up to 1000
+      score = ROUND * BASEAMOUNT * 5;
+    }
   }
   betText.textContent = `Enter in a wager up to ${score}`;
   betContainer.style.display = "flex";
