@@ -14,7 +14,7 @@ const parseForm = bodyParser.urlencoded({
 const episodeObj = require('../lists/air-date-show');
 
 const axios = require('axios').default;
-const jeopardyAPI = 'https://jeopardy.bentleyherron.dev/api';
+const jeopardyAPI = 'https://jeopardy-api.bentleyherron.dev/api';
 
 // Requires Login
 function requireLogin(req, res, next) {
