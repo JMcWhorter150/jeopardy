@@ -74,7 +74,7 @@ router.post('/login', parseForm, async (req, res) => {
             res.redirect('/profile');
         });
     } else {
-        console.log(`incorrect login.`);
+
     }
 });
 
@@ -109,7 +109,7 @@ router.post('/signup', parseForm, async (req, res) => {
         const theUser = await users.addUserToDB(createdUser);
         res.redirect('/login');
     } else {
-        console.log(`incorrect login.`);
+
     }
 });
 

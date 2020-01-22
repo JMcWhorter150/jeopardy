@@ -47,7 +47,7 @@ async function getQuestionArray(date, roundName) {
         const responseObj = await api.getQuestionsForRound(showNumber, roundNumber);
         return responseObj;
     } else {
-        console.log("Error in getting showNumber or roundNumber.")
+
     }
 }
 

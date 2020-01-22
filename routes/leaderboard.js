@@ -9,11 +9,8 @@ router.get('/', async (req, res) => {
 
     const topTenGames = await leaderboard.getTopTenGames();
     for (let entry of topTenGames) {
-        // console.log(entry);
         let userName = await leaderboard.getUsernameById(entry.user_id)
-        // console.log(userName);
         entry.user_id = await userName[0].name;
-        // console.log(entry);
     }
 
     let gamesCount = 0;
@@ -30,11 +27,8 @@ router.get('/', async (req, res) => {
 
     const topTotalScores = await leaderboard.getTopTotalScores();
     for (let entry of topTotalScores) {
-        // console.log(entry);
         let userName = await leaderboard.getUsernameById(entry.user_id)
-        // console.log(userName);
         entry.user_id = await userName[0].name;
-        // console.log(entry);
     }
 
     let scoresCount = 0;
@@ -69,9 +63,5 @@ router.get('/', async (req, res) => {
 
 
 });
-    // consol
 
 module.exports = router;
-
-
-
