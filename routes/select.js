@@ -40,6 +40,7 @@ router.get('/', async (req, res)=>{
             // arrayArrayObject: JSON.stringify(data)
         },
         partials: {
+            analytics: 'partials/analytics',
             head: '/partials/head',
             navbar: req.session.navbar.value,
             footer: '/partials/footer'
