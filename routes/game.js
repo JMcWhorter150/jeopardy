@@ -77,7 +77,7 @@ router.get('/', async (req, res)=>{
     });
 })
 
-router.get('/:episodeNum(\\d+)', async (req, res)=>{
+router.get('/:episodeNum(\\d+)', requireLogin, async (req, res)=>{
     const { episodeNum } = req.params;
     // Check if user is logged in for user id object for frontend
     if (req.session && req.session.user) {
