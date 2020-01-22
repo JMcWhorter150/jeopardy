@@ -22,7 +22,7 @@
 
 ![Leaderboard](screenshots/Leaderboard.png)
 
-# Problems Solved By Application
+# Problem Solved By Application
 
 * Jeopardy is an entertainment application that allows users to select from an archive of past games or play randomly-selected games. 
 
@@ -44,9 +44,3 @@
 * Bentley Herron
 * Joe McWhorter
 * David Schneider
-
-
-
-
-
-
