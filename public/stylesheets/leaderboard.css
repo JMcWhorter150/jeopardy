@@ -1,35 +1,35 @@
 * {
-    box-sizing: border-box;
-    outline: 1px solid red;
+	box-sizing: border-box;
+	outline: 1px solid red;
 }
 
 html {
-    height: 100%;
-    width: 100%;
-    background-color: white;
+	height: 100%;
+	width: 100%;
+	background-color: white;
 }
 
 .columnContainer {
-    display: flex;
-    height: 100%;
-    width: 100%;
+	display: flex;
+	height: 100%;
+	width: 100%;
 }
 
-.columnContainer > * {
-    width: 30%;
-    height: 100%;
+.columnContainer>* {
+	width: 30%;
+	height: 100%;
 }
 
 body {
-    height: 89vh;
+	height: 89vh;
 }
 
 .wrapper {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content: center;
-    width: 100%;
-    min-height: 100%;
-    padding: 20px;
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	justify-content: center;
+	width: 100%;
+	min-height: 100%;
+	padding: 20px;
 }
