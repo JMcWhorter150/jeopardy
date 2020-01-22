@@ -1,7 +1,13 @@
 const express = require('express');
 const router = express.Router();
 
+const bodyParser = require('body-parser');
+const parseForm = bodyParser.urlencoded({
+    extended: true
+});
+
 const user = require('../modules/user');
+const users = require('../models/users');
 const data = require('../modules/data');
 
 const stats = require('../models/stats');
@@ -78,6 +84,39 @@ router.get('/', async (req, res) => {
         }
     });
 });
+
+// Get change password page
+router.get('/change-password', (req, res, next) => {
+    res.render('change-password', {
+      locals: {
+        pagetitle: 'Change Password',
+        submitValue: 'Change Password'
+      },
+      partials: {
+        analytics: 'partials/analytics',
+        head: '/partials/head',
+        navbar: req.session.navbar.value,
+        footer: 'partials/footer'
+      }
+    });
+  });
+  
+  // Signup post
+  router.post('/change-password', parseForm, async (req, res) => {
+      const { password1, password2 } = req.body;
+      if (password1 === password2) {
+          const newPassword = users.createHash(password2);
+          const userID = req.session.user.id;
+          const updatedUser = await users.updatePassword(userID, newPassword);
+          if (updatedUser) {
+              res.redirect('/profile');
+          } else {
+      
+          }
+      } else {
+          console.log("Could not update password.");
+      }
+  });
 
 
 module.exports = router;

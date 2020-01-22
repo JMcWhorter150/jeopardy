@@ -38,11 +38,22 @@ async function addUserToDB(user) {
 }
 
 
+// Update password
+async function updatePassword(id, password) {
+    const result = await db.result(`update users set hash=$1 where id=$2;`, [password, id]);
+    if (result.rowCount === 1) {
+        return id;
+    } else {
+        return null;
+    }
+}
+
 
 module.exports = {
     create,
     createHash,
     login,
     getByUsername,
-    addUserToDB
+    addUserToDB,
+    updatePassword
 }
