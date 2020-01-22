@@ -615,7 +615,13 @@ function populateQuestionFinalJeopardy() {
   let question = document.querySelector('#questionText');
   let answer = document.querySelector('#answerField');
   answer.dataAttribute.Answer = arrayObject[2][0].Answer; // update 2 and 0 if data is not array of 3 arrayobjects with all the questions
-  question.textContent = arrayObject[2][0].Question; // see above
+  let href = getHref(arrayObject[2][0].Question);
+  if (href) {
+    populateImg(href);
+    question.textContent = removeAnchors(arrayObject[2][0].Question)
+  } else {
+    question.textContent = arrayObject[2][0].Question;
+  }
   // changes display from none to flex to show question
   questionContainer.style.display = "flex";
   // puts cursor in answerField
