@@ -1,7 +1,7 @@
 insert into users 
         (name, hash)
     values
-        ('anonymous', `$2a$10$XxUZhSwf0ZVLi8zunl5YpemlXSpX5oRh4bPOvUsF12TjOvbBDMs.O`)
+        ('anonymous', '$2a$10$XxUZhSwf0ZVLi8zunl5YpemlXSpX5oRh4bPOvUsF12TjOvbBDMs.O'),
         -- testanonymous password is null
         ('bentley', '$2a$10$o5aycnAEos8IC.Xqna3NPu.8uyQ83AJdPlaXRTg4Ka7vcUHTu7Dq6'),
         -- testUser1 password is 'password
