@@ -502,8 +502,10 @@ function setBet() {
   const betText = document.querySelector('#betText');
   const bet = document.querySelector('#betField');
   let score = document.querySelector('.score').dataAttribute.Score;
-  if (score < 1000) { // jeopardy rules that if you are betting at less than 1000, you can bet up to 1000
-    score = 1000;
+  if (ROUND !== 3) {  
+    if (score < ROUND * BASEAMOUNT * 5) { // jeopardy rules that if you are betting at less than 1000, you can bet up to 1000
+      score = ROUND * BASEAMOUNT * 5;
+    }
   }
   betText.textContent = `Enter in a wager up to ${score}`;
   betContainer.style.display = "flex";
