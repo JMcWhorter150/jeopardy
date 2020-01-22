@@ -136,7 +136,6 @@ function showRound(roundNumber) {
   let headerTimer = setInterval(function(){
     timeleft -= 1;
     if(timeleft <= 0) {
-      console.log('clearing header')
       clearInterval(headerTimer);
       jeopardyHeader.style.display = "none";
       round.textContent = "";
@@ -386,7 +385,6 @@ function formatText(str) {
 function answerTimer() {
   // once buzzed in, times how long they have to type the answer of the question
   // when someone clicks a category, it waits and then auto exits if no answer
-  console.log('timer started');
   let timeleft = 9; // should match whatever the progress bar max is in html
   let progressBar = document.querySelector('#answerBar');
   progressBar.style.display = "block";
@@ -394,7 +392,6 @@ function answerTimer() {
       progressBar.value = 10 - timeleft; // first number should be timeleft +1
       timeleft -= 1;
       if (QUESTIONANSWERED) {
-        console.log('question answered before timer stopped')
         QUESTIONANSWERED = false;
         progressBar.style.display = "none";
         progressBar.value = 0;
@@ -403,7 +400,6 @@ function answerTimer() {
       } else if(timeleft <= 0) {
         progressBar.style.display = "none";
         progressBar.value = 0;
-        console.log('timer stopped')
         clearInterval(questionTimer);
         missedQuestion();
       }
@@ -422,7 +418,6 @@ function waitForBuzz() {
       questionBar.value = 51 - timeleft;
     }
     if (BUZZED) {
-      console.log('contestant buzzed');
       BUZZED = false;
       questionBar.style.display = "none";
       questionBar.value = 0;
@@ -433,7 +428,6 @@ function waitForBuzz() {
       CANBUZZ = false;
       questionBar.style.display = "none";
       questionBar.value = 0;
-      console.log('contestant no buzz');
       clearInterval(buzzTimer);
       populateAnswerDOMGeneral();
       showAnswerDOM();
@@ -589,7 +583,6 @@ function showDailyDouble() {
   let headerTimer = setInterval(function(){
     timeleft -= 1;
     if(timeleft <= 0) {
-      console.log('clearing header')
       clearInterval(headerTimer);
       jeopardyHeader.style.display = "none";
       round.textContent = "";
@@ -641,7 +634,6 @@ function finalJeopardyCategory() {
   let categoryTimer = setInterval(function(){
     timeleft -= 1;
     if(timeleft <= 0) {
-      console.log('clearing category')
       clearInterval(categoryTimer);
       jeopardyHeader.style.display = "none";
       round.textContent = "";

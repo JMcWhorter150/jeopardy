@@ -5,14 +5,12 @@ async function getUsernameById(user_id) {
         select name from users where id=$1
     `, [user_id])
         .then(data => {
-            // console.log(data);
             return data
         })
         .catch (err => {
-            console.log(err);
+            // console.log(err);
             return [];
         })
-    // console.log(user_name);
     return user_name;
 }
 
@@ -23,11 +21,10 @@ async function getTopTenGames() {
         limit 10;
     `)
         .then(data => {
-            // console.log(data);
             return data;
         })
         .catch (err => {
-            console.log(err);
+            // console.log(err);
             return [];
         })
     return topGamesArray;
@@ -42,11 +39,10 @@ async function getTopTotalScores() {
         limit 10;
     `)
         .then(data => {
-            // console.log(data);
             return data;
         })
         .catch (err => {
-            console.log(err);
+            // console.log(err);
             return [];
         })
     return topScoresArray;
