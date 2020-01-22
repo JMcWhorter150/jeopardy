@@ -49,13 +49,29 @@ router.get('/', async (req, res) => {
     </tr>\n`;
     }
 
+    const questionsNotAttempted = await stats.getQuestionsNotAttempted(req.session.user.id);
+    // console.log(totalCorrectAnswers);
+    let questionsNotAttemptedHTML;
+    if (questionsNotAttempted.length === 1) {
+        questionsNotAttemptedHTML = `<tr>
+        <td>Questions Not Attempted</td>\n
+        <td>${questionsNotAttempted[0].total}</td>\n
+    </tr>\n`;
+    } else {
+        questionsNotAttemptedHTML = `<tr>
+        <td>Questions Not Attempted</td>\n
+        <td>0</td>\n
+    </tr>\n`;
+    }
+
     res.render('profile', {
         locals: {
             pagetitle: `${req.session.user.name}'s Profile`,
             username: req.session.user.name,
             gamesList: gamesList.join(''),
             totalGamesPlayed: totalGamesPlayedHTML,
-            totalCorrectAnswers: totalCorrectAnswersHTML
+            totalCorrectAnswers: totalCorrectAnswersHTML,
+            questionsNotAttempted: questionsNotAttemptedHTML
         },
         partials: {
             analytics: 'partials/analytics',

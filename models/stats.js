@@ -37,7 +37,26 @@ async function getTotalCorrectAnswers(user_id) {
     return correctAnswerObject;
 }
 
+async function getQuestionsNotAttempted(user_id) {
+    const questionsNotAttempted = await db.query(`
+        select user_id, (sum(questionsNotAnsweredJeopardy) + sum(questionsNotAnsweredDoubleJeopardy)) as Total
+        from stats, gameslog
+        where gameslog.user_id=$1 and stats.game_id=gameslog.id
+        group by user_id;
+    `, [user_id])
+        .then(data => {
+            console.log(data);
+            return data;
+        })
+        .catch (err => {
+            console.log(err);
+            return [];
+        })
+    return questionsNotAttempted;
+}
+
 module.exports = {
     getTotalGamesPlayed,
-    getTotalCorrectAnswers
+    getTotalCorrectAnswers,
+    getQuestionsNotAttempted
 }
