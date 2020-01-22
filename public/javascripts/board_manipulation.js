@@ -51,7 +51,7 @@ bet.addEventListener('change', checkBet);
 
 function addBuzzer() {
   document.addEventListener('keyup', contestantBuzzed);
-  document.addEventListener('touchend', contestantBuzzed); // for mobile
+  document.addEventListener('touchend', contestantBuzzed);
 }
 
 
@@ -451,14 +451,13 @@ function updateQuestionsNotAnswered() {
 
 function contestantBuzzed(event) {
   // when user buzzes, show answer field, start answer timer
-  if (event.code === "Enter" && CANBUZZ) {
+  if ((event.code === "Space" && CANBUZZ) || event.changedTouches.length > 0 && CANBUZZ) {
     const answer = document.querySelector('#answerField');
     answer.style.display = "inline-block";
     answer.focus();
     answer.select();
     answerTimer();
     BUZZED = true;
-    return BUZZED;
   }
 }
 
