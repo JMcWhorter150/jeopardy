@@ -385,6 +385,7 @@ function formatText(str) {
 function answerTimer() {
   // once buzzed in, times how long they have to type the answer of the question
   // when someone clicks a category, it waits and then auto exits if no answer
+  QUESTIONANSWERED = false;
   let timeleft = 9; // should match whatever the progress bar max is in html
   let progressBar = document.querySelector('#answerBar');
   progressBar.style.display = "block";
@@ -409,13 +410,13 @@ function answerTimer() {
 function waitForBuzz() {
   // after user selects question, question shows, if user presses a key, then show answer box, then start answer timer. If user doesn't tap, then goes to next answer.
   CANBUZZ = true;
-  let timeleft = 50;
+  let timeleft = 80;
   let questionBar = document.querySelector('#questionBar');
   questionBar.style.display = "block";
   let buzzTimer = setInterval(() => {
     timeleft -= 1;
     if (timeleft % 10 === 0) {
-      questionBar.value = 51 - timeleft;
+      questionBar.value = 81 - timeleft;
     }
     if (BUZZED) {
       BUZZED = false;

@@ -128,6 +128,7 @@ router.post('/', parseForm, async (req, res) => {
 router.post('/:episodeNum(\\d+)', parseForm, async (req, res) => {
     let { Score, date, id, episodePlayed, jeopardyQuestionsCorrect, jeopardyQuestionsNotAnswered, dJeopardyQuestionsCorrect, dJeopardyQuestionsNotAnswered, fJeopardyCorrect } = req.body;
 
+
     const formattedDate = new Date(date);
     const dateString = log.dateToFormattedString(formattedDate);
 
