@@ -274,7 +274,11 @@ function removeAnchors(string) {
   let finalAnchor = string.substring(finalAnchorPosition, finalAnchorPosition + 4);
   string = string.replace(removeString, "");
   string = string.replace(finalAnchor, "");
-  return string;
+  if (string.indexOf(`<a href`) > -1) {
+    return removeAnchors(string)
+  } else {
+    return string;
+  }
 }
 
 function populateImg(hrefStr) {
