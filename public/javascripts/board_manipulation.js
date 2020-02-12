@@ -398,8 +398,8 @@ function formatText(str) {
       return str;
     } else if (typeof str === 'string') { // if answer is string
       str = str.toLowerCase();
-      str = str.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
-      str = str.replace(/\s{2,}/g," ");
+      str = str.replace(/[.,\/#!$%\^&\*;:{}=\-'_`~()]/g,"");
+      str = str.replace(/\s{2,}/g,"");
       return str.removeStopWords();
     } else { // if answer is anything else, just return the answer
       return str;
