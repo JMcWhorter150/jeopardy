@@ -736,8 +736,6 @@ function populateFinalScore() {
   jeopardyHeader.appendChild(form);
 }
 
-// adds a comment to update nodemon
-
 function appendFormInput(element, string) {
   const input = document.createElement('input');
   const score = document.querySelector('.score');
@@ -747,18 +745,41 @@ function appendFormInput(element, string) {
   element.appendChild(input);
 }
 
+function showError() {
+  let jeopardyHeader = document.querySelector('.jeopardyHeader');
+  jeopardyHeader.style.display = "flex";
+  let headerText = "Game data corrupted. Redirecting to home page";
+  let round = document.querySelector('.round');
+  round.textContent = headerText;
+  let timeleft = 3;
+  let headerTimer = setInterval(function(){
+    timeleft -= 1;
+    if(timeleft <= 0) {
+      window.location.replace(window.location.href.split('/game')[0]);
+    }
+    }, 1000);
+}
+
+
+function checkForData(obj=arrayObject) {
+  if (obj[0].length !== 30 || obj[1].length !== 30 || obj[2].length !== 1) {
+    // shows error about corrupt game data and redirects to home page
+    showError();
+  } else {
+    // starts up the game
+    getBaseAmount(); // sets the initial question values $100, $200 etc.
+    populateBoardDOM(arrayObject[0], ROUND); // MAIN FUNCTION, checkBoard runs the rest of the game
+    setInitialScore(); // adds initial score dataAttribute to avoid possible buggy behavior
+    setInitialAnswerAttribute(); // adds dataAttribute to answer to avoid possible buggy behavior
+    addAnswerCheck(); // never removed
+    addBetCheck(); // never removed
+    addBuzzer(); // never removed
+  }
+}
 
 // ============ FUNCTIONS RUN AT BEGINNING OF GAME ============
 
-getBaseAmount(); // Sets the question amounts ($100 or $200);
-populateBoardDOM(arrayObject[0], ROUND); // sets up first jeopardy, then checkboard runs the rest of the game
-setInitialScore();
-setInitialAnswerAttribute();
-addAnswerCheck(); // never removed
-addBetCheck(); // never removed
-addBuzzer(); // never removed
-// 
-
+checkForData(); // checks to make sure data is good and then starts game
 
 /* Gotten from the internet to make this work a bit better
  * String method to remove stop words
