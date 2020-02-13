@@ -247,13 +247,20 @@ function populateQuestionDOM(event) {
       "Value": event.target.dataAttribute.Value,
       "Question": event.target.dataAttribute.Question
   };
-  let href = getHref(event.target.dataAttribute.Question);
-  if (href) {
-    populateImg(href);
+  let hrefs = getHrefs(event.target.dataAttribute.Question);
+  if (hrefs) {
+    hrefs.forEach(href => createImg(href));
     question.textContent = removeAnchors(event.target.dataAttribute.Question)
   } else {
     question.textContent = event.target.dataAttribute.Question;
   }
+  // let href = getHref(event.target.dataAttribute.Question);
+  // if (href) {
+  //   populateImg(href);
+  //   question.textContent = removeAnchors(event.target.dataAttribute.Question)
+  // } else {
+  //   question.textContent = event.target.dataAttribute.Question;
+  // }
   // changes display from none to flex to show question
   questionContainer.style.display = "flex";
   // puts cursor in answerField
@@ -262,10 +269,19 @@ function populateQuestionDOM(event) {
   // answer.select();
 }
 
-function getHref(string) {
-  let removeString = string.substring(string.indexOf(`<a href`), string.indexOf(`_blank">`) + 8);
-  let href = removeString.substring(removeString.indexOf(`http`), removeString.indexOf(`" target`));
-  return href;
+function getHrefs(string) {
+  let textArray = string.split("href=\"");
+  if (textArray.length === 1) { // string doesn't have href, so return null
+    return null;
+  } else if (textArray.length > 1) { // string has one or more hrefs
+    textArray = textArray.splice(1); // get rid of first bit of text (everything up until href)
+    return textArray.map(item => cleanHrefs(item)); // for each href, cleans it up and returns it in an array
+  }
+}
+
+function cleanHrefs(string) {
+  let array = string.split("\" target");
+  return array[0];
 }
 
 function removeAnchors(string) {
@@ -274,23 +290,32 @@ function removeAnchors(string) {
   let finalAnchor = string.substring(finalAnchorPosition, finalAnchorPosition + 4);
   string = string.replace(removeString, "");
   string = string.replace(finalAnchor, "");
-  return string;
+  if (string.indexOf(`<a href`) > -1) { // if there is another href in the string, runs again, otherwise returns the string
+    return removeAnchors(string)
+  } else {
+    return string;
+  }
 }
 
-function populateImg(hrefStr) {
-const img = document.querySelector('.qImg');
-const pictureFrame = document.querySelector('.pictureFrame');
-pictureFrame.style.display = "flex";
-img.style.display = "flex";
-img.src = hrefStr;
+function createImg(hrefStr) {
+  const pictureFrame = document.createElement('div');
+  pictureFrame.className = "pictureFrame";
+  const img = document.createElement('img');
+  img.className = 'qImg';
+  img.src = hrefStr;
+  pictureFrame.appendChild(img);
+  let questionContainer = document.querySelector('.questionContainer');
+  questionContainer.appendChild(pictureFrame);
 }
 
 function clearImg() {
-const img = document.querySelector('.qImg');
-const pictureFrame = document.querySelector('.pictureFrame');
-pictureFrame.style.display = "none";
-img.src = "";
-img.style.display = "none";
+  const pictureFrame = document.querySelector('.pictureFrame');
+  pictureFrame.parentNode.removeChild(pictureFrame);
+  if (document.querySelector('.pictureFrame')) {
+    clearImg();
+  } else {
+    return;
+  }
 }
 
 function populateAnswerDOM(event) {
@@ -398,8 +423,8 @@ function formatText(str) {
       return str;
     } else if (typeof str === 'string') { // if answer is string
       str = str.toLowerCase();
-      str = str.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
-      str = str.replace(/\s{2,}/g," ");
+      str = str.replace(/[.,\/#!$%\^&\*;:{}=\-'_`~()]/g,"");
+      str = str.replace(/\s{2,}/g,"");
       return str.removeStopWords();
     } else { // if answer is anything else, just return the answer
       return str;
@@ -711,8 +736,6 @@ function populateFinalScore() {
   jeopardyHeader.appendChild(form);
 }
 
-// adds a comment to update nodemon
-
 function appendFormInput(element, string) {
   const input = document.createElement('input');
   const score = document.querySelector('.score');
@@ -722,18 +745,41 @@ function appendFormInput(element, string) {
   element.appendChild(input);
 }
 
+function showError() {
+  let jeopardyHeader = document.querySelector('.jeopardyHeader');
+  jeopardyHeader.style.display = "flex";
+  let headerText = "Game data corrupted. Redirecting to home page";
+  let round = document.querySelector('.round');
+  round.textContent = headerText;
+  let timeleft = 3;
+  let headerTimer = setInterval(function(){
+    timeleft -= 1;
+    if(timeleft <= 0) {
+      window.location.replace(window.location.href.split('/game')[0]);
+    }
+    }, 1000);
+}
+
+
+function checkForData(obj=arrayObject) {
+  if (obj[0].length !== 30 || obj[1].length !== 30 || obj[2].length !== 1) {
+    // shows error about corrupt game data and redirects to home page
+    showError();
+  } else {
+    // starts up the game
+    getBaseAmount(); // sets the initial question values $100, $200 etc.
+    populateBoardDOM(arrayObject[0], ROUND); // MAIN FUNCTION, checkBoard runs the rest of the game
+    setInitialScore(); // adds initial score dataAttribute to avoid possible buggy behavior
+    setInitialAnswerAttribute(); // adds dataAttribute to answer to avoid possible buggy behavior
+    addAnswerCheck(); // never removed
+    addBetCheck(); // never removed
+    addBuzzer(); // never removed
+  }
+}
 
 // ============ FUNCTIONS RUN AT BEGINNING OF GAME ============
 
-getBaseAmount(); // Sets the question amounts ($100 or $200);
-populateBoardDOM(arrayObject[0], ROUND); // sets up first jeopardy, then checkboard runs the rest of the game
-setInitialScore();
-setInitialAnswerAttribute();
-addAnswerCheck(); // never removed
-addBetCheck(); // never removed
-addBuzzer(); // never removed
-// 
-
+checkForData(); // checks to make sure data is good and then starts game
 
 /* Gotten from the internet to make this work a bit better
  * String method to remove stop words
