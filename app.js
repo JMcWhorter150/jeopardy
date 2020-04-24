@@ -63,7 +63,7 @@ app.use(function(err, req, res, next) {
     partials: {
       analytics: 'partials/analytics',
       head: 'partials/head',
-      navbar: req.session ? req.session.navbar.value : 'partials/navbar'
+      navbar: req.session.navbar.value
     }
   });
 });
