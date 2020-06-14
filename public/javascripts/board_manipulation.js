@@ -310,7 +310,7 @@ function createImg(hrefStr) {
 
 function clearImg() {
   const pictureFrame = document.querySelector('.pictureFrame');
-  pictureFrame.parentNode.removeChild(pictureFrame);
+  pictureFrame && pictureFrame.parentNode.removeChild(pictureFrame);
   if (document.querySelector('.pictureFrame')) {
     clearImg();
   } else {
